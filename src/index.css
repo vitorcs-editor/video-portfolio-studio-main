@@ -1,0 +1,196 @@
+@import '@fontsource/syne/400.css';
+@import '@fontsource/syne/700.css';
+@import '@fontsource/syne/800.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cinematic Video Editor Portfolio Design System */
+@layer base {
+  :root {
+    --background: 193 100% 5%;
+    --foreground: 0 0% 95%;
+
+    --card: 212 51% 15%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 212 51% 15%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 191 100% 47%;
+    --primary-foreground: 193 100% 5%;
+
+    --secondary: 195 90% 23%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 195 90% 23%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 193 99% 33%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 195 90% 23%;
+    --input: 195 90% 23%;
+    --ring: 191 100% 47%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --glow-primary: 191 100% 47%;
+    --glow-accent: 193 99% 33%;
+    --gradient-primary: linear-gradient(135deg, hsl(191 100% 47%) 0%, hsl(193 99% 33%) 100%);
+    --gradient-surface: linear-gradient(180deg, hsl(212 51% 15%) 0%, hsl(193 100% 5%) 100%);
+    --glass-background: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+
+    /* Typography */
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Shadows */
+    --shadow-glow: 0 0 60px hsl(191 100% 47% / 0.15);
+    --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.4);
+    --shadow-elevated: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  .dark {
+    --background: 193 100% 5%;
+    --foreground: 0 0% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+}
+
+@layer components {
+
+  /* Glass morphism card */
+  .glass-card {
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow effect */
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Adobe software icons container */
+  .software-icon {
+    @apply flex items-center justify-center rounded-xl transition-all duration-300 text-foreground font-display font-bold;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .software-icon:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: hsl(var(--primary) / 0.7);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.4), inset 0 0 15px hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary));
+  }
+
+  /* Cyber Card for Portfolio */
+  .cyber-card {
+    @apply relative overflow-hidden rounded-[2rem] transition-all duration-500;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .cyber-card:hover {
+    transform: scale(1.02);
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.15);
+  }
+
+  /* Video thumbnail card */
+  .video-card {
+    @apply relative overflow-hidden rounded-xl transition-all duration-500;
+    background: var(--glass-background);
+    border: 1px solid var(--glass-border);
+  }
+
+  .video-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-elevated);
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  .video-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: var(--gradient-primary);
+    z-index: 1;
+  }
+
+  .video-card:hover::before {
+    opacity: 0.1;
+  }
+
+  /* Section divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+  }
+}
+
+@layer utilities {
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;    /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance; /* Modern browsers */
+  }
+}
