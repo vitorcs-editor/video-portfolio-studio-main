@@ -4,6 +4,7 @@
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -53,6 +54,7 @@
     /* Typography */
     --font-display: 'Syne', sans-serif;
     --font-body: 'Inter', sans-serif;
+    --font-signature: 'Pinyon Script', cursive;
 
     /* Shadows */
     --shadow-glow: 0 0 60px hsl(191 100% 47% / 0.15);
@@ -192,5 +194,39 @@
   /* Text balance */
   .text-balance {
     text-wrap: balance; /* Modern browsers */
+  }
+
+  /* Grainy texture animation */
+  .bg-grain {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .bg-grain::before {
+    content: "";
+    position: fixed;
+    top: -150%;
+    left: -150%;
+    width: 300%;
+    height: 300%;
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 50;
+    animation: grain 8s steps(10) infinite;
+    filter: brightness(0.5) contrast(150%);
+  }
+
+  @keyframes grain {
+    0%, 100% { transform:translate(0, 0) }
+    10% { transform:translate(-5%, -10%) }
+    20% { transform:translate(-15%, 5%) }
+    30% { transform:translate(7%, -25%) }
+    40% { transform:translate(-5%, 25%) }
+    50% { transform:translate(-15%, 10%) }
+    60% { transform:translate(15%, 0%) }
+    70% { transform:translate(0, 15%) }
+    80% { transform:translate(3%, 35%) }
+    90% { transform:translate(-10%, 10%) }
   }
 }

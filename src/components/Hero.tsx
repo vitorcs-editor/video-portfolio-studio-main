@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Instagram, Linkedin, Mail, Smartphone } from "lucide-react";
+import { Play, Instagram, Linkedin, Mail, Smartphone, ChevronRight, ChevronLeft } from "lucide-react";
 
 import { useLang } from "@/lib/lang";
 
@@ -20,21 +20,22 @@ const TechChips = () => {
 
   return (
     <div className="flex flex-col xl:flex-row gap-5 sm:gap-8 lg:gap-12 mt-6 sm:mt-8 pt-6 relative w-full overflow-hidden">
-      {/* Synchronized Animated Divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+      {/* Divider for Tools - Absolute to Section but centered */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
         {/* Left Bar */}
         <motion.div 
           animate={{ x: ["-200%", "300%"], opacity: [0.2, 0.8, 0.2] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary/80 to-transparent drop-shadow-[0_0_8px_hsl(var(--primary))]"
+          className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]"
         />
         {/* Right Bar */}
         <motion.div 
           animate={{ x: ["200%", "-300%"], opacity: [0.2, 0.8, 0.2] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary/80 to-transparent drop-shadow-[0_0_8px_hsl(var(--primary))]"
+          className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]"
         />
       </div>
+
       {/* Ferramentas Tradicionais */}
       <div className="flex-1">
         <h3 className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/40 font-semibold mb-4 sm:mb-6">{t.hero.tools}</h3>
@@ -85,13 +86,27 @@ const TechChips = () => {
 };
 
 
-// Client Marquee - Placeholder slots (logos a adicionar futuramente)
+// Client Marquee - Exibindo múltiplos quadros conforme preferência do usuário
 const ClientMarquee = () => {
   const { t } = useLang();
 
-  // 6 placeholder slots — substituir pelos logos dos clientes quando disponíveis
-  const placeholders = Array.from({ length: 6 });
-  const scrollItems = [...placeholders, ...placeholders, ...placeholders];
+  // 1 logo real + 5 slots vazios (total 6) para manter a estética de marca em crescimento
+  const clientLogo = "/fenix-logo.png";
+  const placeholdersCount = 5;
+  
+  interface MarqueeItem {
+    type: 'logo' | 'placeholder';
+    src?: string;
+    alt?: string;
+    link?: string;
+  }
+
+  const items: MarqueeItem[] = [
+    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: 'https://groupphoenixmediabuyer.com/' },
+    ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
+  ];
+  
+  const scrollItems = [...items, ...items, ...items];
 
   return (
     <div className="w-full flex flex-col mt-auto relative z-10 pb-4">
@@ -121,26 +136,63 @@ const ClientMarquee = () => {
           />
         </div>
 
-        {/* CLIENTES Badge */}
-        <div className="bg-[#050505] border border-white/5 px-8 py-2 rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.8)] mt-3 relative z-10 hover:border-primary/30 transition-colors">
-          <span className="text-primary text-[10px] font-bold uppercase tracking-[0.4em]">
-            {t.hero.clients}
-          </span>
+        {/* CLIENTES Badge - Rotating Border Style */}
+        <div className="relative p-[1px] rounded-xl overflow-hidden mt-3 z-10 w-fit group">
+          {/* Rotating Beam Animation */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary))_90deg,transparent_180deg)] opacity-40"
+          />
+          
+          {/* Badge Content */}
+          <div className="relative bg-[#0a0a0a] px-8 py-2.5 rounded-xl flex items-center justify-center z-10 w-full h-full border border-white/5 group-hover:bg-[#111111] transition-colors">
+            <span className="text-primary text-[11px] font-black uppercase tracking-[0.4em] drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)]">
+              {t.hero.clients}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Marquee Slider - Placeholders */}
+      {/* Marquee Slider */}
       <div className="w-full overflow-hidden h-28 sm:h-36 flex items-center relative group mt-2">
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
         <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] items-center gap-3 sm:gap-6 px-3">
-          {scrollItems.map((_, i) => (
+          {scrollItems.map((item, i) => (
             <div
               key={i}
-              className="flex items-center justify-center w-36 sm:w-56 h-20 sm:h-28 rounded-2xl border border-dashed border-primary/30 bg-primary/[0.03] shadow-[0_0_15px_hsl(var(--primary)/0.05)] flex-shrink-0"
+              className={`flex items-center justify-center w-36 sm:w-56 h-20 sm:h-28 rounded-2xl border border-dashed transition-all duration-500 flex-shrink-0 group/item
+                ${item.type === 'logo' 
+                  ? "border-primary/20 bg-primary/[0.01] hover:border-solid hover:border-primary hover:bg-white/[0.05] hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]" 
+                  : "border-primary/20 bg-primary/[0.01]"}`}
             >
-              <span className="text-primary/20 text-2xl font-thin select-none">+</span>
+              {item.type === 'logo' ? (
+                <a 
+                  href={item.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full h-full flex items-center justify-center cursor-pointer relative"
+                >
+                  <img 
+                    src={item.src} 
+                    alt={item.alt} 
+                    className="max-w-[70%] max-h-[70%] object-contain transition-all duration-300 group-hover/item:scale-105" 
+                  />
+                  
+                  {/* Tooltip estilo "Projeto Draft" do print */}
+                  <div className="absolute -bottom-1 -right-2 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/item:translate-y-0 z-20">
+                    <div className="bg-[#1a1a1a] border border-white px-3 py-1 shadow-2xl">
+                      <span className="text-white text-[10px] sm:text-[11px] font-medium whitespace-nowrap tracking-wide">
+                        {item.alt}
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              ) : (
+                <span className="text-primary/10 text-2xl font-thin select-none">+</span>
+              )}
             </div>
           ))}
         </div>
@@ -152,8 +204,8 @@ const ClientMarquee = () => {
 const Hero = () => {
   const { t } = useLang();
   return (
-    <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden bg-background pt-20 sm:pt-24">
-      {/* Background Gradient/Glows Cyberpunk */}
+    <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden pt-20 sm:pt-24">
+      {/* Local Neon Glows (Keep these for hero impact) */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px] pointer-events-none animate-glow-pulse" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none animate-glow-pulse [animation-delay:2s]" />
 
@@ -161,13 +213,13 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center pb-8 w-full gap-4">
         <div className="w-full flex flex-col justify-center gap-4">
           
-          {/* Typography - Vitor Carvalho */}
+          {/* Typography - Vitor Carvalho - Sleek Minimalist Scale */}
           <div className="flex flex-col sm:flex-row items-start sm:items-baseline relative z-10 pt-4 lg:pt-0 pb-2 gap-0 sm:gap-6 lg:gap-8">
             <motion.h1
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="font-display text-[2.6rem] xs:text-[3rem] sm:text-[5.5rem] md:text-[6.5rem] font-extrabold text-white leading-none tracking-tighter uppercase drop-shadow-md"
+              className="font-display text-[2.2rem] xs:text-[2.6rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[5.8rem] font-extrabold text-white leading-none tracking-tighter uppercase drop-shadow-md"
             >
               Vitor
             </motion.h1>
@@ -177,7 +229,7 @@ const Hero = () => {
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
               className="relative z-20"
             >
-              <span className="font-display text-[2.6rem] xs:text-[3rem] sm:text-[5.5rem] md:text-[6.5rem] font-extrabold text-primary leading-none tracking-tighter uppercase drop-shadow-[0_0_25px_hsl(var(--primary)/0.5)] block">
+              <span className="font-display text-[2.2rem] xs:text-[2.6rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[5.8rem] font-extrabold text-primary leading-none tracking-tighter uppercase drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)] block">
                 Carvalho
               </span>
             </motion.div>

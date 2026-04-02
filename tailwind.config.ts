@@ -16,7 +16,7 @@ export default {
       fontFamily: {
         display: ["Syne", "sans-serif"],
         body: ["Inter", "sans-serif"],
-        signature: ["Caveat", "cursive"],
+        signature: ["Pinyon Script", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",

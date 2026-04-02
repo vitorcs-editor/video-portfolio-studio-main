@@ -10,9 +10,9 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
 
   const languages = [
     { code: "PT-BR", name: "Portuguese", nativeName: "Português", region: "Brasil" },
-    { code: "ES",    name: "Spanish",    nativeName: "Español",   region: "—" },
-    { code: "EN-US", name: "English",    nativeName: "English",   region: "United States" },
-    { code: "EN-UK", name: "English",    nativeName: "English",   region: "United Kingdom" },
+    { code: "ES", name: "Spanish", nativeName: "Español", region: "—" },
+    { code: "EN-US", name: "English", nativeName: "English", region: "United States" },
+    { code: "EN-UK", name: "English", nativeName: "English", region: "United Kingdom" },
   ];
 
   const currentLang = languages.find(l => l.code === currentLangCode) || languages[0];
@@ -42,11 +42,10 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
               <button
                 key={l.code}
                 onClick={() => handleSelect(l.code)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 ${
-                  isActive
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 ${isActive
                     ? "bg-primary text-black border-primary"
                     : "bg-white/5 text-white/60 border-white/10 hover:border-primary/40 hover:text-white"
-                }`}
+                  }`}
               >
                 <span>{l.nativeName}</span>
                 <span className={`text-[10px] ${isActive ? "text-black/60" : "text-white/30"}`}>{l.region}</span>
@@ -101,11 +100,10 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
                     <button
                       key={l.code}
                       onClick={() => handleSelect(l.code)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl w-full text-left transition-colors duration-200 ${
-                        isActive
+                      className={`flex items-center gap-2 px-3 py-2 rounded-xl w-full text-left transition-colors duration-200 ${isActive
                           ? "bg-primary text-black"
                           : "hover:bg-white/5 cursor-pointer text-white"
-                      }`}
+                        }`}
                     >
                       <span className={isActive ? "font-bold" : "text-white font-medium"}>{l.name}</span>
                       <span className={isActive ? "text-black/60 font-medium" : "text-white/40"}>{l.region}</span>
@@ -118,6 +116,134 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
         )}
       </AnimatePresence>
     </div>
+  );
+};
+
+const NeonLogo = () => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="relative flex items-center justify-center w-32 h-16 sm:w-40 sm:h-20 overflow-visible"
+    >
+      {/* Intense Background Energy Orb */}
+      <motion.div
+        animate={{
+          scale: [1, 1.5, 1],
+          opacity: [0.15, 0.35, 0.15]
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-[-20px] bg-primary/30 rounded-full blur-[50px] pointer-events-none"
+      />
+
+      {/* SVG Letters VC - Side by Side (viewBox 180x100) */}
+      <svg width="140" height="70" viewBox="0 0 180 100" className="relative z-10 overflow-visible">
+        <defs>
+          <linearGradient id="neon-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="hsl(var(--primary))" />
+            <stop offset="100%" stopColor="hsl(var(--accent))" />
+          </linearGradient>
+          <filter id="neon-glow-logo" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        {/* Energy Wisps - Seamless Natural Flow */}
+        {[
+          { d: "M 10 50 C 10 10, 170 10, 170 50 C 170 90, 10 90, 10 50", duration: 10, delay: 0 },
+          { d: "M 170 50 C 170 90, 10 90, 10 50 C 10 10, 170 10, 170 50", duration: 12, delay: 0 },
+        ].map((wisp, i) => (
+          <motion.path
+            key={i}
+            d={wisp.d}
+            fill="none"
+            stroke="hsl(var(--primary))"
+            strokeWidth="1.2"
+            strokeDasharray="100 400"
+            animate={{
+              strokeDashoffset: [500, 0],
+              opacity: [0.1, 0.25, 0.1]
+            }}
+            transition={{ 
+              duration: wisp.duration, 
+              repeat: Infinity, 
+              ease: "linear",
+              delay: wisp.delay 
+            }}
+            filter="url(#neon-glow-logo)"
+            className="pointer-events-none"
+          />
+        ))}
+
+        {/* Letter V - Left Side (Restored Industrial Bold) */}
+        <g className="filter drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
+          <motion.path
+            d="M 35 25 L 60 75 L 85 25"
+            fill="none"
+            stroke="white"
+            strokeWidth="12"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0.8, 1, 0.85, 1, 0.8],
+            }}
+            transition={{
+              pathLength: { duration: 1.2, ease: "easeOut" },
+              opacity: { duration: 3, repeat: Infinity, ease: "linear" }
+            }}
+          />
+          <motion.path
+            d="M 35 25 L 60 75 L 85 25"
+            fill="none"
+            stroke="rgba(255,255,255,0.6)"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            animate={{
+              strokeDasharray: ["0 80", "80 0", "0 80"],
+              strokeDashoffset: [0, -160]
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          />
+        </g>
+
+        {/* Letter C - Right Side (Restored Industrial Bold) */}
+        <g className="filter drop-shadow-[0_0_15px_hsl(var(--primary))]">
+          <motion.path
+            d="M 125 30 A 25 25 0 1 0 125 70"
+            fill="none"
+            stroke="url(#neon-primary)"
+            strokeWidth="12"
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{
+              pathLength: 1,
+              opacity: [1, 0.8, 1, 0.7, 1],
+            }}
+            transition={{
+              pathLength: { duration: 1.2, ease: "easeOut", delay: 0.3 },
+              opacity: { duration: 4, repeat: Infinity, ease: "linear", delay: 0.2 }
+            }}
+          />
+          <motion.path
+            d="M 125 30 A 25 25 0 1 0 125 70"
+            fill="none"
+            stroke="white"
+            strokeWidth="3"
+            strokeLinecap="round"
+            animate={{
+              strokeDasharray: ["10 100"],
+              strokeDashoffset: [0, -110]
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+            className="opacity-50"
+          />
+        </g>
+      </svg>
+    </motion.div>
   );
 };
 
@@ -144,21 +270,15 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
           ? "bg-background/80 backdrop-blur-xl border-b border-white/10 py-4 shadow-lg"
           : "bg-transparent py-6"
-      }`}
+        }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="group flex items-center gap-3">
-          <div className="relative">
-            <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors duration-300">
-              VC
-            </span>
-            <div className="absolute -inset-2 bg-primary/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
+        <a href="#" title="Voltar ao início" className="group flex items-center gap-3">
+          <NeonLogo />
         </a>
 
         {/* Desktop Navigation */}

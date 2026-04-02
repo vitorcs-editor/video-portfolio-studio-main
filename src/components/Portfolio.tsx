@@ -41,8 +41,8 @@ const Portfolio = () => {
   ];
 
   const clients: Client[] = [
-    { id: "fenix_ads", name: "Grupo Fênix", niche: "ads", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
-    { id: "fenix_vsl", name: "Grupo Fênix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
+    { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
+    { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
   ];
 
   const videos: Video[] = [];
@@ -71,7 +71,7 @@ const Portfolio = () => {
   };
 
   return (
-    <section id="portfolio" className="py-20 sm:py-32 relative bg-background overflow-hidden">
+    <section id="portfolio" className="py-20 sm:py-32 relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Header - Murilo Style */}
@@ -155,6 +155,7 @@ const Portfolio = () => {
           {/* Controls */}
           <button
             onClick={() => scroll("left")}
+            title="Ver projeto anterior"
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-20 w-14 h-14 rounded-full bg-black/80 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover/reel:opacity-100 group-hover/reel:translate-x-4 transition-all duration-300 hover:bg-primary hover:text-black hover:border-primary shadow-2xl"
           >
             <ChevronLeft size={24} />
@@ -162,6 +163,7 @@ const Portfolio = () => {
 
           <button
             onClick={() => scroll("right")}
+            title="Ver próximo projeto"
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-20 w-14 h-14 rounded-full bg-black/80 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover/reel:opacity-100 group-hover/reel:-translate-x-4 transition-all duration-300 hover:bg-primary hover:text-black hover:border-primary shadow-2xl"
           >
             <ChevronRight size={24} />

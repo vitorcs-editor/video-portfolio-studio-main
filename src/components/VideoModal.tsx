@@ -7,9 +7,10 @@ interface VideoModalProps {
   onClose: () => void;
   videoUrl: string;
   title: string;
+  isVertical?: boolean;
 }
 
-const VideoModal = ({ isOpen, onClose, videoUrl, title }: VideoModalProps) => {
+const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: VideoModalProps) => {
   // Prevent scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -34,7 +35,7 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title }: VideoModalProps) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-10">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -49,20 +50,23 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title }: VideoModalProps) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", duration: 0.5 }}
-            className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-primary/20 z-10"
+            className={`relative w-full overflow-hidden bg-black rounded-3xl border border-white/10 shadow-2xl z-10 ${
+              isVertical 
+                ? "max-w-[400px] aspect-[9/16] max-h-[85vh]" 
+                : "max-w-5xl aspect-video"
+            }`}
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white hover:bg-primary hover:text-black transition-all duration-300 backdrop-blur-md"
+              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white/50 hover:text-white transition-colors"
               aria-label="Close modal"
             >
-              <X size={20} />
+              <X size={24} />
             </button>
 
             {/* Video Player (Iframe) */}
-            <div className="w-full h-full">
+            <div className="w-full h-full bg-black/50 flex items-center justify-center">
               <iframe
                 src={videoUrl}
                 title={title}

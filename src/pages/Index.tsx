@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Portfolio from "@/components/Portfolio";
 import BudgetForm from "@/components/BudgetForm";
 import Footer from "@/components/Footer";
+import GlobalBackground from "@/components/GlobalBackground";
 import { useLang } from "@/lib/lang";
 
 const Index = () => {
@@ -20,9 +21,10 @@ const Index = () => {
         <link rel="canonical" href="https://vitorcarvalho.com" />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-grain relative">
+        <GlobalBackground />
         <Navbar />
-        <main>
+        <main className="relative z-10 w-full">
           <Hero />
           <Portfolio />
           <BudgetForm />

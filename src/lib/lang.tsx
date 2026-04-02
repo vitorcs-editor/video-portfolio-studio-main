@@ -4,7 +4,7 @@ type Lang = 'PT-BR' | 'EN-US' | 'EN-UK' | 'ES';
 
 interface T {
   navbar: { portfolio: string; budget: string; requestBudget: string; languages: string; search: string; };
-  hero: { description: string; viewPortfolio: string; tools: string; ai: string; clients: string; };
+  hero: { title1: string; title2: string; description: string; viewPortfolio: string; tools: string; ai: string; clients: string; };
   portfolio: {
     projectsLine1: string; projectsLine2: string; description: string; exploreMore: string;
     categories: { all: string; igaming: string; vsl: string; motion: string; ads: string; social: string; };
@@ -32,6 +32,8 @@ const translations: Record<string, T> = {
       search: "Buscar..."
     },
     hero: {
+      title1: "SENIOR",
+      title2: "VIDEO EDITOR",
       description: "Criando narrativas visuais que conectam marcas e pessoas. Editor de vídeo Sênior especializado em VSLs, Ads e conteúdo para redes sociais com impacto e conversão.",
       viewPortfolio: "Ver Portfólio",
       tools: "FERRAMENTAS",
@@ -90,6 +92,8 @@ const translations: Record<string, T> = {
       search: "Search..."
     },
     hero: {
+      title1: "SENIOR",
+      title2: "VIDEO EDITOR",
       description: "Crafting visual narratives that connect brands and people. Senior video editor specializing in VSLs, Ads, and social media content for impact and conversion.",
       viewPortfolio: "View Portfolio",
       tools: "TOOLS",
@@ -148,6 +152,8 @@ const translations: Record<string, T> = {
       search: "Buscar..."
     },
     hero: {
+      title1: "SENIOR",
+      title2: "EDITOR DE VIDEO",
       description: "Creando narrativas visuales que conectan marcas y personas. Editor de video Senior especializado en VSLs, Ads y contenido para redes sociales con impacto y conversión.",
       viewPortfolio: "Ver Portafolio",
       tools: "HERRAMIENTAS",

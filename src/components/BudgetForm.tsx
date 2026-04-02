@@ -45,7 +45,7 @@ const BudgetForm = () => {
   const inputClasses = "w-full bg-[#1A1A1A] border border-white/5 rounded-2xl px-5 py-4 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all duration-300";
 
   return (
-    <section id="orcamento" className="py-20 sm:py-32 relative bg-background">
+    <section id="orcamento" className="py-20 sm:py-32 relative">
       <div className="container mx-auto px-6">
 
         {/* Header Section */}
