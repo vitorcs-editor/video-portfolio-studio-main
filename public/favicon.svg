@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="25 10 130 80">
+  <defs>
+    <linearGradient id="neon-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#0e7490" />
+    </linearGradient>
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  {/* Letter V */}
+  <path
+    d="M 35 25 L 60 75 L 85 25"
+    fill="none"
+    stroke="white"
+    stroke-width="16"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#neon-glow)"
+  />
+
+  {/* Letter C */}
+  <path
+    d="M 125 30 A 25 25 0 1 0 125 70"
+    fill="none"
+    stroke="url(#neon-primary)"
+    stroke-width="16"
+    stroke-linecap="round"
+    filter="url(#neon-glow)"
+  />
+  <path
+    d="M 125 30 A 25 25 0 1 0 125 70"
+    fill="none"
+    stroke="white"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.3"
+  />
+</svg>

@@ -19,6 +19,7 @@ const Index = () => {
         <meta property="og:description" content={t.seo.description} />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://vitorcarvalho.com" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </Helmet>
 
       <div className="min-h-screen bg-grain relative">
