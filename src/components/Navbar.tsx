@@ -269,7 +269,6 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
 
   const navLinks = [
     { href: "#portfolio", label: t.navbar.portfolio },
-    { href: "#orcamento", label: t.navbar.budget },
   ];
 
   return (
@@ -342,7 +341,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
                 <LanguageSwitcher inline />
               </div>
               <button
-                onClick={() => handleMobileNav("#orcamento")}
+                onClick={() => { setIsMobileMenuOpen(false); onOpenBudget?.(); }}
                 className="mt-2 px-5 py-3 rounded-full bg-primary text-black text-xs font-bold uppercase tracking-[0.2em] text-center"
               >
                 {t.navbar.requestBudget}

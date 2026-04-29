@@ -32,18 +32,12 @@ const Index = () => {
         <main className="relative z-10 w-full">
           <Hero />
           <Portfolio />
-          {/* Section only visible on mobile — desktop uses modal */}
-          <div className="md:hidden">
-            <BudgetForm />
-          </div>
         </main>
         <Footer />
       </div>
 
-      {/* Budget modal — desktop only */}
-      <div className="hidden md:block">
-        <BudgetModal isOpen={isBudgetOpen} onClose={() => setIsBudgetOpen(false)} />
-      </div>
+      {/* Budget modal — all screen sizes */}
+      <BudgetModal isOpen={isBudgetOpen} onClose={() => setIsBudgetOpen(false)} />
     </>
   );
 };
