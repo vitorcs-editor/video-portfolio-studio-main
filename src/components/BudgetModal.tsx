@@ -89,21 +89,19 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-[860px]"
+            className="relative z-10 w-full max-w-[860px] max-h-[90svh] overflow-y-auto rounded-[2rem]"
           >
-            {/* Close button */}
-            <div className="flex justify-end mb-3">
+            {/* Card */}
+            <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-6 sm:p-8 shadow-[0_0_80px_hsl(var(--primary)/0.2)] relative overflow-hidden">
+              {/* X button — always visible inside card */}
               <button
                 onClick={onClose}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white/80 hover:text-white text-sm font-medium transition-all duration-200 border border-white/10 hover:border-white/20"
+                className="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 border border-white/10"
+                aria-label="Fechar"
               >
-                <X size={15} strokeWidth={2} />
-                <span>Fechar</span>
+                <X size={16} strokeWidth={2} />
               </button>
-            </div>
 
-            {/* Card */}
-            <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-8 shadow-[0_0_80px_hsl(var(--primary)/0.2)] relative overflow-hidden">
               {/* Inner glow */}
               <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 blur-[100px] pointer-events-none" />
 
