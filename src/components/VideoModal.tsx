@@ -48,12 +48,12 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
             className="fixed inset-0 bg-black/80 backdrop-blur-sm"
           />
 
-          {/* ── Centering wrapper ── */}
-          <div className="relative min-h-full flex items-center justify-center py-4 sm:py-8 px-3 sm:px-4">
+          {/* ── Centering wrapper — pt-28 clears navbar (~95px) + button gap ── */}
+          <div className="relative min-h-full flex items-center justify-center pt-28 sm:pt-24 pb-6 px-3 sm:px-4">
 
             {/* ── Wrapper that groups close button + video ── */}
             <div className={`relative z-10 flex flex-col items-end ${
-              isVertical ? "h-[78svh] sm:h-[80vh] aspect-[9/16]" : "w-full max-w-[830px]"
+              isVertical ? "h-[66svh] sm:h-[74vh] aspect-[9/16]" : "w-full max-w-[830px]"
             }`}>
 
               {/* ── Close (X) button — above the video, right-aligned ── */}

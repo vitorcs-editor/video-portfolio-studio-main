@@ -99,6 +99,26 @@ const Portfolio = () => {
       isVertical: true
     },
     {
+      id: "vera_bet_igaming_4",
+      title: "iGaming Ad",
+      thumbnail: "/betvera_ad4.png",
+      videoUrl: "https://drive.google.com/file/d/1VveGF8jIEl5t1rDG8jlYOIUBrleOURX1/preview",
+      category: "igaming",
+      clientId: "vera_bet",
+      views: "10.5K",
+      isVertical: true
+    },
+    {
+      id: "vera_bet_igaming_5",
+      title: "iGaming Ad",
+      thumbnail: "/betvera_ad5.png",
+      videoUrl: "https://drive.google.com/file/d/1aQhZmkwQt6KiDJ-iF_Ib5TP7_thqzy6C/preview",
+      category: "igaming",
+      clientId: "vera_bet",
+      views: "7.8K",
+      isVertical: true
+    },
+    {
       id: "phoenix_vsl_1",
       title: "VSL",
       thumbnail: "/phoenix_vsl.png",
