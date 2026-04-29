@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Portfolio from "@/components/Portfolio";
 import BudgetForm from "@/components/BudgetForm";
+import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
 import GlobalBackground from "@/components/GlobalBackground";
 import { useLang } from "@/lib/lang";
 
 const Index = () => {
   const { t } = useLang();
+  const [isBudgetOpen, setIsBudgetOpen] = useState(false);
+
   return (
     <>
       <Helmet>
@@ -24,13 +28,21 @@ const Index = () => {
 
       <div className="min-h-screen bg-grain relative">
         <GlobalBackground />
-        <Navbar />
+        <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10 w-full">
           <Hero />
           <Portfolio />
-          <BudgetForm />
+          {/* Section only visible on mobile — desktop uses modal */}
+          <div className="md:hidden">
+            <BudgetForm />
+          </div>
         </main>
         <Footer />
+      </div>
+
+      {/* Budget modal — desktop only */}
+      <div className="hidden md:block">
+        <BudgetModal isOpen={isBudgetOpen} onClose={() => setIsBudgetOpen(false)} />
       </div>
     </>
   );

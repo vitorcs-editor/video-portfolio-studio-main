@@ -247,10 +247,17 @@ const NeonLogo = () => {
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
   const { t } = useLang();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleMobileNav = (href: string) => {
+    setIsMobileMenuOpen(false);
+    setTimeout(() => {
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -295,12 +302,12 @@ const Navbar = () => {
 
           <LanguageSwitcher />
 
-          <a
-            href="#orcamento"
+          <button
+            onClick={onOpenBudget}
             className="px-6 py-2.5 rounded-full bg-primary text-black text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] transition-all duration-300 hover:brightness-125 hover:scale-105"
           >
             {t.navbar.requestBudget}
-          </a>
+          </button>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -323,25 +330,23 @@ const Navbar = () => {
           >
             <nav className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
-                <a
+                <button
                   key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => handleMobileNav(link.href)}
+                  className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors text-left"
                 >
                   {link.label}
-                </a>
+                </button>
               ))}
               <div className="border-t border-white/10 pt-4 mt-2">
                 <LanguageSwitcher inline />
               </div>
-              <a
-                href="#orcamento"
-                onClick={() => setIsMobileMenuOpen(false)}
+              <button
+                onClick={() => handleMobileNav("#orcamento")}
                 className="mt-2 px-5 py-3 rounded-full bg-primary text-black text-xs font-bold uppercase tracking-[0.2em] text-center"
               >
                 {t.navbar.requestBudget}
-              </a>
+              </button>
             </nav>
           </motion.div>
         )}
