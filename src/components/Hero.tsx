@@ -1,7 +1,30 @@
 import { motion } from "framer-motion";
 import { Play, Instagram, Linkedin, Mail, Smartphone, ChevronRight, ChevronLeft } from "lucide-react";
-
 import { useLang } from "@/lib/lang";
+
+// CSS keyframes injected once for cheap line-shimmer animations
+const lineShimmerStyle = (
+  <style>{`
+    @keyframes shimmer-right {
+      0%   { transform: translateX(-200%); opacity: 0.2; }
+      50%  { opacity: 0.8; }
+      100% { transform: translateX(300%);  opacity: 0.2; }
+    }
+    @keyframes shimmer-left {
+      0%   { transform: translateX(200%);  opacity: 0.2; }
+      50%  { opacity: 0.8; }
+      100% { transform: translateX(-300%); opacity: 0.2; }
+    }
+    @keyframes chevron-bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(4px); }
+    }
+    .shimmer-r { animation: shimmer-right 4s ease-in-out infinite; }
+    .shimmer-l { animation: shimmer-left  4s ease-in-out infinite; }
+    .chevron-anim { animation: chevron-bounce 1.5s ease-in-out infinite; }
+  `}</style>
+);
+
 
 // Tech Chips for the new layout
 const TechChips = () => {
@@ -20,20 +43,10 @@ const TechChips = () => {
 
   return (
     <div className="flex flex-col xl:flex-row gap-5 sm:gap-8 lg:gap-12 mt-6 sm:mt-8 pt-6 relative w-full overflow-hidden">
-      {/* Divider for Tools - Absolute to Section but centered */}
+      {/* Divider for Tools — CSS animated, zero JS overhead */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-        {/* Left Bar */}
-        <motion.div 
-          animate={{ x: ["-200%", "300%"], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]"
-        />
-        {/* Right Bar */}
-        <motion.div 
-          animate={{ x: ["200%", "-300%"], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]"
-        />
+        <span className="shimmer-r absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
+        <span className="shimmer-l absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
       </div>
 
       {/* Ferramentas Tradicionais */}
@@ -115,28 +128,13 @@ const ClientMarquee = () => {
     <div className="w-full flex flex-col mt-auto relative z-10 pb-4">
       {/* Divider Header */}
       <div className="w-full flex flex-col items-center justify-center relative mb-2">
-        <div className="animate-bounce mb-3">
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="text-primary opacity-60"
-          >
-            ▾
-          </motion.div>
-        </div>
+        {/* Single CSS animation — no double-animation conflict */}
+        <div className="chevron-anim mb-3 text-primary opacity-60">▾</div>
 
-        {/* Glowing Horizon Line */}
+        {/* Glowing Horizon Line — CSS animated */}
         <div className="relative w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <motion.div
-            animate={{ x: ["-200%", "300%"], opacity: [0.2, 0.8, 0.2] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]"
-          />
-          <motion.div
-            animate={{ x: ["200%", "-300%"], opacity: [0.2, 0.8, 0.2] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]"
-          />
+          <span className="shimmer-r absolute left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
+          <span className="shimmer-l absolute right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
         </div>
 
         {/* CLIENTES Badge - Rotating Border Style */}
@@ -208,9 +206,10 @@ const Hero = () => {
   const { t } = useLang();
   return (
     <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden pt-20 sm:pt-24">
-      {/* Local Neon Glows (Keep these for hero impact) */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px] pointer-events-none animate-glow-pulse" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none animate-glow-pulse [animation-delay:2s]" />
+      {lineShimmerStyle}
+      {/* Local Neon Glows — static opacity, still looks great, no JS loop */}
+      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[100px] pointer-events-none opacity-60" />
+      <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-accent/8 rounded-full blur-[90px] pointer-events-none opacity-50" />
 
       {/* Main Content Container */}
       <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center pb-8 w-full gap-4">

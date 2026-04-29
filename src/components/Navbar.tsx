@@ -126,17 +126,30 @@ const NeonLogo = () => {
       whileTap={{ scale: 0.95 }}
       className="relative flex items-center justify-center w-32 h-16 sm:w-40 sm:h-20 overflow-visible"
     >
-      {/* Intense Background Energy Orb */}
-      <motion.div
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.15, 0.35, 0.15]
-        }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute inset-[-20px] bg-primary/30 rounded-full blur-[50px] pointer-events-none"
-      />
+      <style>{`
+        @keyframes logo-glow-pulse {
+          0%, 100% { opacity: 0.15; transform: scale(1); }
+          50%       { opacity: 0.32; transform: scale(1.45); }
+        }
+        @keyframes logo-wisp {
+          0%   { stroke-dashoffset: 500; opacity: 0.1; }
+          50%  { opacity: 0.25; }
+          100% { stroke-dashoffset: 0;   opacity: 0.1; }
+        }
+        @keyframes logo-letter-flicker {
+          0%, 100% { opacity: 0.85; }
+          50%       { opacity: 1; }
+        }
+        .logo-orb   { animation: logo-glow-pulse 4s ease-in-out infinite; }
+        .logo-wisp1 { animation: logo-wisp 10s linear infinite; }
+        .logo-wisp2 { animation: logo-wisp 12s linear 1s infinite; }
+        .logo-letter { animation: logo-letter-flicker 3s ease-in-out infinite; }
+      `}</style>
 
-      {/* SVG Letters VC - Side by Side (viewBox 180x100) */}
+      {/* Background Energy Orb — CSS animated */}
+      <div className="logo-orb absolute inset-[-20px] bg-primary/30 rounded-full blur-[50px] pointer-events-none" />
+
+      {/* SVG Letters VC */}
       <svg width="140" height="70" viewBox="0 0 180 100" className="relative z-10 overflow-visible">
         <defs>
           <linearGradient id="neon-primary" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -149,97 +162,39 @@ const NeonLogo = () => {
           </filter>
         </defs>
 
-        {/* Energy Wisps - Seamless Natural Flow */}
-        {[
-          { d: "M 10 50 C 10 10, 170 10, 170 50 C 170 90, 10 90, 10 50", duration: 10, delay: 0 },
-          { d: "M 170 50 C 170 90, 10 90, 10 50 C 10 10, 170 10, 170 50", duration: 12, delay: 0 },
-        ].map((wisp, i) => (
-          <motion.path
-            key={i}
-            d={wisp.d}
-            fill="none"
-            stroke="hsl(var(--primary))"
-            strokeWidth="1.2"
-            strokeDasharray="100 400"
-            animate={{
-              strokeDashoffset: [500, 0],
-              opacity: [0.1, 0.25, 0.1]
-            }}
-            transition={{
-              duration: wisp.duration,
-              repeat: Infinity,
-              ease: "linear",
-              delay: wisp.delay
-            }}
-            filter="url(#neon-glow-logo)"
-            className="pointer-events-none"
-          />
-        ))}
+        {/* Energy Wisps — CSS animated */}
+        <path
+          d="M 10 50 C 10 10, 170 10, 170 50 C 170 90, 10 90, 10 50"
+          fill="none" stroke="hsl(var(--primary))" strokeWidth="1.2"
+          strokeDasharray="100 400"
+          className="logo-wisp1"
+          filter="url(#neon-glow-logo)"
+        />
+        <path
+          d="M 170 50 C 170 90, 10 90, 10 50 C 10 10, 170 10, 170 50"
+          fill="none" stroke="hsl(var(--primary))" strokeWidth="1.2"
+          strokeDasharray="100 400"
+          className="logo-wisp2"
+          filter="url(#neon-glow-logo)"
+        />
 
-        {/* Letter V - Left Side (Restored Industrial Bold) */}
+        {/* Letter V — single static path + CSS flicker */}
         <g className="filter drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
-          <motion.path
+          <path
             d="M 35 25 L 60 75 L 85 25"
-            fill="none"
-            stroke="white"
-            strokeWidth="12"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{
-              pathLength: 1,
-              opacity: [0.8, 1, 0.85, 1, 0.8],
-            }}
-            transition={{
-              pathLength: { duration: 1.2, ease: "easeOut" },
-              opacity: { duration: 3, repeat: Infinity, ease: "linear" }
-            }}
-          />
-          <motion.path
-            d="M 35 25 L 60 75 L 85 25"
-            fill="none"
-            stroke="rgba(255,255,255,0.6)"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            animate={{
-              strokeDasharray: ["0 80", "80 0", "0 80"],
-              strokeDashoffset: [0, -160]
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            fill="none" stroke="white" strokeWidth="12"
+            strokeLinecap="round" strokeLinejoin="round"
+            className="logo-letter"
           />
         </g>
 
-        {/* Letter C - Right Side (Restored Industrial Bold) */}
+        {/* Letter C — single static path + CSS flicker */}
         <g className="filter drop-shadow-[0_0_15px_hsl(var(--primary))]">
-          <motion.path
+          <path
             d="M 125 30 A 25 25 0 1 0 125 70"
-            fill="none"
-            stroke="url(#neon-primary)"
-            strokeWidth="12"
+            fill="none" stroke="url(#neon-primary)" strokeWidth="12"
             strokeLinecap="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{
-              pathLength: 1,
-              opacity: [1, 0.8, 1, 0.7, 1],
-            }}
-            transition={{
-              pathLength: { duration: 1.2, ease: "easeOut", delay: 0.3 },
-              opacity: { duration: 4, repeat: Infinity, ease: "linear", delay: 0.2 }
-            }}
-          />
-          <motion.path
-            d="M 125 30 A 25 25 0 1 0 125 70"
-            fill="none"
-            stroke="white"
-            strokeWidth="3"
-            strokeLinecap="round"
-            animate={{
-              strokeDasharray: ["10 100"],
-              strokeDashoffset: [0, -110]
-            }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-            className="opacity-50"
+            className="logo-letter"
           />
         </g>
       </svg>

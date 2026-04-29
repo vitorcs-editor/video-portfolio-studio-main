@@ -206,11 +206,10 @@ const Portfolio = () => {
                 setActiveCategory(cat.id);
                 setActiveClient("all");
               }}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                activeCategory === cat.id
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${activeCategory === cat.id
                   ? "bg-primary text-black shadow-[0_0_20px_hsl(var(--primary)/0.4)]"
                   : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
-              }`}
+                }`}
             >
               {cat.label}
             </button>
@@ -230,11 +229,10 @@ const Portfolio = () => {
             >
               <button
                 onClick={() => setActiveClient("all")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border-2 ${
-                  activeClient === "all"
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border-2 ${activeClient === "all"
                     ? "border-primary/70 text-primary bg-primary/10"
                     : "border-white/10 text-white/50 bg-white/5 hover:text-white hover:border-white/30"
-                }`}
+                  }`}
               >
                 Todos
               </button>
@@ -242,11 +240,10 @@ const Portfolio = () => {
                 <button
                   key={client.id}
                   onClick={() => setActiveClient(client.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border-2 ${
-                    activeClient === client.id
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border-2 ${activeClient === client.id
                       ? "border-primary/70 text-primary bg-primary/10"
                       : "border-white/10 text-white/50 bg-white/5 hover:text-white hover:border-white/30"
-                  }`}
+                    }`}
                 >
                   {client.logo && (
                     <img src={client.logo} alt="" className="w-6 h-6 object-contain" />
@@ -285,15 +282,14 @@ const Portfolio = () => {
             className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth scrollbar-hide px-6 sm:px-10 pb-6 snap-x snap-mandatory"
             style={{ justifyContent: 'safe center' }}
           >
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="wait">
               {filteredVideos.map((video, idx) => (
                 <motion.div
-                  layout
                   key={video.id}
                   initial={{ opacity: 0, scale: 0.92 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.88 }}
-                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  transition={{ duration: 0.35, delay: idx * 0.04 }}
                   className="flex-shrink-0 snap-center"
                 >
                   {/* Card — responsive width: smaller on mobile */}
@@ -305,6 +301,7 @@ const Portfolio = () => {
                     <img
                       src={video.thumbnail}
                       alt={video.title}
+                      loading="lazy"
                       className="w-full h-full object-cover"
                     />
 
