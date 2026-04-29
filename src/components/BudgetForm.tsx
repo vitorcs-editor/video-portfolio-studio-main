@@ -19,23 +19,22 @@ const BudgetForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     // Create WhatsApp message
     const message = encodeURIComponent(
-      `*Novo Orçamento Elite*\n\n` +
+      `*Novo Orçamento - Portfólio*\n\n` +
         `*Nome:* ${formData.name}\n` +
         `*Email:* ${formData.email}\n` +
-        `*Serviço:* ${formData.service || "Não informado"}\n` +
-        `*Briefing:* ${formData.briefing}\n` +
-        `*Referências:* ${formData.reference || "Não informado"}`
+        `*Tipo de Projeto:* ${formData.service || "Não informado"}\n` +
+        `*Descrição:* ${formData.briefing}\n` +
+        `*Link de Referência:* ${formData.reference || "Não informado"}`
     );
 
-    window.open(`https://wa.me/5500000000000?text=${message}`, "_blank");
+    // Abre WhatsApp ANTES do await — mobile (Safari iOS) bloqueia window.open após async
+    window.open(`https://wa.me/5516994427941?text=${message}`, "_blank");
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     toast({ title: t.budget.toastTitle, description: t.budget.toastDesc });
-
     setIsSubmitting(false);
     setFormData({ name: "", email: "", service: "", briefing: "", reference: "" });
   };

@@ -279,10 +279,11 @@ const Portfolio = () => {
             <ChevronRight size={20} />
           </button>
 
-          {/* Scroll track — full width, touch-friendly snap scrolling */}
+          {/* Scroll track — centered on desktop, scrollable on mobile */}
           <div
             ref={scrollRef}
             className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth scrollbar-hide px-6 sm:px-10 pb-6 snap-x snap-mandatory"
+            style={{ justifyContent: 'safe center' }}
           >
             <AnimatePresence mode="popLayout">
               {filteredVideos.map((video, idx) => (
