@@ -43,8 +43,8 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
                 key={l.code}
                 onClick={() => handleSelect(l.code)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 ${isActive
-                    ? "bg-primary text-black border-primary"
-                    : "bg-white/5 text-white/60 border-white/10 hover:border-primary/40 hover:text-white"
+                  ? "bg-primary text-black border-primary"
+                  : "bg-white/5 text-white/60 border-white/10 hover:border-primary/40 hover:text-white"
                   }`}
               >
                 <span>{l.nativeName}</span>
@@ -101,8 +101,8 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
                       key={l.code}
                       onClick={() => handleSelect(l.code)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl w-full text-left transition-colors duration-200 ${isActive
-                          ? "bg-primary text-black"
-                          : "hover:bg-white/5 cursor-pointer text-white"
+                        ? "bg-primary text-black"
+                        : "hover:bg-white/5 cursor-pointer text-white"
                         }`}
                     >
                       <span className={isActive ? "font-bold" : "text-white font-medium"}>{l.name}</span>
@@ -165,11 +165,11 @@ const NeonLogo = () => {
               strokeDashoffset: [500, 0],
               opacity: [0.1, 0.25, 0.1]
             }}
-            transition={{ 
-              duration: wisp.duration, 
-              repeat: Infinity, 
+            transition={{
+              duration: wisp.duration,
+              repeat: Infinity,
               ease: "linear",
-              delay: wisp.delay 
+              delay: wisp.delay
             }}
             filter="url(#neon-glow-logo)"
             className="pointer-events-none"
@@ -271,8 +271,8 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-white/10 py-4 shadow-lg"
-          : "bg-transparent py-6"
+        ? "bg-background/80 backdrop-blur-xl border-b border-white/10 py-4 shadow-lg"
+        : "bg-transparent py-6"
         }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">

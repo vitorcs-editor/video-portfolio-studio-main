@@ -90,19 +90,22 @@ const TechChips = () => {
 const ClientMarquee = () => {
   const { t } = useLang();
 
-  // 1 logo real + 5 slots vazios (total 6) para manter a estética de marca em crescimento
+  // 3 logos reais + 3 slots vazios (total 6) para manter a estética de marca em crescimento
   const clientLogo = "/fenix-logo.png";
-  const placeholdersCount = 5;
+  const placeholdersCount = 3;
   
   interface MarqueeItem {
     type: 'logo' | 'placeholder';
     src?: string;
     alt?: string;
     link?: string;
+    imgClass?: string;
   }
 
   const items: MarqueeItem[] = [
-    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: 'https://groupphoenixmediabuyer.com/' },
+    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: 'https://groupphoenixmediabuyer.com/', imgClass: 'max-w-[70%] max-h-[70%]' },
+    { type: 'logo', src: '/vera-bet-logo.png', alt: 'Vera Bet', link: 'https://vera.bet.br/', imgClass: 'w-[95%] max-h-[70%] -translate-y-3' },
+    { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: 'https://www.projetodraft.com/', imgClass: 'max-w-[70%] max-h-[70%]' },
     ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
   ];
   
@@ -178,7 +181,7 @@ const ClientMarquee = () => {
                   <img 
                     src={item.src} 
                     alt={item.alt} 
-                    className="max-w-[70%] max-h-[70%] object-contain transition-all duration-300 group-hover/item:scale-105" 
+                    className={`${item.imgClass ?? 'max-w-[70%] max-h-[70%]'} object-contain transition-all duration-300 group-hover/item:scale-105`} 
                   />
                   
                   {/* Tooltip estilo "Projeto Draft" do print */}

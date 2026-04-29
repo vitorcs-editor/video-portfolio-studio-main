@@ -32,50 +32,66 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
+
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[100] overflow-y-auto">
+          {/* ── Backdrop: semi-transparent — matches Murilo ── */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
           />
 
-          {/* Modal Content */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className={`relative w-full overflow-hidden bg-black rounded-3xl border border-white/10 shadow-2xl z-10 ${
-              isVertical 
-                ? "max-w-[400px] aspect-[9/16] max-h-[85vh]" 
-                : "max-w-5xl aspect-video"
-            }`}
-          >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/50 text-white/50 hover:text-white transition-colors"
-              aria-label="Close modal"
-            >
-              <X size={24} />
-            </button>
+          {/* ── Centering wrapper ── */}
+          <div className="relative min-h-full flex items-center justify-center py-4 sm:py-8 px-3 sm:px-4">
 
-            {/* Video Player (Iframe) */}
-            <div className="w-full h-full bg-black/50 flex items-center justify-center">
-              <iframe
-                src={videoUrl}
-                title={title}
-                className="w-full h-full"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-              />
+            {/* ── Wrapper that groups close button + video ── */}
+            <div className={`relative z-10 flex flex-col items-end ${
+              isVertical ? "h-[78svh] sm:h-[80vh] aspect-[9/16]" : "w-full max-w-[830px]"
+            }`}>
+
+              {/* ── Close (X) button — above the video, right-aligned ── */}
+              <motion.button
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25, delay: 0.1 }}
+                onClick={onClose}
+                className="mb-2 flex items-center gap-1.5 px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white/80 hover:text-white text-sm font-medium transition-all duration-200 border border-white/10 hover:border-white/20 min-h-[44px] sm:min-h-0"
+                aria-label="Fechar vídeo"
+              >
+                <X size={16} strokeWidth={2} />
+                <span>Fechar</span>
+              </motion.button>
+
+              {/* ── Video container ── */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className={`w-full overflow-hidden rounded-xl bg-black shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.06)] ${
+                  isVertical ? "flex-1" : "aspect-video"
+                }`}
+              >
+                {/* Iframe */}
+                <iframe
+                  src={videoUrl}
+                  title={title}
+                  className="w-full h-full border-0 block"
+                  allow="autoplay; fullscreen"
+                  allowFullScreen
+                />
+              </motion.div>
             </div>
-          </motion.div>
+
+          </div>
         </div>
       )}
     </AnimatePresence>
