@@ -44,6 +44,7 @@ const Portfolio = () => {
     { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
     { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
     { id: "vera_bet", name: "Vera Bet", niche: "igaming", logo: "/vera-bet-logo2.png" },
+    { id: "cassino_bet", name: "Cassino.bet.br", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=cassino.bet.br&sz=128" },
     { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
   ];
 
@@ -116,6 +117,76 @@ const Portfolio = () => {
       category: "igaming",
       clientId: "vera_bet",
       views: "7.8K",
+      isVertical: true
+    },
+    {
+      id: "vera_bet_igaming_6",
+      title: "iGaming Ad",
+      thumbnail: "/betvera_ad6.png",
+      videoUrl: "https://drive.google.com/file/d/10_qy3yitUPM57XINRbTAezYQCg4nsv38/preview",
+      category: "igaming",
+      clientId: "vera_bet",
+      views: "5.9K",
+      isVertical: true
+    },
+    {
+      id: "vera_bet_igaming_7",
+      title: "iGaming Ad",
+      thumbnail: "/betvera_ad7.png",
+      videoUrl: "https://drive.google.com/file/d/1zZ6pAZsutJIcRrk3Q10ipluIx9YL7TVz/preview",
+      category: "igaming",
+      clientId: "vera_bet",
+      views: "6.1K",
+      isVertical: true
+    },
+    {
+      id: "cassino_bet_igaming_1",
+      title: "iGaming Ad",
+      thumbnail: "/cassino_ad1.png",
+      videoUrl: "https://drive.google.com/file/d/1wgo1vU91e0y2O3wf87n1Wr4HiU20Mu5s/preview",
+      category: "igaming",
+      clientId: "cassino_bet",
+      views: "4.2K",
+      isVertical: true
+    },
+    {
+      id: "cassino_bet_igaming_2",
+      title: "iGaming Ad",
+      thumbnail: "/cassino_ad2.png",
+      videoUrl: "https://drive.google.com/file/d/1MEWuJlIkHIr3LgyMCQ3U0sBMX8im2p6m/preview",
+      category: "igaming",
+      clientId: "cassino_bet",
+      views: "3.7K",
+      isVertical: true
+    },
+    {
+      id: "cassino_bet_igaming_3",
+      title: "iGaming Ad",
+      thumbnail: "/cassino_ad3.png",
+      videoUrl: "https://drive.google.com/file/d/1caaJF_Ek7GfqF-Fr_aALYyYJzGzhTmck/preview",
+      category: "igaming",
+      clientId: "cassino_bet",
+      views: "5.1K",
+      isVertical: true
+    },
+    {
+      id: "cassino_bet_igaming_4",
+      title: "iGaming Ad",
+      thumbnail: "/cassino_ad4.png",
+      videoUrl: "https://drive.google.com/file/d/1cdKhKb80D-_rdtV7lMjCLsPScrfySwAp/preview",
+      category: "igaming",
+      clientId: "cassino_bet",
+      views: "4.8K",
+      isVertical: true
+    },
+    {
+      id: "cassino_bet_igaming_5",
+      title: "iGaming Ad",
+      thumbnail: "/cassino_ad5.png",
+      videoUrl: "https://drive.google.com/file/d/1ZQ59nEjoJ6nqLpe_MFEVUPn_AA7kQ3eG/preview",
+      category: "igaming",
+      clientId: "cassino_bet",
+      views: "3.9K",
       isVertical: true
     },
     {
