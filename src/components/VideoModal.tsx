@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -11,19 +11,40 @@ interface VideoModalProps {
 }
 
 const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: VideoModalProps) => {
-  // Prevent scrolling when modal is open
+  const scrollYRef = useRef(0);
+
+  // ── Lock body scroll (iOS-safe) ──────────────────────────────────────────
   useEffect(() => {
     if (isOpen) {
+      // Save current scroll position
+      scrollYRef.current = window.scrollY;
+
+      // iOS Safari needs position:fixed + top offset to truly lock scroll
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      // Restore body scroll position exactly
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.overflow = "";
+      window.scrollTo(0, scrollYRef.current);
     }
+
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  // Handle escape key
+  // ── Escape key ───────────────────────────────────────────────────────────
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -32,67 +53,66 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-
-
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] overflow-y-auto">
-          {/* ── Backdrop: semi-transparent — matches Murilo ── */}
+        <>
+          {/* ── Backdrop ──────────────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] bg-black/85"
+            style={{ WebkitTapHighlightColor: "transparent" }}
           />
 
-          {/* ── Centering wrapper — pt-28 clears navbar (~95px) + button gap ── */}
-          <div className="relative min-h-full flex items-center justify-center pt-28 sm:pt-24 pb-6 px-3 sm:px-4">
-
-            {/* ── Wrapper that groups close button + video ── */}
-            <div className={`relative z-10 flex flex-col items-end ${
-              isVertical ? "h-[66svh] sm:h-[74vh] aspect-[9/16]" : "w-full max-w-[830px]"
-            }`}>
-
-              {/* ── Close (X) button — above the video, right-aligned ── */}
-              <motion.button
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25, delay: 0.1 }}
+          {/* ── Modal wrapper — uses flex centering, avoids overflow-y-auto ── */}
+          <div
+            className="fixed inset-0 z-[101] flex flex-col items-center justify-center px-3 sm:px-6"
+            style={{ paddingTop: "env(safe-area-inset-top, 16px)", paddingBottom: "env(safe-area-inset-bottom, 16px)" }}
+          >
+            {/* ── Content group: Close button + Video ───────────────────── */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className={`relative z-10 flex flex-col items-end w-full ${
+                isVertical
+                  ? "max-h-[85svh] max-w-[280px] sm:max-w-[360px]"
+                  : "max-w-[830px]"
+              }`}
+            >
+              {/* ── Close button ─────────────────────────────────────────── */}
+              <button
                 onClick={onClose}
-                className="mb-2 flex items-center gap-1.5 px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white/80 hover:text-white text-sm font-medium transition-all duration-200 border border-white/10 hover:border-white/20 min-h-[44px] sm:min-h-0"
+                className="mb-2 flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-sm font-medium transition-colors duration-200 border border-white/10 hover:border-white/20 min-h-[44px] touch-manipulation"
                 aria-label="Fechar vídeo"
+                style={{ WebkitTapHighlightColor: "transparent" }}
               >
                 <X size={16} strokeWidth={2} />
                 <span>Fechar</span>
-              </motion.button>
+              </button>
 
-              {/* ── Video container ── */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              {/* ── Video container ──────────────────────────────────────── */}
+              <div
                 className={`w-full overflow-hidden rounded-xl bg-black shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.06)] ${
-                  isVertical ? "flex-1" : "aspect-video"
+                  isVertical ? "aspect-[9/16]" : "aspect-video"
                 }`}
               >
-                {/* Iframe */}
                 <iframe
-                  src={videoUrl}
+                  src={isOpen ? videoUrl : ""}
                   title={title}
                   className="w-full h-full border-0 block"
                   allow="autoplay; fullscreen"
                   allowFullScreen
                 />
-              </motion.div>
-            </div>
-
+              </div>
+            </motion.div>
           </div>
-        </div>
+        </>
       )}
     </AnimatePresence>
   );
