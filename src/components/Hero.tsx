@@ -275,7 +275,7 @@ const Hero = () => {
               {[
                 { icon: Instagram, href: "https://www.instagram.com/vitorcs.editor/" },
                 { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/" },
-                { icon: Mail, href: "#" },
+                { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com" },
               ].map((social, i) => (
                 <a
                   key={i}
