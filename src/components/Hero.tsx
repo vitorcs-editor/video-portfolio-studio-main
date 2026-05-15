@@ -103,9 +103,9 @@ const TechChips = () => {
 const ClientMarquee = () => {
   const { t } = useLang();
 
-  // 4 logos reais + 2 slots vazios para manter a estética de marca em crescimento
+  // 5 logos reais + 1 slot vazio para manter a estética de marca em crescimento
   const clientLogo = "/fenix-logo.png";
-  const placeholdersCount = 2;
+  const placeholdersCount = 1;
   
   interface MarqueeItem {
     type: 'logo' | 'placeholder';
@@ -120,6 +120,7 @@ const ClientMarquee = () => {
     { type: 'logo', src: '/vera-bet-logo.png', alt: 'Vera Bet', link: 'https://vera.bet.br/', imgClass: 'w-[95%] max-h-[70%] -translate-y-3' },
     { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: 'https://www.projetodraft.com/', imgClass: 'max-w-[70%] max-h-[70%]' },
     { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=cassino.bet.br&sz=128', alt: 'Cassino.bet.br', link: 'https://cassino.bet.br/', imgClass: 'max-w-[45%] max-h-[45%]' },
+    { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128', alt: '1pra1.bet', link: 'https://1pra1.bet.br/', imgClass: 'max-w-[45%] max-h-[45%]' },
     ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
   ];
   

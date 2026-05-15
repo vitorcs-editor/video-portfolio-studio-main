@@ -45,6 +45,7 @@ const Portfolio = () => {
     { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
     { id: "vera_bet", name: "Vera Bet", niche: "igaming", logo: "/vera-bet-logo2.png" },
     { id: "cassino_bet", name: "Cassino.bet.br", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=cassino.bet.br&sz=128" },
+    { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128" },
     { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
   ];
 
@@ -187,6 +188,36 @@ const Portfolio = () => {
       category: "igaming",
       clientId: "cassino_bet",
       views: "3.9K",
+      isVertical: true
+    },
+    {
+      id: "1pra1_bet_igaming_1",
+      title: "iGaming Ad",
+      thumbnail: "/1pra1_ad1.png",
+      videoUrl: "https://drive.google.com/file/d/160lVRuJbbGCXKv6O1GLkDDEbRjDXsEPh/preview",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "8.3K",
+      isVertical: true
+    },
+    {
+      id: "1pra1_bet_igaming_2",
+      title: "iGaming Ad",
+      thumbnail: "/1pra1_ad2.png",
+      videoUrl: "https://drive.google.com/file/d/1NWwKABt0Kom6T-4yGkwLD5rQlapPAmOe/preview",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "6.1K",
+      isVertical: true
+    },
+    {
+      id: "1pra1_bet_igaming_3",
+      title: "iGaming Ad",
+      thumbnail: "/1pra1_ad3.png",
+      videoUrl: "https://drive.google.com/file/d/1Hiy6O91l0_a1G-ZoUi3LYUVEBnuKyVKD/preview",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "5.4K",
       isVertical: true
     },
     {
