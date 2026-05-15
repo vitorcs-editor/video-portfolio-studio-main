@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLang } from "@/lib/lang";
@@ -31,6 +31,17 @@ const Portfolio = () => {
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleSelectClient = (e: Event) => {
+      const customEvent = e as CustomEvent<{ category: VideoCategory, client: string }>;
+      setActiveCategory(customEvent.detail.category);
+      setActiveClient(customEvent.detail.client);
+      document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+    };
+    window.addEventListener('selectClient', handleSelectClient);
+    return () => window.removeEventListener('selectClient', handleSelectClient);
+  }, []);
 
   const categories: { id: VideoCategory; label: string }[] = [
     { id: "igaming", label: t.portfolio.categories.igaming },

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Instagram, Linkedin, Mail, Smartphone, ChevronRight, ChevronLeft } from "lucide-react";
+import { Play, Instagram, Linkedin, Mail, ChevronRight, ChevronLeft } from "lucide-react";
 import { useLang } from "@/lib/lang";
 
 // CSS keyframes injected once for cheap line-shimmer animations
@@ -106,24 +106,26 @@ const ClientMarquee = () => {
   // 5 logos reais + 1 slot vazio para manter a estética de marca em crescimento
   const clientLogo = "/fenix-logo.png";
   const placeholdersCount = 1;
-  
+
   interface MarqueeItem {
     type: 'logo' | 'placeholder';
     src?: string;
     alt?: string;
     link?: string;
     imgClass?: string;
+    clientId?: string;
+    category?: string;
   }
 
   const items: MarqueeItem[] = [
-    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: 'https://groupphoenixmediabuyer.com/', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: '/vera-bet-logo.png', alt: 'Vera Bet', link: 'https://vera.bet.br/', imgClass: 'w-[95%] max-h-[70%] -translate-y-3' },
-    { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: 'https://www.projetodraft.com/', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=cassino.bet.br&sz=128', alt: 'Cassino.bet.br', link: 'https://cassino.bet.br/', imgClass: 'max-w-[45%] max-h-[45%]' },
-    { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128', alt: '1pra1.bet', link: 'https://1pra1.bet.br/', imgClass: 'max-w-[45%] max-h-[45%]' },
+    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: '#portfolio', clientId: 'fenix_ads', category: 'ads', imgClass: 'max-w-[70%] max-h-[70%]' },
+    { type: 'logo', src: '/vera-bet-logo.png', alt: 'Vera Bet', link: '#portfolio', clientId: 'vera_bet', category: 'igaming', imgClass: 'w-[95%] max-h-[70%] -translate-y-3' },
+    { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: '#portfolio', clientId: 'projeto_draft', category: 'social', imgClass: 'max-w-[70%] max-h-[70%]' },
+    { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=cassino.bet.br&sz=128', alt: 'Cassino.bet.br', link: '#portfolio', clientId: 'cassino_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
+    { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128', alt: '1pra1.bet', link: '#portfolio', clientId: '1pra1_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
     ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
   ];
-  
+
   const scrollItems = [...items, ...items, ...items];
 
   return (
@@ -147,7 +149,7 @@ const ClientMarquee = () => {
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary))_90deg,transparent_180deg)] opacity-40"
           />
-          
+
           {/* Badge Content */}
           <div className="relative bg-[#0a0a0a] px-8 py-2.5 rounded-xl flex items-center justify-center z-10 w-full h-full border border-white/5 group-hover:bg-[#111111] transition-colors">
             <span className="text-primary text-[11px] font-black uppercase tracking-[0.4em] drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)]">
@@ -167,23 +169,29 @@ const ClientMarquee = () => {
             <div
               key={i}
               className={`flex items-center justify-center w-36 sm:w-56 h-20 sm:h-28 rounded-2xl border border-dashed transition-all duration-500 flex-shrink-0 group/item
-                ${item.type === 'logo' 
-                  ? "border-primary/20 bg-primary/[0.01] hover:border-solid hover:border-primary hover:bg-white/[0.05] hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]" 
+                ${item.type === 'logo'
+                  ? "border-primary/20 bg-primary/[0.01] hover:border-solid hover:border-primary hover:bg-white/[0.05] hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
                   : "border-primary/20 bg-primary/[0.01]"}`}
             >
               {item.type === 'logo' ? (
-                <a 
-                  href={item.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <a
+                  href={item.link}
+                  target={item.link?.startsWith('#') ? "_self" : "_blank"}
+                  rel={item.link?.startsWith('#') ? "" : "noopener noreferrer"}
+                  onClick={(e) => {
+                    if (item.clientId && item.category) {
+                      e.preventDefault();
+                      window.dispatchEvent(new CustomEvent('selectClient', { detail: { category: item.category, client: item.clientId } }));
+                    }
+                  }}
                   className="w-full h-full flex items-center justify-center cursor-pointer relative"
                 >
-                  <img 
-                    src={item.src} 
-                    alt={item.alt} 
-                    className={`${item.imgClass ?? 'max-w-[70%] max-h-[70%]'} object-contain transition-all duration-300 group-hover/item:scale-105`} 
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className={`${item.imgClass ?? 'max-w-[70%] max-h-[70%]'} object-contain transition-all duration-300 group-hover/item:scale-105`}
                   />
-                  
+
                   {/* Tooltip estilo "Projeto Draft" do print */}
                   <div className="absolute -bottom-1 -right-2 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/item:translate-y-0 z-20">
                     <div className="bg-[#1a1a1a] border border-white px-3 py-1 shadow-2xl">
@@ -216,7 +224,7 @@ const Hero = () => {
       {/* Main Content Container */}
       <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center pb-8 w-full gap-4">
         <div className="w-full flex flex-col justify-center gap-4">
-          
+
           {/* Typography - Vitor Carvalho - Sleek Minimalist Scale */}
           <div className="flex flex-col sm:flex-row items-start sm:items-baseline relative z-10 pt-4 lg:pt-0 pb-2 gap-0 sm:gap-6 lg:gap-8">
             <motion.h1
@@ -268,7 +276,6 @@ const Hero = () => {
                 { icon: Instagram, href: "https://www.instagram.com/vitorcs.editor/" },
                 { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/" },
                 { icon: Mail, href: "#" },
-                { icon: Smartphone, href: "#" },
               ].map((social, i) => (
                 <a
                   key={i}
@@ -281,6 +288,19 @@ const Hero = () => {
                   <social.icon size={24} className="group-hover:scale-110 transition-transform" />
                 </a>
               ))}
+
+              {/* WhatsApp */}
+              <a
+                href="https://wa.me/5516994427941"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 hover:border-primary/50 hover:text-primary hover:shadow-[0_0_15px_hsl(var(--primary)/0.3)] hover:scale-105 transition-all duration-300 backdrop-blur-md"
+                title="WhatsApp"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="group-hover:scale-110 transition-transform">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </a>
             </div>
           </motion.div>
 
