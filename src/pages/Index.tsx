@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Portfolio from "@/components/Portfolio";
+import Services from "@/components/Services";
+import About from "@/components/About";
 import BudgetForm from "@/components/BudgetForm";
 import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
@@ -12,6 +14,12 @@ import { useLang } from "@/lib/lang";
 const Index = () => {
   const { t } = useLang();
   const [isBudgetOpen, setIsBudgetOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setIsBudgetOpen(true);
+    window.addEventListener("openBudgetModal", handler);
+    return () => window.removeEventListener("openBudgetModal", handler);
+  }, []);
 
   return (
     <>
@@ -31,6 +39,8 @@ const Index = () => {
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10 w-full">
           <Hero />
+          <Services />
+          <About />
           <Portfolio />
         </main>
         <Footer />

@@ -4,7 +4,7 @@ import { useLang } from "@/lib/lang";
 const Footer = () => {
   const { t } = useLang();
   const socialLinks = [
-    { icon: Instagram, href: "https://www.instagram.com/vitorcs.editor/", label: "Instagram" },
+    { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
     { icon: Youtube, href: "#", label: "YouTube" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/", label: "LinkedIn" },
     { icon: Mail, href: "mailto:contato@vitorcarvalho.com", label: "Email" },

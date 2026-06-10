@@ -30,17 +30,17 @@ const Portfolio = () => {
   const [activeClient, setActiveClient] = useState<string>("all");
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const clientScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleSelectClient = (e: Event) => {
-      const customEvent = e as CustomEvent<{ category: VideoCategory, client: string }>;
+      const customEvent = e as CustomEvent<{ category: VideoCategory; client: string }>;
       setActiveCategory(customEvent.detail.category);
       setActiveClient(customEvent.detail.client);
-      document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" });
     };
-    window.addEventListener('selectClient', handleSelectClient);
-    return () => window.removeEventListener('selectClient', handleSelectClient);
+    window.addEventListener("selectClient", handleSelectClient);
+    return () => window.removeEventListener("selectClient", handleSelectClient);
   }, []);
 
   const categories: { id: VideoCategory; label: string }[] = [
@@ -54,250 +54,111 @@ const Portfolio = () => {
   const clients: Client[] = [
     { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
     { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
-    { id: "vera_bet", name: "Vera Bet", niche: "igaming", logo: "/vera-bet-logo2.png" },
-    { id: "cassino_bet", name: "Cassino.bet.br", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=cassino.bet.br&sz=128" },
     { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128" },
     { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
+    { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/cruzeiro-basquete-logo.png.png" },
   ];
 
   const videos: Video[] = [
     {
-      id: "phoenix_ad_1",
-      title: "Ads & Performance",
-      thumbnail: "/phoenix_ad.png",
-      videoUrl: "https://drive.google.com/file/d/1LjRKPbaBQQuEPQGDol7ZGLVcJO2EGA3g/preview",
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "15.4K",
-      isVertical: true
-    },
-    {
-      id: "phoenix_ad_2",
-      title: "Ads & Performance",
-      thumbnail: "/phoenix_ad_2.png",
-      videoUrl: "https://drive.google.com/file/d/1iol_L1BpbVJximPemAHX90aNQ4b5h3OY/preview",
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "9.8K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_1",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad.jpg",
-      videoUrl: "https://drive.google.com/file/d/1vGsmjb5Fj1J8Z9Fbxe1kezkPvZvyMc1b/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "12.1K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_2",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad2.png",
-      videoUrl: "https://drive.google.com/file/d/1aR_KEtY2P3akwvgrmzberU6ME0mKBigU/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "8.7K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_3",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad3.png",
-      videoUrl: "https://drive.google.com/file/d/1fH4ZDdyhPwFlKekmkiqZrV78ftAw4H4b/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "6.3K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_4",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad4.png",
-      videoUrl: "https://drive.google.com/file/d/1VveGF8jIEl5t1rDG8jlYOIUBrleOURX1/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "10.5K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_5",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad5.png",
-      videoUrl: "https://drive.google.com/file/d/1aQhZmkwQt6KiDJ-iF_Ib5TP7_thqzy6C/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "7.8K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_6",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad6.png",
-      videoUrl: "https://drive.google.com/file/d/10_qy3yitUPM57XINRbTAezYQCg4nsv38/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "5.9K",
-      isVertical: true
-    },
-    {
-      id: "vera_bet_igaming_7",
-      title: "iGaming Ad",
-      thumbnail: "/betvera_ad7.png",
-      videoUrl: "https://drive.google.com/file/d/1zZ6pAZsutJIcRrk3Q10ipluIx9YL7TVz/preview",
-      category: "igaming",
-      clientId: "vera_bet",
-      views: "6.1K",
-      isVertical: true
-    },
-    {
-      id: "cassino_bet_igaming_1",
-      title: "iGaming Ad",
-      thumbnail: "/cassino_ad1.png",
-      videoUrl: "https://drive.google.com/file/d/1wgo1vU91e0y2O3wf87n1Wr4HiU20Mu5s/preview",
-      category: "igaming",
-      clientId: "cassino_bet",
-      views: "4.2K",
-      isVertical: true
-    },
-    {
-      id: "cassino_bet_igaming_2",
-      title: "iGaming Ad",
-      thumbnail: "/cassino_ad2.png",
-      videoUrl: "https://drive.google.com/file/d/1MEWuJlIkHIr3LgyMCQ3U0sBMX8im2p6m/preview",
-      category: "igaming",
-      clientId: "cassino_bet",
-      views: "3.7K",
-      isVertical: true
-    },
-    {
-      id: "cassino_bet_igaming_3",
-      title: "iGaming Ad",
-      thumbnail: "/cassino_ad3.png",
-      videoUrl: "https://drive.google.com/file/d/1caaJF_Ek7GfqF-Fr_aALYyYJzGzhTmck/preview",
-      category: "igaming",
-      clientId: "cassino_bet",
-      views: "5.1K",
-      isVertical: true
-    },
-    {
-      id: "cassino_bet_igaming_4",
-      title: "iGaming Ad",
-      thumbnail: "/cassino_ad4.png",
-      videoUrl: "https://drive.google.com/file/d/1cdKhKb80D-_rdtV7lMjCLsPScrfySwAp/preview",
-      category: "igaming",
-      clientId: "cassino_bet",
-      views: "4.8K",
-      isVertical: true
-    },
-    {
-      id: "cassino_bet_igaming_5",
-      title: "iGaming Ad",
-      thumbnail: "/cassino_ad5.png",
-      videoUrl: "https://drive.google.com/file/d/1ZQ59nEjoJ6nqLpe_MFEVUPn_AA7kQ3eG/preview",
-      category: "igaming",
-      clientId: "cassino_bet",
-      views: "3.9K",
-      isVertical: true
-    },
-    {
-      id: "1pra1_bet_igaming_1",
-      title: "iGaming Ad",
-      thumbnail: "/1pra1_ad1.png",
-      videoUrl: "https://drive.google.com/file/d/160lVRuJbbGCXKv6O1GLkDDEbRjDXsEPh/preview",
+      id: "1pra1_1",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/Or1IyfXaG84/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/Or1IyfXaG84?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
       category: "igaming",
       clientId: "1pra1_bet",
-      views: "8.3K",
-      isVertical: true
+      views: "0",
+      isVertical: true,
     },
     {
-      id: "1pra1_bet_igaming_2",
-      title: "iGaming Ad",
-      thumbnail: "/1pra1_ad2.png",
-      videoUrl: "https://drive.google.com/file/d/1NWwKABt0Kom6T-4yGkwLD5rQlapPAmOe/preview",
+      id: "1pra1_2",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/-h3PymgpBD0/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/-h3PymgpBD0?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
       category: "igaming",
       clientId: "1pra1_bet",
-      views: "6.1K",
-      isVertical: true
+      views: "0",
+      isVertical: true,
     },
     {
-      id: "1pra1_bet_igaming_3",
-      title: "iGaming Ad",
-      thumbnail: "/1pra1_ad3.png",
-      videoUrl: "https://drive.google.com/file/d/1Hiy6O91l0_a1G-ZoUi3LYUVEBnuKyVKD/preview",
+      id: "1pra1_3",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/3Z-F-Mwy_Go/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/3Z-F-Mwy_Go?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
       category: "igaming",
       clientId: "1pra1_bet",
-      views: "5.4K",
-      isVertical: true
+      views: "0",
+      isVertical: true,
     },
     {
-      id: "phoenix_vsl_1",
-      title: "VSL",
-      thumbnail: "/phoenix_vsl.png",
-      videoUrl: "https://drive.google.com/file/d/1hEQOG_8z83qxfNGvYDKIoBUh56IiGSVX/preview",
-      category: "vsl",
-      clientId: "fenix_vsl",
-      views: "11.2K",
-      isVertical: true
+      id: "1pra1_4",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/WhNxarVRM-w/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/WhNxarVRM-w?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "0",
+      isVertical: true,
     },
     {
-      id: "projeto_draft_social_1",
-      title: "Social Media",
-      thumbnail: "/draft_ad.png",
-      videoUrl: "https://drive.google.com/file/d/1Lcm3ViOtqirmBidi4EbgLOm0cThwxhGr/preview",
+      id: "1pra1_5",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/0dcQ6RA_blc/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/0dcQ6RA_blc?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "0",
+      isVertical: true,
+    },
+    {
+      id: "1pra1_6",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/_1ZlsFqz8HI/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/_1ZlsFqz8HI?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "0",
+      isVertical: true,
+    },
+    {
+      id: "cruzeiro_basquete_1",
+      title: "Cruzeiro Basquete",
+      thumbnail: "https://img.youtube.com/vi/3IDSKdXrdoc/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/3IDSKdXrdoc?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
       category: "social",
-      clientId: "projeto_draft",
-      views: "9.5K",
-      isVertical: true
+      clientId: "cruzeiro_basquete",
+      views: "0",
+      isVertical: true,
     },
     {
-      id: "projeto_draft_social_2",
-      title: "Social Media",
-      thumbnail: "/draft_ad2.jpg",
-      videoUrl: "https://drive.google.com/file/d/1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo/preview",
+      id: "cruzeiro_basquete_2",
+      title: "Cruzeiro Basquete",
+      thumbnail: "https://img.youtube.com/vi/zLjRsZZiv_8/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/zLjRsZZiv_8?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
       category: "social",
-      clientId: "projeto_draft",
-      views: "7.2K",
-      isVertical: true
+      clientId: "cruzeiro_basquete",
+      views: "0",
+      isVertical: true,
     },
     {
-      id: "phoenix_ad_3",
-      title: "Ads & Performance",
-      thumbnail: "/phoenix_ad_3.png",
-      videoUrl: "https://drive.google.com/file/d/1Ufex1neFqGHJWH3wl1_gbwkrlkhCgpa1/preview",
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "13.7K",
-      isVertical: true
+      id: "cruzeiro_basquete_3",
+      title: "Cruzeiro Basquete",
+      thumbnail: "https://img.youtube.com/vi/utj4E2h1qEA/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/utj4E2h1qEA?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      category: "social",
+      clientId: "cruzeiro_basquete",
+      views: "0",
+      isVertical: true,
     },
-    {
-      id: "phoenix_vsl_2",
-      title: "VSL",
-      thumbnail: "/phoenix_vsl2.png",
-      videoUrl: "https://drive.google.com/file/d/1BDHURurOkrWC0EiMQH4u2YXooj3-0R04/preview",
-      category: "vsl",
-      clientId: "fenix_vsl",
-      views: "14.8K",
-      isVertical: true
-    }
   ];
 
-  const filteredClients = clients.filter(c => c.niche === activeCategory);
+  const filteredClients = clients.filter((c) => c.niche === activeCategory);
 
   const filteredVideos = videos.filter((v) => {
     const categoryMatch = v.category === activeCategory;
     const clientMatch = activeClient === "all" || v.clientId === activeClient;
     return categoryMatch && clientMatch;
   });
-
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === "left" ? scrollLeft - clientWidth * 0.7 : scrollLeft + clientWidth * 0.7;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
-    }
-  };
 
   const openVideo = (video: Video) => {
     if (video.videoUrl !== "#") {
@@ -306,32 +167,45 @@ const Portfolio = () => {
     }
   };
 
+  const clientsWithAll: Array<{ id: string; name: string; logo?: string }> = [
+    { id: "all", name: "Todos" },
+    ...filteredClients,
+  ];
+
   return (
-    <section id="portfolio" className="py-20 sm:py-32 relative overflow-hidden">
-      <div className="relative z-10">
+    <section id="portfolio" className="py-20 sm:py-28 relative overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-10 sm:mb-14 px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-black mb-4 tracking-tight leading-none">
-              Meus{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Trabalhos
-              </span>
-            </h2>
-            <p className="text-white/50 text-sm sm:text-base font-normal">
-              Selecione uma categoria para ver os projetos.
-            </p>
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-10"
+        >
+          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/50 font-bold mb-3 block">
+            Showcase Recente
+          </span>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none mb-3">
+            Trabalhos{" "}
+            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">
+              Selecionados
+            </span>
+          </h2>
+          <p className="text-white/35 text-sm max-w-sm mx-auto">
+            Uma selecao de producoes recentes sob medida. Clique no card para assistir ao projeto.
+          </p>
+        </motion.div>
 
-        {/* Level 1 Filters: Niches — Murilo exact style */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8 px-6">
+        {/* Category filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-wrap justify-center gap-2 mb-5"
+        >
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -339,127 +213,122 @@ const Portfolio = () => {
                 setActiveCategory(cat.id);
                 setActiveClient("all");
               }}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${activeCategory === cat.id
-                  ? "bg-primary text-black shadow-[0_0_20px_hsl(var(--primary)/0.4)]"
-                  : "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
-                }`}
+              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+                activeCategory === cat.id
+                  ? "bg-primary text-black shadow-[0_0_16px_hsl(var(--primary)/0.4)]"
+                  : "bg-white/5 text-white/50 border border-white/10 hover:text-white hover:bg-white/10"
+              }`}
             >
               {cat.label}
             </button>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Level 2 Filters: Clients — Murilo exact style */}
+        {/* Client filters - scrollable row */}
         <AnimatePresence mode="wait">
           {filteredClients.length > 0 && (
             <motion.div
               key={activeCategory}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-              className="flex justify-center flex-wrap gap-3 mb-10 px-6"
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="relative mb-10"
             >
-              <button
-                onClick={() => setActiveClient("all")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border-2 ${activeClient === "all"
-                    ? "border-primary/70 text-primary bg-primary/10"
-                    : "border-white/10 text-white/50 bg-white/5 hover:text-white hover:border-white/30"
-                  }`}
+              <div
+                ref={clientScrollRef}
+                className="flex items-center justify-center flex-wrap gap-2"
               >
-                Todos
-              </button>
-              {filteredClients.map((client) => (
-                <button
-                  key={client.id}
-                  onClick={() => setActiveClient(client.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 border-2 ${activeClient === client.id
-                      ? "border-primary/70 text-primary bg-primary/10"
-                      : "border-white/10 text-white/50 bg-white/5 hover:text-white hover:border-white/30"
+                {clientsWithAll.map((client) => (
+                  <button
+                    key={client.id}
+                    onClick={() => setActiveClient(client.id)}
+                    className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border whitespace-nowrap ${
+                      activeClient === client.id
+                        ? "border-primary/60 text-primary bg-primary/10"
+                        : "border-white/10 text-white/40 bg-transparent hover:text-white hover:border-white/30"
                     }`}
+                  >
+                    {client.logo && (
+                      <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full" />
+                    )}
+                    {client.name}
+                  </button>
+                ))}
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
+                  className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border border-dashed border-primary/40 text-primary/70 hover:text-primary hover:border-primary whitespace-nowrap"
                 >
-                  {client.logo && (
-                    <img src={client.logo} alt="" className="w-6 h-6 object-contain" />
-                  )}
-                  {client.name}
+                  ✦ Pode ser voce
                 </button>
-              ))}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Video Reel — Exact Murilo horizontal scroll structure */}
-        <div className="relative group/reel">
-
-          {/* Left scroll button — always visible on mobile, hover-only on desktop */}
-          <button
-            onClick={() => scroll("left")}
-            aria-label="Anterior"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/70 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white opacity-100 sm:opacity-0 group-hover/reel:opacity-100 transition-all duration-300 hover:bg-primary hover:text-black hover:border-primary hover:scale-110 shadow-xl"
+        {/* Video grid */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory + activeClient}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
           >
-            <ChevronLeft size={20} />
-          </button>
-
-          {/* Right scroll button — always visible on mobile, hover-only on desktop */}
-          <button
-            onClick={() => scroll("right")}
-            aria-label="Próximo"
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/70 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white opacity-100 sm:opacity-0 group-hover/reel:opacity-100 transition-all duration-300 hover:bg-primary hover:text-black hover:border-primary hover:scale-110 shadow-xl"
-          >
-            <ChevronRight size={20} />
-          </button>
-
-          {/* Scroll track — centered on desktop, scrollable on mobile */}
-          <div
-            ref={scrollRef}
-            className="flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth scrollbar-hide px-6 sm:px-10 pb-6 snap-x snap-mandatory"
-            style={{ justifyContent: 'safe center' }}
-          >
-            <AnimatePresence mode="wait">
-              {filteredVideos.map((video, idx) => (
+            {filteredVideos.map((video, idx) => {
+              const client = clients.find((c) => c.id === video.clientId);
+              return (
                 <motion.div
                   key={video.id}
-                  initial={{ opacity: 0, scale: 0.92 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.88 }}
-                  transition={{ duration: 0.35, delay: idx * 0.04 }}
-                  className="flex-shrink-0 snap-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: idx * 0.05 }}
                 >
-                  {/* Card — responsive width: smaller on mobile */}
                   <button
                     onClick={() => openVideo(video)}
-                    className="relative group/card rounded-2xl overflow-hidden w-[170px] sm:w-[290px] aspect-[9/16] block cursor-pointer transition-transform duration-300 hover:scale-[1.03] shadow-xl shadow-black/50"
+                    className="w-full group/card text-left"
                   >
                     {/* Thumbnail */}
-                    <img
-                      src={video.thumbnail}
-                      alt={video.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
+                    <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-3 shadow-lg shadow-black/40">
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-primary/0 group-hover/card:bg-primary/10 transition-colors duration-300" />
 
-                    {/* Always-visible gradient from bottom */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-                    {/* Play overlay — always visible on mobile, hover-only on desktop */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover/card:opacity-100 transition-opacity duration-250">
-                      <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-primary/80 sm:bg-primary/90 flex items-center justify-center shadow-[0_0_30px_hsl(var(--primary)/0.7)]">
-                        <Play size={18} className="fill-black text-black ml-0.5 sm:ml-1" />
+                      {/* Play button */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover/card:opacity-100 transition-opacity duration-300">
+                        <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shadow-[0_0_24px_hsl(var(--primary)/0.6)] scale-90 group-hover/card:scale-100 transition-transform duration-300">
+                          <Play size={15} className="fill-black text-black ml-0.5" />
+                        </div>
                       </div>
+                    </div>
+
+                    {/* Info below card */}
+                    <div className="flex items-center gap-2">
+                      {client?.logo && (
+                        <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full flex-shrink-0" />
+                      )}
+                      <span className="text-white/50 text-[11px] font-semibold uppercase tracking-wide truncate group-hover/card:text-white/80 transition-colors duration-200">
+                        {client?.name ?? video.title}
+                      </span>
                     </div>
                   </button>
                 </motion.div>
-              ))}
-            </AnimatePresence>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
 
-            {/* Empty state */}
-            {filteredVideos.length === 0 && (
-              <div className="w-full flex items-center justify-center py-24 text-white/20 uppercase tracking-[0.4em] font-black text-xs text-center">
-                Nenhum projeto nesta categoria
-              </div>
-            )}
+        {filteredVideos.length === 0 && (
+          <div className="flex items-center justify-center py-32 text-white/20 uppercase tracking-[0.4em] font-black text-xs text-center">
+            Nenhum projeto nesta categoria
           </div>
-        </div>
+        )}
 
       </div>
 

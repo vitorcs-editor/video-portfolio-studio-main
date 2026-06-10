@@ -223,7 +223,9 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
   }, []);
 
   const navLinks = [
-    { href: "#portfolio", label: t.navbar.portfolio },
+    { href: "#portfolio", label: "Projetos" },
+    { href: "#servicos", label: "Serviços" },
+    { href: "#sobre", label: "Sobre" },
   ];
 
   return (
@@ -232,42 +234,47 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-        ? "bg-background/80 backdrop-blur-xl border-b border-white/10 py-4 shadow-lg"
-        : "bg-transparent py-6"
+        ? "bg-background/80 backdrop-blur-xl border-b border-white/10 py-3 shadow-lg"
+        : "bg-transparent py-5"
         }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <a href="#" title="Voltar ao início" className="group flex items-center gap-3">
-          <NeonLogo />
-        </a>
+      <div className="container mx-auto px-6 flex items-center justify-between gap-4">
+        {/* Logo — largura fixa para equilibrar */}
+        <div className="w-[200px] flex-shrink-0">
+          <a href="#" title="Voltar ao inicio">
+            <NeonLogo />
+          </a>
+        </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        {/* Desktop nav — centro com orçamento */}
+        <nav className="hidden md:flex items-center gap-1 bg-white/5 border border-white/10 rounded-full px-2 py-1.5 backdrop-blur-md">
           {navLinks.map((link) => (
             <a
-              key={link.href}
+              key={link.label}
               href={link.href}
-              className="text-xs uppercase tracking-[0.2em] font-medium text-muted-foreground hover:text-foreground transition-colors duration-300"
+              className="text-[11px] uppercase tracking-[0.15em] font-semibold text-white/60 hover:text-white transition-colors duration-200 px-4 py-1.5 rounded-full hover:bg-white/10"
             >
               {link.label}
             </a>
           ))}
 
-          <LanguageSwitcher />
-
           <button
             onClick={onOpenBudget}
-            className="px-6 py-2.5 rounded-full bg-primary text-black text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] transition-all duration-300 hover:brightness-125 hover:scale-105"
+            className="text-[11px] uppercase tracking-[0.15em] font-semibold text-white/60 hover:text-white transition-colors duration-200 px-4 py-1.5 rounded-full hover:bg-white/10"
           >
-            {t.navbar.requestBudget}
+            Solicitar Orçamento
           </button>
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Idioma — direita com mesma largura do logo */}
+        <div className="hidden md:flex w-[200px] justify-end flex-shrink-0">
+          <LanguageSwitcher />
+        </div>
+
+        {/* Mobile menu button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 text-foreground"
+          className="md:hidden p-2 text-white"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -285,9 +292,9 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
             <nav className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
                 <button
-                  key={link.href}
+                  key={link.label}
                   onClick={() => handleMobileNav(link.href)}
-                  className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors text-left"
+                  className="text-lg font-medium text-white/60 hover:text-white transition-colors text-left uppercase tracking-wider"
                 >
                   {link.label}
                 </button>
@@ -297,9 +304,9 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
               </div>
               <button
                 onClick={() => { setIsMobileMenuOpen(false); onOpenBudget?.(); }}
-                className="mt-2 px-5 py-3 rounded-full bg-primary text-black text-xs font-bold uppercase tracking-[0.2em] text-center"
+                className="mt-2 px-5 py-3 rounded-full border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] text-center hover:bg-white hover:text-black transition-all"
               >
-                {t.navbar.requestBudget}
+                Solicitar Orcamento
               </button>
             </nav>
           </motion.div>

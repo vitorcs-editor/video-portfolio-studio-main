@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Send, Upload, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -21,14 +21,40 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
     reference: "",
   });
 
-  // Prevent scroll when open
+  const savedScrollY = useRef(0);
+
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      savedScrollY.current = window.scrollY;
+      Object.assign(document.body.style, {
+        position: "fixed",
+        top: `-${savedScrollY.current}px`,
+        left: "0",
+        right: "0",
+        width: "100%",
+      });
     } else {
-      document.body.style.overflow = "unset";
+      const y = savedScrollY.current;
+      Object.assign(document.body.style, {
+        position: "",
+        top: "",
+        left: "",
+        right: "",
+        width: "",
+      });
+      window.scrollTo(0, y);
     }
-    return () => { document.body.style.overflow = "unset"; };
+    return () => {
+      const y = savedScrollY.current;
+      Object.assign(document.body.style, {
+        position: "",
+        top: "",
+        left: "",
+        right: "",
+        width: "",
+      });
+      window.scrollTo(0, y);
+    };
   }, [isOpen]);
 
   // Close on Escape
@@ -48,7 +74,6 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
       `*Novo Orçamento - Portfólio*\n\n` +
         `*Nome:* ${formData.name}\n` +
         `*Email:* ${formData.email}\n` +
-        `*Tipo de Projeto:* ${formData.service || "Não informado"}\n` +
         `*Descrição:* ${formData.briefing}\n` +
         `*Link de Referência:* ${formData.reference || "Não informado"}`
     );
@@ -121,7 +146,7 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
               {/* Form */}
               <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
                 {/* Name & Email */}
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">
                     <label className={labelClasses}>{t.budget.name}</label>
                     <input
@@ -144,26 +169,6 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
                   </div>
                 </div>
 
-                {/* Service */}
-                <div className="flex flex-col gap-2">
-                  <label className={labelClasses}>{t.budget.whatYouNeed}</label>
-                  <div className="relative">
-                    <select
-                      required
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className={`${inputClasses} appearance-none cursor-pointer`}
-                    >
-                      <option value="" disabled className="text-white/20">{t.budget.selectService}</option>
-                      <option value="VSL" className="bg-[#1a1a1a] text-white">{t.budget.services.vsl}</option>
-                      <option value="Vídeo Curto" className="bg-[#1a1a1a] text-white">{t.budget.services.shorts}</option>
-                      <option value="Vídeo Longo" className="bg-[#1a1a1a] text-white">{t.budget.services.longform}</option>
-                      <option value="Criativos" className="bg-[#1a1a1a] text-white">{t.budget.services.ads}</option>
-                      <option value="Outro" className="bg-[#1a1a1a] text-white">{t.budget.services.other}</option>
-                    </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 text-xs">▼</div>
-                  </div>
-                </div>
 
                 {/* Briefing */}
                 <div className="flex flex-col gap-2">
