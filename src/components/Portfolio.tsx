@@ -121,6 +121,16 @@ const Portfolio = () => {
       isVertical: true,
     },
     {
+      id: "1pra1_7",
+      title: "1pra1.bet",
+      thumbnail: "https://img.youtube.com/vi/boclK_OtPQs/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/boclK_OtPQs?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      category: "igaming",
+      clientId: "1pra1_bet",
+      views: "0",
+      isVertical: true,
+    },
+    {
       id: "cruzeiro_basquete_1",
       title: "Cruzeiro Basquete",
       thumbnail: "https://img.youtube.com/vi/3IDSKdXrdoc/maxresdefault.jpg",
@@ -133,8 +143,8 @@ const Portfolio = () => {
     {
       id: "cruzeiro_basquete_2",
       title: "Cruzeiro Basquete",
-      thumbnail: "https://img.youtube.com/vi/zLjRsZZiv_8/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/zLjRsZZiv_8?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: "https://img.youtube.com/vi/Vjp0SXDlFRk/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/Vjp0SXDlFRk?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
       category: "social",
       clientId: "cruzeiro_basquete",
       views: "0",
