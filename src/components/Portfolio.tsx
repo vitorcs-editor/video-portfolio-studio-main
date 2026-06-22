@@ -123,7 +123,7 @@ const Portfolio = () => {
     {
       id: "projeto_draft_1",
       title: "Projeto Draft",
-      thumbnail: driveThumb("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
+      thumbnail: "/projeto-draft-thumb.jpg.png",
       videoUrl: driveEmbed("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
       category: "social",
       clientId: "projeto_draft",
@@ -143,7 +143,7 @@ const Portfolio = () => {
     {
       id: "cruzeiro_basquete_2",
       title: "Cruzeiro Basquete",
-      thumbnail: driveThumb("1uot6SjYDxBQQrOWlpOuTipBcQ_sSFS2W"),
+      thumbnail: "/ruzeiro-basquete-thumb.jpg.png",
       videoUrl: driveEmbed("1uot6SjYDxBQQrOWlpOuTipBcQ_sSFS2W"),
       category: "social",
       clientId: "cruzeiro_basquete",
