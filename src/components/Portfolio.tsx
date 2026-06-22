@@ -24,6 +24,15 @@ interface Video {
   isVertical?: boolean;
 }
 
+// Monta a URL de player do Google Drive a partir do ID do arquivo.
+// O arquivo precisa estar compartilhado como "Qualquer pessoa com o link".
+const driveEmbed = (fileId: string) =>
+  `https://drive.google.com/file/d/${fileId}/preview`;
+
+// Monta a URL da thumbnail do Google Drive a partir do ID do arquivo.
+const driveThumb = (fileId: string) =>
+  `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+
 const Portfolio = () => {
   const { t } = useLang();
   const [activeCategory, setActiveCategory] = useState<VideoCategory>("igaming");
@@ -55,6 +64,7 @@ const Portfolio = () => {
     { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
     { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
     { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128" },
+    { id: "1pra1_motion", name: "1pra1.bet", niche: "motion", logo: "https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128" },
     { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
     { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/cruzeiro-basquete-logo.png.png" },
   ];
@@ -63,8 +73,8 @@ const Portfolio = () => {
     {
       id: "1pra1_1",
       title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/Or1IyfXaG84/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/Or1IyfXaG84?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("1gxFfZL1jyYny5WEJPxwIfQumCaDR_dbZ"),
+      videoUrl: driveEmbed("1gxFfZL1jyYny5WEJPxwIfQumCaDR_dbZ"),
       category: "igaming",
       clientId: "1pra1_bet",
       views: "0",
@@ -73,8 +83,8 @@ const Portfolio = () => {
     {
       id: "1pra1_2",
       title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/-h3PymgpBD0/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/-h3PymgpBD0?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("1T2lqpfZJtG-8BJ77NRHS-xALPwEPHVm5"),
+      videoUrl: driveEmbed("1T2lqpfZJtG-8BJ77NRHS-xALPwEPHVm5"),
       category: "igaming",
       clientId: "1pra1_bet",
       views: "0",
@@ -83,58 +93,28 @@ const Portfolio = () => {
     {
       id: "1pra1_3",
       title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/3Z-F-Mwy_Go/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/3Z-F-Mwy_Go?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("129Ah3ujYY2wDrBXzEAixUyGw59I0Sbiq"),
+      videoUrl: driveEmbed("129Ah3ujYY2wDrBXzEAixUyGw59I0Sbiq"),
       category: "igaming",
       clientId: "1pra1_bet",
       views: "0",
       isVertical: true,
     },
     {
-      id: "1pra1_4",
+      id: "1pra1_motion_1",
       title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/WhNxarVRM-w/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/WhNxarVRM-w?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_5",
-      title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/0dcQ6RA_blc/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/0dcQ6RA_blc?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_6",
-      title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/_1ZlsFqz8HI/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/_1ZlsFqz8HI?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_7",
-      title: "1pra1.bet",
-      thumbnail: "https://img.youtube.com/vi/boclK_OtPQs/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/boclK_OtPQs?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
-      category: "igaming",
-      clientId: "1pra1_bet",
+      thumbnail: driveThumb("1HxAy5GdGXdRGFpTlnHmfcQTJCF59yvIJ"),
+      videoUrl: driveEmbed("1HxAy5GdGXdRGFpTlnHmfcQTJCF59yvIJ"),
+      category: "motion",
+      clientId: "1pra1_motion",
       views: "0",
       isVertical: true,
     },
     {
       id: "projeto_draft_1",
       title: "Projeto Draft",
-      thumbnail: "https://img.youtube.com/vi/B3yNdNhIHiM/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/B3yNdNhIHiM?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
+      videoUrl: driveEmbed("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
       category: "social",
       clientId: "projeto_draft",
       views: "0",
@@ -143,8 +123,8 @@ const Portfolio = () => {
     {
       id: "cruzeiro_basquete_1",
       title: "Cruzeiro Basquete",
-      thumbnail: "https://img.youtube.com/vi/3IDSKdXrdoc/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/3IDSKdXrdoc?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("1j8Gryyp0-YbtWQHUy-ZQgH6NdkfXsHyw"),
+      videoUrl: driveEmbed("1j8Gryyp0-YbtWQHUy-ZQgH6NdkfXsHyw"),
       category: "social",
       clientId: "cruzeiro_basquete",
       views: "0",
@@ -153,8 +133,8 @@ const Portfolio = () => {
     {
       id: "cruzeiro_basquete_2",
       title: "Cruzeiro Basquete",
-      thumbnail: "https://img.youtube.com/vi/Vjp0SXDlFRk/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/Vjp0SXDlFRk?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("1uot6SjYDxBQQrOWlpOuTipBcQ_sSFS2W"),
+      videoUrl: driveEmbed("1uot6SjYDxBQQrOWlpOuTipBcQ_sSFS2W"),
       category: "social",
       clientId: "cruzeiro_basquete",
       views: "0",
@@ -163,8 +143,8 @@ const Portfolio = () => {
     {
       id: "cruzeiro_basquete_3",
       title: "Cruzeiro Basquete",
-      thumbnail: "https://img.youtube.com/vi/utj4E2h1qEA/maxresdefault.jpg",
-      videoUrl: "https://www.youtube.com/embed/utj4E2h1qEA?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      thumbnail: driveThumb("1CAo5vTb5p0OOq-9CdQGjS4wEKfnrRbns"),
+      videoUrl: driveEmbed("1CAo5vTb5p0OOq-9CdQGjS4wEKfnrRbns"),
       category: "social",
       clientId: "cruzeiro_basquete",
       views: "0",
