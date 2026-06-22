@@ -131,6 +131,16 @@ const Portfolio = () => {
       isVertical: true,
     },
     {
+      id: "projeto_draft_1",
+      title: "Projeto Draft",
+      thumbnail: "https://img.youtube.com/vi/B3yNdNhIHiM/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/embed/B3yNdNhIHiM?autoplay=1&rel=0&modestbranding=1&vq=hd1080&hd=1",
+      category: "social",
+      clientId: "projeto_draft",
+      views: "0",
+      isVertical: true,
+    },
+    {
       id: "cruzeiro_basquete_1",
       title: "Cruzeiro Basquete",
       thumbnail: "https://img.youtube.com/vi/3IDSKdXrdoc/maxresdefault.jpg",

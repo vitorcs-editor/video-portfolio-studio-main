@@ -5,7 +5,7 @@ const features = [
   {
     icon: Target,
     title: "Visão Estratégica",
-    desc: "Não crio só pra criar. Cada peça tem uma função: prender, comunicar ou converter.",
+    desc: "Não crio só para criar. Cada peça tem uma função: prender, comunicar ou converter.",
   },
   {
     icon: Zap,
@@ -20,7 +20,7 @@ const features = [
   {
     icon: TrendingUp,
     title: "Foco em Conversão",
-    desc: "O vídeo bonito que não converte não serve. Trabalho pra que estética e resultado andem juntos.",
+    desc: "O vídeo bonito que não converte não serve. Trabalho para que estética e resultado andem juntos.",
   },
 ];
 

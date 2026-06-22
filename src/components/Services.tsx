@@ -15,12 +15,12 @@ const services = [
   {
     icon: TrendingUp,
     title: "VSLs de Alta Conversão",
-    desc: "VSLs que prendem do primeiro segundo ao CTA. Estrutura, ritmo e áudio pensados pra manter o espectador até o final — e convencer.",
+    desc: "VSLs que prendem do primeiro segundo ao CTA. Estrutura, ritmo e áudio pensados para manter o espectador até o final — e convencer.",
   },
   {
     icon: Tv,
     title: "Campanhas & Performance",
-    desc: "Criativos que param o scroll e vendem. Feitos pra rodar em tráfego pago e parecerem conteúdo, não anúncio.",
+    desc: "Criativos que param o scroll e vendem. Feitos para rodar em tráfego pago e parecerem conteúdo, não anúncio.",
   },
 ];
 

@@ -249,7 +249,7 @@ const Hero = () => {
           <span className="block text-white text-2xl sm:text-3xl font-black mb-3 leading-tight tracking-tight">
             Edição que prende. Resultado que converte.
           </span>
-          Atendo marcas de iGaming, VSL e social media. Entrego vídeos com identidade, ritmo e foco em performance.
+          Atendo marcas de iGaming, VSL e redes sociais. Entrego vídeos com identidade, ritmo e foco em performance.
         </motion.p>
 
         {/* Botões */}

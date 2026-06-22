@@ -71,8 +71,8 @@ const translations: Record<string, T> = {
       reference: "REFERÊNCIA VISUAL (OPCIONAL)",
       referencePlaceholder: "Cole um link do YouTube ou Drive...",
       requestNow: "SOLICITAR AGORA",
-      toastTitle: "Próximo Passo Iniciado!",
-      toastDesc: "Você será redirecionado para o WhatsApp com todos os detalhes.",
+      toastTitle: "Próxima Etapa Iniciada!",
+      toastDesc: "Você será direcionado ao WhatsApp para continuar.",
       response24h: "Resposta em 24h",
       freeBudget: "Orçamento gratuito"
     },
