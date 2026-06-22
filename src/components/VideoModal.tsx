@@ -85,7 +85,7 @@ const VideoModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute inset-0 bg-black"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
             onClick={onClose}
           />
 
