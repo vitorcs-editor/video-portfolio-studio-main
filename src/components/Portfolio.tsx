@@ -111,6 +111,16 @@ const Portfolio = () => {
       isVertical: true,
     },
     {
+      id: "1pra1_motion_2",
+      title: "1pra1.bet",
+      thumbnail: driveThumb("1_g_Xj61kaQr2XP3FSTKclo12nNJOUBCZ"),
+      videoUrl: driveEmbed("1_g_Xj61kaQr2XP3FSTKclo12nNJOUBCZ"),
+      category: "motion",
+      clientId: "1pra1_motion",
+      views: "0",
+      isVertical: true,
+    },
+    {
       id: "projeto_draft_1",
       title: "Projeto Draft",
       thumbnail: driveThumb("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
