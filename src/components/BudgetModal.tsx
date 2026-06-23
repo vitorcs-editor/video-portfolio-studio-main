@@ -3,6 +3,7 @@ import { Send, Upload, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/lib/lang";
+import { whatsappLink } from "@/lib/contact";
 
 interface BudgetModalProps {
   isOpen: boolean;
@@ -70,16 +71,15 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const message = encodeURIComponent(
+    const message =
       `*Novo Orçamento - Portfólio*\n\n` +
-        `*Nome:* ${formData.name}\n` +
-        `*Email:* ${formData.email}\n` +
-        `*Descrição:* ${formData.briefing}\n` +
-        `*Link de Referência:* ${formData.reference || "Não informado"}`
-    );
+      `*Nome:* ${formData.name}\n` +
+      `*Email:* ${formData.email}\n` +
+      `*Descrição:* ${formData.briefing}\n` +
+      `*Link de Referência:* ${formData.reference || "Não informado"}`;
 
     // Abre WhatsApp antes do await — evita bloqueio no mobile
-    window.open(`https://wa.me/5516994427941?text=${message}`, "_blank");
+    window.open(whatsappLink(message), "_blank");
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
 

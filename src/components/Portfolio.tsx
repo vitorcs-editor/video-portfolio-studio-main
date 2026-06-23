@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import VideoModal from "./VideoModal";
 
@@ -39,7 +39,6 @@ const Portfolio = () => {
   const [activeClient, setActiveClient] = useState<string>("all");
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const clientScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleSelectClient = (e: Event) => {
@@ -385,10 +384,7 @@ const Portfolio = () => {
               transition={{ duration: 0.2 }}
               className="relative mb-10"
             >
-              <div
-                ref={clientScrollRef}
-                className="flex items-center justify-center flex-wrap gap-2"
-              >
+              <div className="flex items-center justify-center flex-wrap gap-2">
                 {clientsWithAll.map((client) => (
                   <button
                     key={client.id}
@@ -439,13 +435,14 @@ const Portfolio = () => {
                     onClick={() => openVideo(video)}
                     className="w-full group/card text-left"
                   >
-                    {/* Thumbnail */}
-                    <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-3 shadow-lg shadow-black/40">
+                    {/* Thumbnail — fundo de marca aparece caso a thumb do Drive falhe */}
+                    <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-3 shadow-lg shadow-black/40 bg-gradient-to-br from-[#0c0c0c] via-[#0a1418] to-primary/10">
                       <img
                         src={video.thumbnail}
                         alt={video.title}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                        onError={(e) => { e.currentTarget.style.opacity = "0"; }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       <div className="absolute inset-0 bg-primary/0 group-hover/card:bg-primary/10 transition-colors duration-300" />

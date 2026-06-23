@@ -1,14 +1,14 @@
-import { Instagram, Youtube, Linkedin, Mail, Smartphone } from "lucide-react";
+import { Instagram, Linkedin, Mail, Smartphone } from "lucide-react";
 import { useLang } from "@/lib/lang";
+import { whatsappLink } from "@/lib/contact";
 
 const Footer = () => {
   const { t } = useLang();
   const socialLinks = [
     { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
-    { icon: Youtube, href: "#", label: "YouTube" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/", label: "LinkedIn" },
-    { icon: Mail, href: "mailto:contato@vitorcarvalho.com", label: "Email" },
-    { icon: Smartphone, href: "#", label: "WhatsApp" },
+    { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com", label: "Email" },
+    { icon: Smartphone, href: whatsappLink(), label: "WhatsApp" },
   ];
 
   return (
