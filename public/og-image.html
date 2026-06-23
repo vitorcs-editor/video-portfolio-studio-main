@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>OG Image — Vitor Carvalho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #02121a; }
+  /* Frame com o tamanho EXATO de uma og:image (1200x630). */
+  .frame {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(900px 600px at 80% 10%, rgba(0,194,240,0.18), transparent 60%),
+      radial-gradient(700px 500px at 10% 95%, rgba(0,120,160,0.16), transparent 60%),
+      #02121a;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 56px;
+  }
+  /* Linha decorativa sutil no topo */
+  .frame::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,194,240,0.5), transparent);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 28px;
+    border: 1px solid rgba(0,194,240,0.35);
+    background: rgba(0,194,240,0.06);
+    border-radius: 999px;
+    color: #2fd0f5;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    margin-bottom: 38px;
+  }
+  .name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 86px;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .name .white { color: #ffffff; }
+  .name .cyan  { color: #00c2f0; text-shadow: 0 0 60px rgba(0,194,240,0.55); }
+  .headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 40px;
+    color: #ffffff;
+    margin-top: 34px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    font-size: 22px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 16px;
+    font-weight: 400;
+    max-width: 760px;
+  }
+  .domain {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #2fd0f5;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+  }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="badge">✦ EDIÇÃO DE VÍDEO &nbsp;•&nbsp; IGAMING &nbsp;•&nbsp; VSL &nbsp;•&nbsp; ADS</div>
+    <div class="name"><span class="white">VITOR </span><span class="cyan">CARVALHO</span></div>
+    <div class="headline">Edição que prende. Resultado que converte.</div>
+    <div class="sub">Editor de vídeo sênior — iGaming, VSL e redes sociais.</div>
+    <div class="domain">www.vitorcs.com.br</div>
+  </div>
+</body>
+</html>

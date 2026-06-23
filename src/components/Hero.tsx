@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Instagram, Linkedin, Mail, ChevronRight, ChevronLeft } from "lucide-react";
+import { Play, Instagram, Linkedin, Mail } from "lucide-react";
 import { useLang } from "@/lib/lang";
 
 // CSS keyframes injected once for cheap line-shimmer animations
@@ -266,14 +266,12 @@ const Hero = () => {
             <Play size={16} className="fill-black" />
             {t.hero.viewPortfolio}
           </a>
-          <a
-            href="https://wa.me/5516994427941"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
             className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-white/15 bg-white/5 text-white font-bold text-sm uppercase tracking-widest hover:border-primary/50 hover:bg-white/10 transition-all duration-300 hover:scale-105 w-full sm:w-auto backdrop-blur-sm"
           >
             Solicitar Orçamento
-          </a>
+          </button>
         </motion.div>
 
         {/* Sociais */}
