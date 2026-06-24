@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Stats from "@/components/Stats";
 import Portfolio from "@/components/Portfolio";
 import Services from "@/components/Services";
 import About from "@/components/About";
+import Stack from "@/components/Stack";
 import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
 import GlobalBackground from "@/components/GlobalBackground";
@@ -60,9 +62,11 @@ const Index = () => {
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10 w-full">
           <Hero />
+          <Stats />
+          <Portfolio />
           <Services />
           <About />
-          <Portfolio />
+          <Stack />
         </main>
         <Footer />
       </div>

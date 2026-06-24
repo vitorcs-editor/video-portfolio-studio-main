@@ -247,7 +247,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
         </div>
 
         {/* Desktop nav — centro com orçamento */}
-        <nav className="hidden md:flex items-center gap-1 bg-white/5 border border-white/10 rounded-full px-2 py-1.5 backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1 bg-white/5 border border-white/10 rounded-full pl-2 pr-1.5 py-1.5 backdrop-blur-md">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -260,7 +260,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
 
           <button
             onClick={onOpenBudget}
-            className="text-[11px] uppercase tracking-[0.15em] font-semibold text-white/60 hover:text-white transition-colors duration-200 px-4 py-1.5 rounded-full hover:bg-white/10"
+            className="ml-1 text-[11px] uppercase tracking-[0.15em] font-bold text-background bg-primary hover:brightness-110 transition-all duration-200 px-4 py-1.5 rounded-full shadow-[0_0_16px_hsl(var(--primary)/0.35)]"
           >
             Solicitar Orçamento
           </button>
@@ -306,7 +306,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
                 onClick={() => { setIsMobileMenuOpen(false); onOpenBudget?.(); }}
                 className="mt-2 px-5 py-3 rounded-full border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] text-center hover:bg-white hover:text-black transition-all"
               >
-                Solicitar Orcamento
+                Solicitar Orçamento
               </button>
             </nav>
           </motion.div>

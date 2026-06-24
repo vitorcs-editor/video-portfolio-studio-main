@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Arquivos temporários / artefatos
+tmp/
+lint_output.txt
+
+# Config local de ferramentas
+.claude/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

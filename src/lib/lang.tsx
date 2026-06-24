@@ -4,7 +4,11 @@ type Lang = 'PT-BR' | 'EN-US' | 'EN-UK' | 'ES';
 
 interface T {
   navbar: { portfolio: string; budget: string; requestBudget: string; languages: string; search: string; };
-  hero: { title1: string; title2: string; description: string; viewPortfolio: string; tools: string; ai: string; clients: string; };
+  hero: {
+    title1: string; title2: string; description: string; viewPortfolio: string; tools: string; ai: string; clients: string;
+    stack: { label: string; title: string; categories: { ia: string; edicao: string; motion: string; analise: string; design: string; }; };
+    stats: { label: string; title: string; titleAccent: string; items: { value: string; label: string; }[]; };
+  };
   portfolio: {
     projectsLine1: string; projectsLine2: string; description: string; exploreMore: string;
     categories: { all: string; igaming: string; vsl: string; motion: string; ads: string; social: string; };
@@ -38,7 +42,23 @@ const translations: Record<string, T> = {
       viewPortfolio: "Ver Portfólio",
       tools: "FERRAMENTAS",
       ai: "INTELIGÊNCIA ARTIFICIAL",
-      clients: "CLIENTES"
+      clients: "CLIENTES",
+      stack: {
+        label: "FERRAMENTAS & IA",
+        title: "Stack de produção.",
+        categories: { ia: "IA", edicao: "Edição", motion: "Motion", analise: "Análise", design: "Design" }
+      },
+      stats: {
+        label: "NÚMEROS",
+        title: "Resultado que ",
+        titleAccent: "fala por mim.",
+        items: [
+          { value: "10M+", label: "Views geradas" },
+          { value: "4+", label: "Anos de experiência" },
+          { value: "50+", label: "Projetos entregues" },
+          { value: "20+", label: "Clientes atendidos" }
+        ]
+      }
     },
     portfolio: {
       projectsLine1: "Projetos",
@@ -98,7 +118,23 @@ const translations: Record<string, T> = {
       viewPortfolio: "View Portfolio",
       tools: "TOOLS",
       ai: "ARTIFICIAL INTELLIGENCE",
-      clients: "CLIENTS"
+      clients: "CLIENTS",
+      stack: {
+        label: "TOOLS & AI",
+        title: "Production stack.",
+        categories: { ia: "AI", edicao: "Editing", motion: "Motion", analise: "Analytics", design: "Design" }
+      },
+      stats: {
+        label: "NUMBERS",
+        title: "Results that ",
+        titleAccent: "speak for me.",
+        items: [
+          { value: "10M+", label: "Views generated" },
+          { value: "4+", label: "Years of experience" },
+          { value: "50+", label: "Projects delivered" },
+          { value: "20+", label: "Clients served" }
+        ]
+      }
     },
     portfolio: {
       projectsLine1: "Selected",
@@ -158,7 +194,23 @@ const translations: Record<string, T> = {
       viewPortfolio: "Ver Portafolio",
       tools: "HERRAMIENTAS",
       ai: "INTELIGENCIA ARTIFICIAL",
-      clients: "CLIENTES"
+      clients: "CLIENTES",
+      stack: {
+        label: "HERRAMIENTAS E IA",
+        title: "Stack de producción.",
+        categories: { ia: "IA", edicao: "Edición", motion: "Motion", analise: "Análisis", design: "Diseño" }
+      },
+      stats: {
+        label: "NÚMEROS",
+        title: "Resultados que ",
+        titleAccent: "hablan por mí.",
+        items: [
+          { value: "10M+", label: "Views generadas" },
+          { value: "4+", label: "Años de experiencia" },
+          { value: "50+", label: "Proyectos entregados" },
+          { value: "20+", label: "Clientes atendidos" }
+        ]
+      }
     },
     portfolio: {
       projectsLine1: "Proyectos",

@@ -22,7 +22,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Syne", "sans-serif"],
+        display: ["Space Grotesk", "sans-serif"],
+        impact: ["Bebas Neue", "sans-serif"],
         body: ["Inter", "sans-serif"],
         signature: ["Pinyon Script", "cursive"],
       },

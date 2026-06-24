@@ -60,10 +60,10 @@ const Portfolio = () => {
   ];
 
   const clients: Client[] = [
-    { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
-    { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "https://groupphoenixmediabuyer.com/images/favicon.png" },
-    { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128" },
-    { id: "1pra1_motion", name: "1pra1.bet", niche: "motion", logo: "https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128" },
+    { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "/icons/groupphoenix.png" },
+    { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "/icons/groupphoenix.png" },
+    { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "/icons/1pra1.png" },
+    { id: "1pra1_motion", name: "1pra1.bet", niche: "motion", logo: "/icons/1pra1.png" },
     { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
     { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/cruzeiro-basquete-logo.png.png" },
   ];
@@ -331,19 +331,17 @@ const Portfolio = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10"
+          className="mb-10"
         >
           <span className="text-[10px] uppercase tracking-[0.35em] text-primary/50 font-bold mb-3 block">
             Showcase Recente
           </span>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none mb-3">
-            Trabalhos{" "}
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">
-              Selecionados
-            </span>
+          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide mb-3">
+            <span className="text-white">Trabalhos </span>
+            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">Selecionados</span>
           </h2>
-          <p className="text-white/35 text-sm max-w-sm mx-auto">
-            Uma selecao de producoes recentes sob medida. Clique no card para assistir ao projeto.
+          <p className="text-white/35 text-sm max-w-md">
+            Uma seleção de produções recentes sob medida. Clique no card para assistir ao projeto.
           </p>
         </motion.div>
 
@@ -364,8 +362,8 @@ const Portfolio = () => {
               }}
               className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
                 activeCategory === cat.id
-                  ? "bg-primary text-black shadow-[0_0_16px_hsl(var(--primary)/0.4)]"
-                  : "bg-white/5 text-white/50 border border-white/10 hover:text-white hover:bg-white/10"
+                  ? "bg-primary text-background shadow-[0_0_16px_hsl(var(--primary)/0.4)]"
+                  : "bg-primary/[0.04] text-white/50 border border-primary/15 hover:text-white hover:border-primary/35 hover:bg-primary/[0.08]"
               }`}
             >
               {cat.label}
@@ -405,7 +403,7 @@ const Portfolio = () => {
                   onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
                   className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border border-dashed border-primary/40 text-primary/70 hover:text-primary hover:border-primary whitespace-nowrap"
                 >
-                  ✦ Pode ser voce
+                  ✦ Pode ser você
                 </button>
               </div>
             </motion.div>

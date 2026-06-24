@@ -1,6 +1,7 @@
-@import '@fontsource/syne/400.css';
-@import '@fontsource/syne/700.css';
-@import '@fontsource/syne/800.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
+@import '@fontsource/space-grotesk/700.css';
+@import '@fontsource/bebas-neue/400.css';
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
@@ -52,7 +53,7 @@
     --glass-border: rgba(255, 255, 255, 0.08);
 
     /* Typography */
-    --font-display: 'Syne', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-signature: 'Pinyon Script', cursive;
 

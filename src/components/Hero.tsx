@@ -26,78 +26,6 @@ const lineShimmerStyle = (
 );
 
 
-// Tech Chips for the new layout
-const TechChips = () => {
-  const { t } = useLang();
-  const tools = [
-    { name: "Pr", label: "Premiere Pro", delay: 0, icon: "https://skillicons.dev/icons?i=pr" },
-    { name: "Ae", label: "After Effects", delay: 0.1, icon: "https://skillicons.dev/icons?i=ae" },
-    { name: "Ps", label: "Photoshop", delay: 0.2, icon: "https://skillicons.dev/icons?i=ps" },
-  ];
-  const ais = [
-    { name: "Rw", label: "Runway", delay: 0.4, icon: "https://www.google.com/s2/favicons?domain=runwayml.com&sz=128" },
-    { name: "Kl", label: "Kling", delay: 0.5, icon: "https://www.google.com/s2/favicons?domain=klingai.com&sz=128" },
-    { name: "Mx", label: "Minimax", delay: 0.6, icon: "https://www.google.com/s2/favicons?domain=minimaxi.com&sz=128" },
-    { name: "Df", label: "Dreamface", delay: 0.7, icon: "https://www.google.com/s2/favicons?domain=dreamfaceapp.com&sz=128" },
-  ];
-
-  return (
-    <div className="flex flex-col xl:flex-row gap-5 sm:gap-8 lg:gap-12 mt-6 sm:mt-8 pt-6 relative w-full overflow-hidden">
-      {/* Divider for Tools — CSS animated, zero JS overhead */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-        <span className="shimmer-r absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
-        <span className="shimmer-l absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
-      </div>
-
-      {/* Ferramentas Tradicionais */}
-      <div className="flex-1">
-        <h3 className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/40 font-semibold mb-4 sm:mb-6">{t.hero.tools}</h3>
-        <div className="flex flex-wrap gap-3 sm:gap-4">
-          {tools.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 + t.delay }}
-              className="group relative flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pr-5 p-1 backdrop-blur-md cursor-pointer hover:border-primary/50 transition-all duration-500 hover:scale-105 hover:bg-white/10 shadow-sm hover:shadow-[0_0_15px_hsl(var(--primary)/0.2)]"
-            >
-              <div className="w-10 h-10 rounded-full bg-black/40 border border-white/5 flex items-center justify-center group-hover:bg-primary/20 group-hover:shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-all duration-300">
-                <img src={t.icon} alt={t.label} className="w-5 h-5 object-contain" />
-              </div>
-              <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
-                {t.label}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Integração de Inteligência Artificial */}
-      <div className="flex-1">
-        <h3 className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/40 font-semibold mb-4 sm:mb-6">{t.hero.ai}</h3>
-        <div className="flex flex-wrap gap-3 sm:gap-4">
-          {ais.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 + t.delay }}
-              className="group relative flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pr-5 p-1 backdrop-blur-md cursor-pointer hover:border-primary/50 transition-all duration-500 hover:scale-105 hover:bg-white/10 shadow-sm hover:shadow-[0_0_15px_hsl(var(--primary)/0.2)]"
-            >
-              <div className="w-10 h-10 rounded-full bg-black/40 border border-white/5 flex items-center justify-center group-hover:bg-primary/20 group-hover:shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-all duration-300">
-                <img src={t.icon} alt={t.label} className="w-5 h-5 object-contain rounded-full" />
-              </div>
-              <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
-                {t.label}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 
 // Client Marquee - Exibindo múltiplos quadros conforme preferência do usuário
 const ClientMarquee = () => {
@@ -120,7 +48,7 @@ const ClientMarquee = () => {
   const items: MarqueeItem[] = [
     { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: '#portfolio', clientId: 'fenix_ads', category: 'ads', imgClass: 'max-w-[70%] max-h-[70%]' },
     { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: '#portfolio', clientId: 'projeto_draft', category: 'social', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: 'https://www.google.com/s2/favicons?domain=1pra1.bet.br&sz=128', alt: '1pra1.bet', link: '#portfolio', clientId: '1pra1_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
+    { type: 'logo', src: '/icons/1pra1.png', alt: '1pra1.bet', link: '#portfolio', clientId: '1pra1_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
     { type: 'logo', src: '/cruzeiro-basquete-logo.png.png', alt: 'Cruzeiro Basquete', link: '#portfolio', clientId: 'cruzeiro_basquete', category: 'social', imgClass: 'max-w-[80%] max-h-[80%] mix-blend-lighten' },
     ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
   ];
@@ -128,43 +56,28 @@ const ClientMarquee = () => {
   const scrollItems = [...items, ...items, ...items];
 
   return (
-    <div className="w-full flex flex-col mt-auto relative z-10 pb-4">
-      {/* Divider Header */}
-      <div className="w-full flex flex-col items-center justify-center relative mb-2">
-        <div className="chevron-anim mb-3 text-primary opacity-60">▾</div>
-
-        <div className="relative w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <span className="shimmer-r absolute left-0 w-1/3 h-full bg-gradient-to-r from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
-          <span className="shimmer-l absolute right-0 w-1/3 h-full bg-gradient-to-l from-transparent via-primary to-transparent drop-shadow-[0_0_12px_hsl(var(--primary))]" />
-        </div>
-
-        <div className="relative p-[1px] rounded-xl overflow-hidden mt-3 z-10 w-fit group">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary))_90deg,transparent_180deg)] opacity-40"
-          />
-          <div className="relative bg-[#0a0a0a] px-8 py-2.5 rounded-xl flex items-center justify-center z-10 w-full h-full border border-white/5 group-hover:bg-[#111111] transition-colors">
-            <span className="text-primary text-[11px] font-black uppercase tracking-[0.4em] drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)]">
-              {t.hero.clients}
-            </span>
-          </div>
-        </div>
+    <div className="w-full mt-auto relative z-10 pb-6">
+      {/* Header simples no padrão das seções */}
+      <div className="container mx-auto px-6 mb-4 flex items-center gap-3">
+        <span className="text-[10px] uppercase tracking-[0.3em] text-primary/55 font-bold">
+          {t.hero.clients}
+        </span>
+        <span className="h-px flex-1 bg-gradient-to-r from-primary/25 to-transparent" />
       </div>
 
-      {/* Marquee Slider */}
-      <div className="w-full overflow-hidden h-28 sm:h-36 flex items-center relative group mt-2">
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+      {/* Marquee Slider — células bento */}
+      <div className="w-full overflow-hidden h-[88px] sm:h-24 flex items-center relative group">
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] items-center gap-3 sm:gap-6 px-3">
+        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] items-center gap-3 sm:gap-4 px-3">
           {scrollItems.map((item, i) => (
             <div
               key={i}
-              className={`flex items-center justify-center w-36 sm:w-56 h-20 sm:h-28 rounded-2xl border border-dashed transition-all duration-500 flex-shrink-0 group/item
+              className={`flex items-center justify-center w-36 sm:w-48 h-16 sm:h-20 rounded-2xl border transition-all duration-300 flex-shrink-0 group/item
                 ${item.type === 'logo'
-                  ? "border-primary/20 bg-primary/[0.01] hover:border-solid hover:border-primary hover:bg-white/[0.05] hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
-                  : "border-primary/20 bg-primary/[0.01]"}`}
+                  ? "border-primary/15 bg-primary/[0.03] hover:border-primary/40 hover:bg-primary/[0.07] hover:shadow-[0_0_18px_hsl(var(--primary)/0.2)]"
+                  : "border-primary/10 bg-primary/[0.01]"}`}
             >
               {item.type === 'logo' ? (
                 <a
@@ -185,7 +98,7 @@ const ClientMarquee = () => {
                     className={`${item.imgClass ?? 'max-w-[70%] max-h-[70%]'} object-contain transition-all duration-300 group-hover/item:scale-105`}
                   />
                   <div className="absolute -bottom-1 -right-2 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/item:translate-y-0 z-20">
-                    <div className="bg-[#1a1a1a] border border-white px-3 py-1 shadow-2xl">
+                    <div className="bg-[#1a1a1a] border border-white/20 rounded-md px-3 py-1 shadow-2xl">
                       <span className="text-white text-[10px] sm:text-[11px] font-medium whitespace-nowrap tracking-wide">
                         {item.alt}
                       </span>
@@ -193,7 +106,7 @@ const ClientMarquee = () => {
                   </div>
                 </a>
               ) : (
-                <span className="text-primary/10 text-2xl font-thin select-none">+</span>
+                <span className="text-primary/15 text-2xl font-thin select-none">+</span>
               )}
             </div>
           ))}
@@ -203,139 +116,149 @@ const ClientMarquee = () => {
   );
 };
 
+// Célula base do bento
+const cellBase =
+  "relative rounded-2xl border border-primary/15 bg-primary/[0.03] overflow-hidden transition-all duration-300 hover:border-primary/35";
+
+const socials = [
+  { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/", label: "LinkedIn" },
+  { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com", label: "Email" },
+];
+
 const Hero = () => {
   const { t } = useLang();
+  const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
+
   return (
     <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden pt-20 sm:pt-24">
       {lineShimmerStyle}
-      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[100px] pointer-events-none opacity-60" />
-      <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-accent/8 rounded-full blur-[90px] pointer-events-none opacity-50" />
+      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[110px] pointer-events-none opacity-50" />
+      <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-accent/8 rounded-full blur-[90px] pointer-events-none opacity-40" />
 
-      {/* Main Content — centralizado */}
-      <div className="container mx-auto px-6 relative z-10 flex-1 flex flex-col items-center justify-center text-center gap-6 pb-8">
-
-        {/* Badge de especialidades */}
+      <div className="container mx-auto px-6 relative z-10 flex-1 flex items-center py-4">
         <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-2 px-5 py-2 rounded-full border border-primary/30 bg-primary/5 backdrop-blur-sm"
+          initial="hidden"
+          animate="show"
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
+          className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:auto-rows-[150px]"
         >
-          <span className="text-primary text-[10px] font-black uppercase tracking-[0.25em]">
-            ✦ Edição de Vídeo &nbsp;•&nbsp; iGaming &nbsp;•&nbsp; YouTube &nbsp;•&nbsp; VSL &nbsp;•&nbsp; Ads
-          </span>
-        </motion.div>
+          {/* Célula NOME — grande */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            className={`${cellBase} col-span-2 lg:row-span-2 bg-primary/[0.05] flex flex-col justify-between p-6 sm:p-7`}
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-[#ff4646] shadow-[0_0_8px_#ff4646] animate-pulse" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
+                Editor de Vídeo Sênior
+              </span>
+              <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.12em] text-primary/90 bg-primary/10 border border-primary/25 rounded-full px-2.5 py-1">
+                ✦ IA
+              </span>
+            </div>
 
-        {/* Nome */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="flex flex-col items-center leading-none"
-        >
-          <h1 className="font-display text-[2.8rem] xs:text-[3.2rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6rem] font-extrabold tracking-tighter uppercase whitespace-nowrap">
-            <span className="text-white">Vitor </span>
-            <span className="text-primary drop-shadow-[0_0_30px_hsl(var(--primary)/0.5)]">Carvalho</span>
-          </h1>
-        </motion.div>
+            <h1 className="flex-1 flex flex-col justify-center font-impact text-6xl sm:text-8xl lg:text-[6.5rem] tracking-[0.01em] leading-[0.84] text-white py-1">
+              <span>Vitor</span>
+              <span className="text-primary drop-shadow-[0_0_30px_hsl(var(--primary)/0.45)]">
+                Carvalho
+              </span>
+            </h1>
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-base sm:text-xl text-white/55 max-w-xl font-light leading-relaxed"
-        >
-          <span className="block text-white text-2xl sm:text-3xl font-black mb-3 leading-tight tracking-tight">
-            Edição que prende. Resultado que converte.
-          </span>
-          Atendo marcas de iGaming, VSL e redes sociais. Entrego vídeos com identidade, ritmo e foco em performance.
-        </motion.p>
+            <div className="flex items-center gap-3">
+              {socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={s.label}
+                  className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/55 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
+                >
+                  <s.icon size={15} strokeWidth={1.5} />
+                </a>
+              ))}
+            </div>
+          </motion.div>
 
-        {/* Botões */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto"
-        >
-          <a
+          {/* Célula VER TRABALHOS */}
+          <motion.a
             href="#portfolio"
-            className="group flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-primary text-black font-bold text-sm uppercase tracking-widest hover:brightness-110 transition-all duration-300 hover:scale-105 shadow-[0_0_25px_hsl(var(--primary)/0.35)] w-full sm:w-auto"
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            className={`${cellBase} col-span-2 group flex flex-col justify-between p-5 hover:bg-primary/[0.06]`}
           >
-            <Play size={16} className="fill-black" />
-            {t.hero.viewPortfolio}
-          </a>
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-            className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-white/15 bg-white/5 text-white font-bold text-sm uppercase tracking-widest hover:border-primary/50 hover:bg-white/10 transition-all duration-300 hover:scale-105 w-full sm:w-auto backdrop-blur-sm"
-          >
-            Solicitar Orçamento
-          </button>
-        </motion.div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold">Portfólio</span>
+              <span className="text-white/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300">↗</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Play size={15} className="fill-white text-white group-hover:fill-primary group-hover:text-primary transition-colors duration-300" />
+              <span className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.3em] text-white group-hover:text-primary transition-colors duration-300">
+                Ver Trabalhos
+              </span>
+            </div>
+            <span className="text-white/35 text-xs">Showreel · melhores cortes em vídeo</span>
+          </motion.a>
 
-        {/* Sociais */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex items-center gap-5"
-        >
+          {/* Stats */}
           {[
-            { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
-            { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/", label: "LinkedIn" },
-            { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com", label: "Email" },
-          ].map((social, i) => (
-            <a
-              key={i}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={social.label}
-              className="w-11 h-11 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/60 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300 hover:scale-110"
+            { value: "150+", label: "Vídeos entregues" },
+            { value: "20+", label: "Clientes atendidos" },
+          ].map((s) => (
+            <motion.div
+              key={s.label}
+              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+              className={`${cellBase} flex flex-col justify-center p-5`}
             >
-              <social.icon size={18} strokeWidth={1.5} />
-            </a>
+              <div className="font-display text-3xl sm:text-4xl font-bold text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.35)]">
+                {s.value}
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.12em] text-white/40 font-semibold mt-1">
+                {s.label}
+              </span>
+            </motion.div>
           ))}
-        </motion.div>
 
-        {/* Barra de ferramentas compacta */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.75 }}
-          className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 px-6 py-3.5 rounded-2xl border border-white/8 bg-white/3 backdrop-blur-md mt-2"
-        >
-          {/* Label Ferramentas */}
-          <span className="text-[10px] uppercase tracking-[0.18em] text-primary/60 font-bold hidden sm:block">{t.hero.tools}</span>
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
-          {[
-            { label: "Premiere Pro", icon: "https://skillicons.dev/icons?i=pr" },
-            { label: "After Effects", icon: "https://skillicons.dev/icons?i=ae" },
-            { label: "Photoshop", icon: "https://skillicons.dev/icons?i=ps" },
-          ].map((tool, i) => (
-            <div key={i} className="flex items-center gap-1.5 group cursor-default">
-              <img src={tool.icon} alt={tool.label} className="w-5 h-5 object-contain" />
-              <span className="text-xs text-white/40 group-hover:text-white/70 transition-colors hidden sm:block">{tool.label}</span>
-            </div>
-          ))}
-          <div className="w-px h-4 bg-white/10" />
-          {/* Label IA */}
-          <span className="text-[10px] uppercase tracking-[0.18em] text-primary/60 font-bold hidden sm:block">{t.hero.ai}</span>
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
-          {[
-            { label: "Runway", icon: "https://www.google.com/s2/favicons?domain=runwayml.com&sz=128" },
-            { label: "Kling", icon: "https://www.google.com/s2/favicons?domain=klingai.com&sz=128" },
-            { label: "Minimax", icon: "https://www.google.com/s2/favicons?domain=minimaxi.com&sz=128" },
-            { label: "Dreamface", icon: "https://www.google.com/s2/favicons?domain=dreamfaceapp.com&sz=128" },
-          ].map((tool, i) => (
-            <div key={i} className="flex items-center gap-1.5 group cursor-default">
-              <img src={tool.icon} alt={tool.label} className="w-5 h-5 object-contain rounded-full" />
-              <span className="text-xs text-white/40 group-hover:text-white/70 transition-colors hidden sm:block">{tool.label}</span>
-            </div>
-          ))}
-        </motion.div>
+          {/* Frase */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            className={`${cellBase} col-span-2 flex flex-col justify-center gap-3 p-6`}
+          >
+            <p className="font-display text-xl sm:text-2xl font-bold leading-snug">
+              <span className="text-white">Edição que prende. </span>
+              <span className="text-primary">Resultado que converte.</span>
+            </p>
+            <p className="text-white/45 text-sm leading-relaxed">
+              Atendo marcas de iGaming, VSL e redes sociais — vídeos com identidade, ritmo e foco em performance.
+            </p>
+          </motion.div>
 
+          {/* Nichos */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            className={`${cellBase} flex flex-col justify-center gap-2 p-5`}
+          >
+            <span className="text-[10px] uppercase tracking-[0.15em] text-white/35 font-bold">Nichos</span>
+            <div className="flex flex-wrap gap-1.5">
+              {["iGaming", "VSL", "Ads", "Motion"].map((tag) => (
+                <span key={tag} className="text-[10px] font-bold uppercase tracking-wide text-primary/80 bg-primary/[0.08] border border-primary/20 rounded-md px-2 py-0.5">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* CTA */}
+          <motion.button
+            onClick={openBudget}
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+            className="relative rounded-2xl bg-primary text-background overflow-hidden flex flex-col items-start justify-center gap-1 p-5 text-left transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
+          >
+            <span className="font-display text-lg font-bold leading-tight">Solicitar<br />orçamento</span>
+            <span className="text-xs font-bold opacity-70">Resposta em até 24h ↗</span>
+          </motion.button>
+
+        </motion.div>
       </div>
 
       <ClientMarquee />
