@@ -33,6 +33,7 @@ const VideoModal = ({
         overflow: "hidden",
       });
       if (navbar) navbar.style.display = "none";
+      document.body.classList.add("modal-open");
     } else {
       const y = savedScrollY.current;
       Object.assign(document.body.style, {
@@ -44,7 +45,13 @@ const VideoModal = ({
         overflow: "",
       });
       if (navbar) navbar.style.display = "";
+      document.body.classList.remove("modal-open");
+      // Desliga o scroll-behavior:smooth global durante a restauração pra não animar ("sobe e desce")
+      const docEl = document.documentElement;
+      const prevSB = docEl.style.scrollBehavior;
+      docEl.style.scrollBehavior = "auto";
       window.scrollTo(0, y);
+      docEl.style.scrollBehavior = prevSB;
     }
     return () => {
       const y = savedScrollY.current;
@@ -57,7 +64,13 @@ const VideoModal = ({
         overflow: "",
       });
       if (navbar) navbar.style.display = "";
+      document.body.classList.remove("modal-open");
+      // Desliga o scroll-behavior:smooth global durante a restauração pra não animar ("sobe e desce")
+      const docEl = document.documentElement;
+      const prevSB = docEl.style.scrollBehavior;
+      docEl.style.scrollBehavior = "auto";
       window.scrollTo(0, y);
+      docEl.style.scrollBehavior = prevSB;
     };
   }, [isOpen]);
 

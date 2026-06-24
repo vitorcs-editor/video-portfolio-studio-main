@@ -34,6 +34,7 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
         right: "0",
         width: "100%",
       });
+      document.body.classList.add("modal-open");
     } else {
       const y = savedScrollY.current;
       Object.assign(document.body.style, {
@@ -43,7 +44,12 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
         right: "",
         width: "",
       });
+      document.body.classList.remove("modal-open");
+      const docEl = document.documentElement;
+      const prevSB = docEl.style.scrollBehavior;
+      docEl.style.scrollBehavior = "auto";
       window.scrollTo(0, y);
+      docEl.style.scrollBehavior = prevSB;
     }
     return () => {
       const y = savedScrollY.current;
@@ -54,7 +60,12 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
         right: "",
         width: "",
       });
+      document.body.classList.remove("modal-open");
+      const docEl = document.documentElement;
+      const prevSB = docEl.style.scrollBehavior;
+      docEl.style.scrollBehavior = "auto";
       window.scrollTo(0, y);
+      docEl.style.scrollBehavior = prevSB;
     };
   }, [isOpen]);
 

@@ -10,8 +10,11 @@ import React from "react";
 
 const GlobalBackground = () => {
   return (
-    <div className="fixed inset-0 z-0 bg-background pointer-events-none">
+    <div className="fixed inset-0 z-0 bg-background pointer-events-none gb-root">
       <style>{`
+        /* Oculta o fundo animado enquanto um modal está aberto — evita o
+           navegador re-borrar partículas/linhas em movimento sob o backdrop-blur */
+        body.modal-open .gb-root { display: none; }
         @keyframes particle-float {
           0%   { transform: translate(0, 0);   opacity: 0; }
           10%  { opacity: 0.25; }

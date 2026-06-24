@@ -120,6 +120,16 @@ const Portfolio = () => {
       isVertical: true,
     },
     {
+      id: "1pra1_motion_3",
+      title: "1pra1.bet",
+      thumbnail: driveThumb("1AGEsJ5D71YLIQTNJH_XIX9ml_kkKLlla"),
+      videoUrl: driveEmbed("1AGEsJ5D71YLIQTNJH_XIX9ml_kkKLlla"),
+      category: "motion",
+      clientId: "1pra1_motion",
+      views: "0",
+      isVertical: true,
+    },
+    {
       id: "projeto_draft_1",
       title: "Projeto Draft",
       thumbnail: "/ruzeiro-basquete-thumb.jpg.png",
