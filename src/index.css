@@ -5,7 +5,6 @@
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
-@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -55,7 +54,6 @@
     /* Typography */
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
-    --font-signature: 'Pinyon Script', cursive;
 
     /* Shadows */
     --shadow-glow: 0 0 60px hsl(191 100% 47% / 0.15);

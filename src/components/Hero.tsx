@@ -2,31 +2,6 @@ import { motion } from "framer-motion";
 import { Play, Instagram, Linkedin, Mail } from "lucide-react";
 import { useLang } from "@/lib/lang";
 
-// CSS keyframes injected once for cheap line-shimmer animations
-const lineShimmerStyle = (
-  <style>{`
-    @keyframes shimmer-right {
-      0%   { transform: translateX(-200%); opacity: 0.2; }
-      50%  { opacity: 0.8; }
-      100% { transform: translateX(300%);  opacity: 0.2; }
-    }
-    @keyframes shimmer-left {
-      0%   { transform: translateX(200%);  opacity: 0.2; }
-      50%  { opacity: 0.8; }
-      100% { transform: translateX(-300%); opacity: 0.2; }
-    }
-    @keyframes chevron-bounce {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(4px); }
-    }
-    .shimmer-r { animation: shimmer-right 4s ease-in-out infinite; }
-    .shimmer-l { animation: shimmer-left  4s ease-in-out infinite; }
-    .chevron-anim { animation: chevron-bounce 1.5s ease-in-out infinite; }
-  `}</style>
-);
-
-
-
 // Client Marquee - Exibindo múltiplos quadros conforme preferência do usuário
 const ClientMarquee = () => {
   const { t } = useLang();
@@ -132,7 +107,6 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden pt-20 sm:pt-24">
-      {lineShimmerStyle}
       <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[110px] pointer-events-none opacity-50" />
       <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-accent/8 rounded-full blur-[90px] pointer-events-none opacity-40" />
 
