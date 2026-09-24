@@ -2,36 +2,17 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play } from "lucide-react";
 import { useLang } from "@/lib/lang";
+import {
+  CATEGORIES,
+  clients,
+  videos,
+  clientById,
+  driveEmbed,
+  driveThumb,
+  type Video,
+  type VideoCategory,
+} from "@/data/portfolio";
 import VideoModal from "./VideoModal";
-
-type VideoCategory = "igaming" | "vsl" | "motion" | "ads" | "social";
-
-interface Client {
-  id: string;
-  name: string;
-  logo?: string;
-  niche: VideoCategory;
-}
-
-interface Video {
-  id: string;
-  title: string;
-  thumbnail: string;
-  videoUrl: string;
-  category: VideoCategory;
-  clientId: string;
-  views: string;
-  isVertical?: boolean;
-}
-
-// Monta a URL de player do Google Drive a partir do ID do arquivo.
-// O arquivo precisa estar compartilhado como "Qualquer pessoa com o link".
-const driveEmbed = (fileId: string) =>
-  `https://drive.google.com/file/d/${fileId}/preview`;
-
-// Monta a URL da thumbnail do Google Drive a partir do ID do arquivo.
-const driveThumb = (fileId: string) =>
-  `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
 
 const Portfolio = () => {
   const { t } = useLang();
@@ -51,380 +32,16 @@ const Portfolio = () => {
     return () => window.removeEventListener("selectClient", handleSelectClient);
   }, []);
 
-  const categories: { id: VideoCategory; label: string }[] = [
-    { id: "igaming", label: t.portfolio.categories.igaming },
-    { id: "vsl", label: t.portfolio.categories.vsl },
-    { id: "motion", label: t.portfolio.categories.motion },
-    { id: "ads", label: t.portfolio.categories.ads },
-    { id: "social", label: t.portfolio.categories.social },
-  ];
-
-  const clients: Client[] = [
-    { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "/icons/groupphoenix.png" },
-    { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "/icons/groupphoenix.png" },
-    { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "/icons/1pra1.png" },
-    { id: "1pra1_motion", name: "1pra1.bet", niche: "motion", logo: "/icons/1pra1.png" },
-    { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
-    { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/cruzeiro-basquete-logo.png.png" },
-    { id: "1pra1_social", name: "1pra1.bet", niche: "social", logo: "/icons/1pra1.png" },
-  ];
-
-  const videos: Video[] = [
-    {
-      id: "1pra1_1",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1gxFfZL1jyYny5WEJPxwIfQumCaDR_dbZ"),
-      videoUrl: driveEmbed("1gxFfZL1jyYny5WEJPxwIfQumCaDR_dbZ"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_2",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1T2lqpfZJtG-8BJ77NRHS-xALPwEPHVm5"),
-      videoUrl: driveEmbed("1T2lqpfZJtG-8BJ77NRHS-xALPwEPHVm5"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_3",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("129Ah3ujYY2wDrBXzEAixUyGw59I0Sbiq"),
-      videoUrl: driveEmbed("129Ah3ujYY2wDrBXzEAixUyGw59I0Sbiq"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_4",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      videoUrl: driveEmbed("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_5",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      videoUrl: driveEmbed("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_6",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      videoUrl: driveEmbed("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_7",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      videoUrl: driveEmbed("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_8",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      videoUrl: driveEmbed("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_1",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1HxAy5GdGXdRGFpTlnHmfcQTJCF59yvIJ"),
-      videoUrl: driveEmbed("1HxAy5GdGXdRGFpTlnHmfcQTJCF59yvIJ"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_2",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1_g_Xj61kaQr2XP3FSTKclo12nNJOUBCZ"),
-      videoUrl: driveEmbed("1_g_Xj61kaQr2XP3FSTKclo12nNJOUBCZ"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_3",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1AGEsJ5D71YLIQTNJH_XIX9ml_kkKLlla"),
-      videoUrl: driveEmbed("1AGEsJ5D71YLIQTNJH_XIX9ml_kkKLlla"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_4",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      videoUrl: driveEmbed("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "projeto_draft_1",
-      title: "Projeto Draft",
-      thumbnail: "/ruzeiro-basquete-thumb.jpg.png",
-      videoUrl: driveEmbed("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
-      category: "social",
-      clientId: "projeto_draft",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "cruzeiro_basquete_1",
-      title: "Cruzeiro Basquete",
-      thumbnail: driveThumb("1j8Gryyp0-YbtWQHUy-ZQgH6NdkfXsHyw"),
-      videoUrl: driveEmbed("1j8Gryyp0-YbtWQHUy-ZQgH6NdkfXsHyw"),
-      category: "social",
-      clientId: "cruzeiro_basquete",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "cruzeiro_basquete_2",
-      title: "Cruzeiro Basquete",
-      thumbnail: "/projeto-draft-thumb.jpg.png",
-      videoUrl: driveEmbed("1uot6SjYDxBQQrOWlpOuTipBcQ_sSFS2W"),
-      category: "social",
-      clientId: "cruzeiro_basquete",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "cruzeiro_basquete_3",
-      title: "Cruzeiro Basquete",
-      thumbnail: driveThumb("1CAo5vTb5p0OOq-9CdQGjS4wEKfnrRbns"),
-      videoUrl: driveEmbed("1CAo5vTb5p0OOq-9CdQGjS4wEKfnrRbns"),
-      category: "social",
-      clientId: "cruzeiro_basquete",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_1",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      videoUrl: driveEmbed("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_2",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      videoUrl: driveEmbed("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_3",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      videoUrl: driveEmbed("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_4",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      videoUrl: driveEmbed("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_1",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("16vh8lHJtgJs0orRZOwpqkBlOVxbSG5-x"),
-      videoUrl: driveEmbed("16vh8lHJtgJs0orRZOwpqkBlOVxbSG5-x"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_2",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("15-7hhNBHbEHpqCSCWmfmW2_fn0tddXhm"),
-      videoUrl: driveEmbed("15-7hhNBHbEHpqCSCWmfmW2_fn0tddXhm"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_3",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1fDdJ4TaWy0zIlrBw27GNm9KwTDMSlbou"),
-      videoUrl: driveEmbed("1fDdJ4TaWy0zIlrBw27GNm9KwTDMSlbou"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_4",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1LjRKPbaBQQuEPQGDol7ZGLVcJO2EGA3g"),
-      videoUrl: driveEmbed("1LjRKPbaBQQuEPQGDol7ZGLVcJO2EGA3g"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_5",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1lJDTPrJZNzGeGjuBDKKJYKYJxuJJxDG0"),
-      videoUrl: driveEmbed("1lJDTPrJZNzGeGjuBDKKJYKYJxuJJxDG0"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_6",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1jUft6etXETQSku_nTr6DjrZt_rO9Cgl5"),
-      videoUrl: driveEmbed("1jUft6etXETQSku_nTr6DjrZt_rO9Cgl5"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_7",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1iol_L1BpbVJximPemAHX90aNQ4b5h3OY"),
-      videoUrl: driveEmbed("1iol_L1BpbVJximPemAHX90aNQ4b5h3OY"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_8",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1jVMH7gQSiYbDAcIuzmEuLg6XtTGxAXmd"),
-      videoUrl: driveEmbed("1jVMH7gQSiYbDAcIuzmEuLg6XtTGxAXmd"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_9",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1mM1GYkZUYcwi9b3K-HQqbPWnwj1E4YMW"),
-      videoUrl: driveEmbed("1mM1GYkZUYcwi9b3K-HQqbPWnwj1E4YMW"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_10",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1Ufex1neFqGHJWH3wl1_gbwkrlkhCgpa1"),
-      videoUrl: driveEmbed("1Ufex1neFqGHJWH3wl1_gbwkrlkhCgpa1"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_11",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1H4U2PaYvHvP3LV0VA3NBexM9Z-e2Hx7V"),
-      videoUrl: driveEmbed("1H4U2PaYvHvP3LV0VA3NBexM9Z-e2Hx7V"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_12",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1qdEOd1GbOqJB6oD5w1AZ1y5nEofYvGRj"),
-      videoUrl: driveEmbed("1qdEOd1GbOqJB6oD5w1AZ1y5nEofYvGRj"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_13",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1Mg3Bd7a29D6mkL6rkIBlc-i4r3XwzozT"),
-      videoUrl: driveEmbed("1Mg3Bd7a29D6mkL6rkIBlc-i4r3XwzozT"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_vsl_1",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1hEQOG_8z83qxfNGvYDKIoBUh56IiGSVX"),
-      videoUrl: driveEmbed("1hEQOG_8z83qxfNGvYDKIoBUh56IiGSVX"),
-      category: "vsl",
-      clientId: "fenix_vsl",
-      views: "0",
-      isVertical: true,
-    },
-  ];
-
   const filteredClients = clients.filter((c) => c.niche === activeCategory);
 
   const filteredVideos = videos.filter((v) => {
-    const categoryMatch = v.category === activeCategory;
-    const clientMatch = activeClient === "all" || v.clientId === activeClient;
-    return categoryMatch && clientMatch;
+    if (activeClient !== "all") return v.clientId === activeClient;
+    return clientById(v.clientId)?.niche === activeCategory;
   });
 
   const openVideo = (video: Video) => {
-    if (video.videoUrl !== "#") {
-      setSelectedVideo(video);
-      setIsModalOpen(true);
-    }
+    setSelectedVideo(video);
+    setIsModalOpen(true);
   };
 
   const clientsWithAll: Array<{ id: string; name: string; logo?: string }> = [
@@ -464,20 +81,20 @@ const Portfolio = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex flex-wrap justify-center gap-2 mb-5"
         >
-          {categories.map((cat) => (
+          {CATEGORIES.map((cat) => (
             <button
-              key={cat.id}
+              key={cat}
               onClick={() => {
-                setActiveCategory(cat.id);
+                setActiveCategory(cat);
                 setActiveClient("all");
               }}
               className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeCategory === cat.id
+                activeCategory === cat
                   ? "bg-primary text-background shadow-[0_0_16px_hsl(var(--primary)/0.4)]"
                   : "bg-primary/[0.04] text-white/50 border border-primary/15 hover:text-white hover:border-primary/35 hover:bg-primary/[0.08]"
               }`}
             >
-              {cat.label}
+              {t.portfolio.categories[cat]}
             </button>
           ))}
         </motion.div>
@@ -532,10 +149,10 @@ const Portfolio = () => {
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
           >
             {filteredVideos.map((video, idx) => {
-              const client = clients.find((c) => c.id === video.clientId);
+              const client = clientById(video.clientId);
               return (
                 <motion.div
-                  key={video.id}
+                  key={`${video.clientId}-${video.driveId}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, delay: idx * 0.05 }}
@@ -547,8 +164,8 @@ const Portfolio = () => {
                     {/* Thumbnail — fundo de marca aparece caso a thumb do Drive falhe */}
                     <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-3 shadow-lg shadow-black/40 bg-gradient-to-br from-[#0c0c0c] via-[#0a1418] to-primary/10">
                       <img
-                        src={video.thumbnail}
-                        alt={video.title}
+                        src={video.thumbnail ?? driveThumb(video.driveId)}
+                        alt={client?.name ?? ""}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                         onError={(e) => { e.currentTarget.style.opacity = "0"; }}
@@ -570,7 +187,7 @@ const Portfolio = () => {
                         <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full flex-shrink-0" />
                       )}
                       <span className="text-white/50 text-[11px] font-semibold uppercase tracking-wide truncate group-hover/card:text-white/80 transition-colors duration-200">
-                        {client?.name ?? video.title}
+                        {client?.name}
                       </span>
                     </div>
                   </button>
@@ -591,9 +208,9 @@ const Portfolio = () => {
       <VideoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        videoUrl={selectedVideo?.videoUrl || ""}
-        title={selectedVideo?.title || ""}
-        isVertical={selectedVideo?.isVertical}
+        videoUrl={selectedVideo ? driveEmbed(selectedVideo.driveId) : ""}
+        title={selectedVideo ? clientById(selectedVideo.clientId)?.name ?? "" : ""}
+        isVertical={!selectedVideo?.horizontal}
       />
     </section>
   );

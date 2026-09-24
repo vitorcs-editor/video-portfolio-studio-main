@@ -47,9 +47,9 @@ const ClientMarquee = () => {
 
   const items: MarqueeItem[] = [
     { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: '#portfolio', clientId: 'fenix_ads', category: 'ads', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: '#portfolio', clientId: 'projeto_draft', category: 'social', imgClass: 'max-w-[70%] max-h-[70%]' },
+    { type: 'logo', src: '/icons/projeto-draft.webp', alt: 'Projeto Draft', link: '#portfolio', clientId: 'projeto_draft', category: 'social', imgClass: 'max-w-[70%] max-h-[70%]' },
     { type: 'logo', src: '/icons/1pra1.png', alt: '1pra1.bet', link: '#portfolio', clientId: '1pra1_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
-    { type: 'logo', src: '/cruzeiro-basquete-logo.png.png', alt: 'Cruzeiro Basquete', link: '#portfolio', clientId: 'cruzeiro_basquete', category: 'social', imgClass: 'max-w-[80%] max-h-[80%] mix-blend-lighten' },
+    { type: 'logo', src: '/icons/cruzeiro-basquete.webp', alt: 'Cruzeiro Basquete', link: '#portfolio', clientId: 'cruzeiro_basquete', category: 'social', imgClass: 'max-w-[80%] max-h-[80%] mix-blend-lighten' },
     ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
   ];
 

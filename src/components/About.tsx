@@ -46,7 +46,7 @@ const About = () => {
             className={`${cell} col-span-2 lg:row-span-2 min-h-[340px] overflow-hidden`}
           >
             <img
-              src="/vitor-hero.jpg"
+              src="/vitor-hero.webp"
               alt="Vitor Carvalho, editor de vídeo"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
