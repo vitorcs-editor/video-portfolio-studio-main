@@ -1,18 +1,17 @@
 import { motion } from "framer-motion";
 import { Target, Zap, Shield, TrendingUp } from "lucide-react";
+import { useLang } from "@/lib/lang";
 
-const features = [
-  { icon: Target, title: "Visão Estratégica", desc: "Cada peça tem uma função: prender, comunicar ou converter." },
-  { icon: Zap, title: "IA na Fronteira", desc: "IA como parte do fluxo criativo — não como substituto de ideia." },
-  { icon: Shield, title: "Qualidade Absoluta", desc: "Cor, corte, áudio e timing. Cada detalhe é intencional." },
-  { icon: TrendingUp, title: "Foco em Conversão", desc: "Estética e resultado andam juntos. O resto é só vídeo bonito." },
-];
+const featureIcons = [Target, Zap, Shield, TrendingUp];
 
-const clients = ["1pra1.bet", "Cruzeiro Basquete", "Grupo Fênix", "Projeto Draft"];
+const clients = ["1pra1.bet", "Cruzeiro Basquete", "Group Phoenix", "Projeto Draft"];
 
 const cell = "relative rounded-2xl border border-primary/15 bg-primary/[0.03] transition-all duration-300 hover:border-primary/35";
 
 const About = () => {
+  const { t } = useLang();
+  const features = t.about.features.map((f, i) => ({ ...f, icon: featureIcons[i] }));
+
   return (
     <section id="sobre" className="py-20 sm:py-28 relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
@@ -25,11 +24,11 @@ const About = () => {
           className="mb-10"
         >
           <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            O Diretor Criativo
+            {t.about.label}
           </span>
           <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide">
-            <span className="text-white">Especializado em iGaming, </span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">VSL e Social.</span>
+            <span className="text-white">{t.about.title}</span>
+            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">{t.about.titleAccent}</span>
           </h2>
         </motion.div>
 
@@ -47,7 +46,7 @@ const About = () => {
           >
             <img
               src="/vitor-hero.webp"
-              alt="Vitor Carvalho, editor de vídeo"
+              alt={t.about.photoAlt}
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent pointer-events-none" />
@@ -63,7 +62,7 @@ const About = () => {
             className={`${cell} col-span-2 p-6 sm:p-7 flex items-center`}
           >
             <p className="text-white/55 text-sm sm:text-base leading-relaxed">
-              Edição de vídeo, motion design, color grading, direção criativa e integração com IA. Do roteiro ao arquivo final, cuido de cada etapa com atenção técnica e visão criativa. Já atuei para 1pra1.bet, Cruzeiro Basquete, Grupo Fênix e Draft — marcas que exigem padrão e recebem exatamente isso.
+              {t.about.bio}
             </p>
           </motion.div>
 
@@ -73,7 +72,7 @@ const About = () => {
             className={`${cell} col-span-2 p-6 flex flex-col justify-center gap-3`}
           >
             <span className="text-[10px] uppercase tracking-[0.2em] text-white/35 font-bold">
-              Marcas que confiaram no meu corte
+              {t.about.clientsLabel}
             </span>
             <div className="flex flex-wrap gap-2">
               {clients.map((c) => (

@@ -151,7 +151,7 @@ const Hero = () => {
             <div className="flex items-center gap-2.5">
               <span className="w-2 h-2 rounded-full bg-[#ff4646] shadow-[0_0_8px_#ff4646] animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-                Editor de Vídeo Sênior
+                {t.hero.role}
               </span>
               <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.12em] text-primary/90 bg-primary/10 border border-primary/25 rounded-full px-2.5 py-1">
                 ✦ IA
@@ -188,23 +188,20 @@ const Hero = () => {
             className={`${cellBase} col-span-2 group flex flex-col justify-between p-5 hover:bg-primary/[0.06]`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold">Portfólio</span>
+              <span className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold">{t.hero.portfolio}</span>
               <span className="text-white/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300">↗</span>
             </div>
             <div className="flex items-center gap-3">
               <Play size={15} className="fill-white text-white group-hover:fill-primary group-hover:text-primary transition-colors duration-300" />
               <span className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.3em] text-white group-hover:text-primary transition-colors duration-300">
-                Ver Trabalhos
+                {t.hero.viewWork}
               </span>
             </div>
-            <span className="text-white/35 text-xs">Showreel · melhores cortes em vídeo</span>
+            <span className="text-white/35 text-xs">{t.hero.showreel}</span>
           </motion.a>
 
           {/* Stats */}
-          {[
-            { value: "150+", label: "Vídeos entregues" },
-            { value: "20+", label: "Clientes atendidos" },
-          ].map((s) => (
+          {t.hero.quickStats.map((s) => (
             <motion.div
               key={s.label}
               variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
@@ -225,11 +222,11 @@ const Hero = () => {
             className={`${cellBase} col-span-2 flex flex-col justify-center gap-3 p-6`}
           >
             <p className="font-display text-xl sm:text-2xl font-bold leading-snug">
-              <span className="text-white">Edição que prende. </span>
-              <span className="text-primary">Resultado que converte.</span>
+              <span className="text-white">{t.hero.headline}</span>
+              <span className="text-primary">{t.hero.headlineAccent}</span>
             </p>
             <p className="text-white/45 text-sm leading-relaxed">
-              Atendo marcas de iGaming, VSL e redes sociais — vídeos com identidade, ritmo e foco em performance.
+              {t.hero.pitch}
             </p>
           </motion.div>
 
@@ -238,7 +235,7 @@ const Hero = () => {
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
             className={`${cellBase} flex flex-col justify-center gap-2 p-5`}
           >
-            <span className="text-[10px] uppercase tracking-[0.15em] text-white/35 font-bold">Nichos</span>
+            <span className="text-[10px] uppercase tracking-[0.15em] text-white/35 font-bold">{t.hero.niches}</span>
             <div className="flex flex-wrap gap-1.5">
               {["iGaming", "VSL", "Ads", "Motion"].map((tag) => (
                 <span key={tag} className="text-[10px] font-bold uppercase tracking-wide text-primary/80 bg-primary/[0.08] border border-primary/20 rounded-md px-2 py-0.5">
@@ -254,8 +251,8 @@ const Hero = () => {
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
             className="relative rounded-2xl bg-primary text-background overflow-hidden flex flex-col items-start justify-center gap-1 p-5 text-left transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
           >
-            <span className="font-display text-lg font-bold leading-tight">Solicitar<br />orçamento</span>
-            <span className="text-xs font-bold opacity-70">Resposta em até 24h ↗</span>
+            <span className="font-display text-lg font-bold leading-tight">{t.hero.ctaLine1}<br />{t.hero.ctaLine2}</span>
+            <span className="text-xs font-bold opacity-70">{t.hero.ctaNote}</span>
           </motion.button>
 
         </motion.div>

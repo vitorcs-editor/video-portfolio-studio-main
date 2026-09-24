@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useLang } from "@/lib/lang";
 import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
 
 interface VideoModalProps {
@@ -17,6 +18,7 @@ const VideoModal = ({
   title,
   isVertical = false,
 }: VideoModalProps) => {
+  const { t } = useLang();
   useScrollLock(isOpen, { hideNavbar: true });
   useEscapeKey(isOpen, onClose);
 
@@ -89,11 +91,11 @@ const VideoModal = ({
               <button
                 onClick={onClose}
                 className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/30 text-white/80 hover:text-white text-sm font-semibold transition-colors border border-white/15 min-h-[44px] touch-manipulation"
-                aria-label="Fechar vídeo"
+                aria-label={t.common.close}
                 style={{ WebkitTapHighlightColor: "transparent" }}
               >
                 <X size={15} strokeWidth={2.5} />
-                <span>Fechar</span>
+                <span>{t.common.close}</span>
               </button>
             </motion.div>
 

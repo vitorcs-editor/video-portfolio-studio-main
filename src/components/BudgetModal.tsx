@@ -75,7 +75,7 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 border border-white/10"
-                aria-label="Fechar"
+                aria-label={t.common.close}
               >
                 <X size={16} strokeWidth={2} />
               </button>

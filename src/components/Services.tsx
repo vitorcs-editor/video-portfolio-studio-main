@@ -1,30 +1,13 @@
 import { motion } from "framer-motion";
 import { Sparkles, Layers, TrendingUp, Tv } from "lucide-react";
+import { useLang } from "@/lib/lang";
 
-const services = [
-  {
-    icon: Sparkles,
-    title: "Direção Criativa & IA",
-    desc: "Cada vídeo começa com uma ideia forte. Uso IA como ferramenta criativa — não como atalho — para construir estéticas que ninguém vai confundir com template.",
-  },
-  {
-    icon: Layers,
-    title: "Motion Design Premium",
-    desc: "Movimento, timing e tipografia que fazem o vídeo parecer caro antes de qualquer palavra aparecer na tela.",
-  },
-  {
-    icon: TrendingUp,
-    title: "VSLs de Alta Conversão",
-    desc: "VSLs que prendem do primeiro segundo ao CTA. Estrutura, ritmo e áudio pensados para manter o espectador até o final — e convencer.",
-  },
-  {
-    icon: Tv,
-    title: "Campanhas & Performance",
-    desc: "Criativos que param o scroll e vendem. Feitos para rodar em tráfego pago e parecerem conteúdo, não anúncio.",
-  },
-];
+const icons = [Sparkles, Layers, TrendingUp, Tv];
 
 const Services = () => {
+  const { t } = useLang();
+  const services = t.services.items.map((item, i) => ({ ...item, icon: icons[i] }));
+
   return (
     <section id="servicos" className="py-20 sm:py-28 relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
@@ -37,11 +20,11 @@ const Services = () => {
           className="mb-10"
         >
           <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            Serviços de Elite
+            {t.services.label}
           </span>
           <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide">
-            <span className="text-white">Direção audiovisual que </span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">gera valor.</span>
+            <span className="text-white">{t.services.title}</span>
+            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">{t.services.titleAccent}</span>
           </h2>
         </motion.div>
 
@@ -75,7 +58,7 @@ const Services = () => {
                 onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
                 className="self-start text-xs font-semibold text-white/40 hover:text-primary transition-colors duration-200 flex items-center gap-1 group/btn uppercase tracking-wider"
               >
-                Solicitar este serviço
+                {t.services.cta}
                 <span className="group-hover/btn:translate-x-1 transition-transform duration-200">→</span>
               </button>
             </motion.div>

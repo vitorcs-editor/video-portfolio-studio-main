@@ -18,8 +18,7 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
   const currentLang = languages.find(l => l.code === currentLangCode) || languages[0];
 
   const filteredLanguages = languages.filter(l =>
-    l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    l.region.toLowerCase().includes(searchQuery.toLowerCase())
+    [l.name, l.nativeName, l.region].some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const handleSelect = (code: string) => {
@@ -84,7 +83,7 @@ const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
               <Search size={14} className="text-white/40" />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder={t.navbar.search}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-transparent border-none outline-none text-sm text-white placeholder:text-white/30 w-full"
@@ -223,9 +222,9 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
   }, []);
 
   const navLinks = [
-    { href: "#portfolio", label: "Projetos" },
-    { href: "#servicos", label: "Serviços" },
-    { href: "#sobre", label: "Sobre" },
+    { href: "#portfolio", label: t.navbar.projects },
+    { href: "#servicos", label: t.navbar.services },
+    { href: "#sobre", label: t.navbar.about },
   ];
 
   return (
@@ -241,7 +240,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
       <div className="container mx-auto px-6 flex items-center justify-between gap-4">
         {/* Logo — largura fixa para equilibrar */}
         <div className="w-[200px] flex-shrink-0">
-          <a href="#" title="Voltar ao inicio">
+          <a href="#" title={t.navbar.backToTop} aria-label={t.navbar.backToTop}>
             <NeonLogo />
           </a>
         </div>
@@ -262,7 +261,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
             onClick={onOpenBudget}
             className="ml-1 text-[11px] uppercase tracking-[0.15em] font-bold text-background bg-primary hover:brightness-110 transition-all duration-200 px-4 py-1.5 rounded-full shadow-[0_0_16px_hsl(var(--primary)/0.35)]"
           >
-            Solicitar Orçamento
+            {t.navbar.requestBudget}
           </button>
         </nav>
 
@@ -275,6 +274,8 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="md:hidden p-2 text-white"
+          aria-label={t.navbar.openMenu}
+          aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -306,7 +307,7 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
                 onClick={() => { setIsMobileMenuOpen(false); onOpenBudget?.(); }}
                 className="mt-2 px-5 py-3 rounded-full border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] text-center hover:bg-white hover:text-black transition-all"
               >
-                Solicitar Orçamento
+                {t.navbar.requestBudget}
               </button>
             </nav>
           </motion.div>

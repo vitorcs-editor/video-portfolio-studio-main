@@ -45,7 +45,7 @@ const Portfolio = () => {
   };
 
   const clientsWithAll: Array<{ id: string; name: string; logo?: string }> = [
-    { id: "all", name: "Todos" },
+    { id: "all", name: t.portfolio.allClients },
     ...filteredClients,
   ];
 
@@ -62,14 +62,14 @@ const Portfolio = () => {
           className="mb-10"
         >
           <span className="text-[10px] uppercase tracking-[0.35em] text-primary/50 font-bold mb-3 block">
-            Showcase Recente
+            {t.portfolio.label}
           </span>
           <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide mb-3">
-            <span className="text-white">Trabalhos </span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">Selecionados</span>
+            <span className="text-white">{t.portfolio.title}</span>
+            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">{t.portfolio.titleAccent}</span>
           </h2>
           <p className="text-white/35 text-sm max-w-md">
-            Uma seleção de produções recentes sob medida. Clique no card para assistir ao projeto.
+            {t.portfolio.description}
           </p>
         </motion.div>
 
@@ -131,7 +131,7 @@ const Portfolio = () => {
                   onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
                   className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border border-dashed border-primary/40 text-primary/70 hover:text-primary hover:border-primary whitespace-nowrap"
                 >
-                  ✦ Pode ser você
+                  {t.portfolio.yourBrand}
                 </button>
               </div>
             </motion.div>
@@ -199,7 +199,7 @@ const Portfolio = () => {
 
         {filteredVideos.length === 0 && (
           <div className="flex items-center justify-center py-32 text-white/20 uppercase tracking-[0.4em] font-black text-xs text-center">
-            Nenhum projeto nesta categoria
+            {t.portfolio.empty}
           </div>
         )}
 

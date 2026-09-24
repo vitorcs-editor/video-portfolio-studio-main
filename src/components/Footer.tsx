@@ -25,7 +25,7 @@ const Footer = () => {
               <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">Carvalho</span>
             </h2>
             <p className="text-white/40 text-xs sm:text-sm font-medium mt-2 uppercase tracking-[0.15em]">
-              Editor de Vídeo Sênior · iGaming · VSL · Social
+              {t.footer.tagline}
             </p>
           </div>
 
@@ -33,7 +33,7 @@ const Footer = () => {
             onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
             className="self-start md:self-auto flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary text-background font-bold text-sm uppercase tracking-widest hover:brightness-110 transition-all duration-300 hover:scale-105 shadow-[0_0_25px_hsl(var(--primary)/0.3)]"
           >
-            Solicitar Orçamento ↗
+            {t.footer.cta}
           </button>
         </div>
 
