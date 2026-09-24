@@ -1,73 +1,50 @@
-# Welcome to your Lovable project
+# Vitor Carvalho — Portfólio
 
-## Project info
+Site de portfólio de edição de vídeo publicado em [vitorcs.com.br](https://www.vitorcs.com.br).
 
-**URL**: https://lovable.dev/projects/c0f2c8e5-d07e-4426-aa95-db99c97cf589
+Página única feita com React, TypeScript, Vite, Tailwind CSS e framer-motion, hospedada na Vercel.
 
-## How can I edit this code?
+## Rodando localmente
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/c0f2c8e5-d07e-4426-aa95-db99c97cf589) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requer Node.js 18 ou mais recente.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm install
+npm run dev      # servidor local em http://localhost:8080
+npm run lint     # ESLint
+npm run build    # build de produção em dist/
+npm run preview  # serve o build de produção
 ```
 
-**Edit a file directly in GitHub**
+## Onde editar
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| O que | Onde |
+| --- | --- |
+| Vídeos e clientes do portfólio | `src/data/portfolio.ts` |
+| Todos os textos do site (PT-BR, EN, ES) | `src/lib/lang.tsx` |
+| WhatsApp e URL do site | `src/lib/contact.ts` |
+| Seções da página | `src/components/` (Hero, Stats, Portfolio, Services, About, Stack, Footer) |
+| Cores e tema | `src/index.css` e `tailwind.config.ts` |
+| Imagens, logos e thumbnails | `public/` |
 
-**Use GitHub Codespaces**
+### Adicionando um vídeo
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. No Google Drive, compartilhe o arquivo como **"Qualquer pessoa com o link"**.
+2. Copie o ID do arquivo: o trecho entre `/d/` e `/view` no link.
+3. Adicione uma linha em `videos` em `src/data/portfolio.ts`:
 
-## What technologies are used for this project?
+```ts
+{ clientId: "fenix_ads", driveId: "ID_DO_ARQUIVO" },
+```
 
-This project is built with:
+A thumbnail vem do próprio Drive. Para usar uma imagem sua, coloque o arquivo em `public/thumbs/` (de preferência em WebP) e informe `thumbnail: "/thumbs/nome.webp"`. Vídeos são verticais (9:16) por padrão; para um vídeo horizontal, adicione `horizontal: true`.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Para um cliente novo, adicione-o em `clients` no mesmo arquivo, com o logo em `public/icons/`.
 
-## How can I deploy this project?
+### Formulário de orçamento
 
-Simply open [Lovable](https://lovable.dev/projects/c0f2c8e5-d07e-4426-aa95-db99c97cf589) and click on Share -> Publish.
+O formulário não salva dados: ele monta uma mensagem e abre uma conversa no WhatsApp com o número definido em `src/lib/contact.ts`.
 
-## Can I connect a custom domain to my Lovable project?
+### Imagem de compartilhamento
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+`public/og-image.png` é a imagem exibida ao compartilhar o link. O modelo dela fica em `design/og-image.html`: abra no navegador e capture a área de 1200×630.
