@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -17,72 +17,8 @@ const VideoModal = ({
   title,
   isVertical = false,
 }: VideoModalProps) => {
-  const savedScrollY = useRef(0);
-
-  /* ── iOS-safe scroll lock ────────────────────────────────────────────── */
-  useEffect(() => {
-    const navbar = document.querySelector("header") as HTMLElement | null;
-    if (isOpen) {
-      savedScrollY.current = window.scrollY;
-      Object.assign(document.body.style, {
-        position: "fixed",
-        top: `-${savedScrollY.current}px`,
-        left: "0",
-        right: "0",
-        width: "100%",
-        overflow: "hidden",
-      });
-      if (navbar) navbar.style.display = "none";
-      document.body.classList.add("modal-open");
-    } else {
-      const y = savedScrollY.current;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-        overflow: "",
-      });
-      if (navbar) navbar.style.display = "";
-      document.body.classList.remove("modal-open");
-      // Desliga o scroll-behavior:smooth global durante a restauração pra não animar ("sobe e desce")
-      const docEl = document.documentElement;
-      const prevSB = docEl.style.scrollBehavior;
-      docEl.style.scrollBehavior = "auto";
-      window.scrollTo(0, y);
-      docEl.style.scrollBehavior = prevSB;
-    }
-    return () => {
-      const y = savedScrollY.current;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-        overflow: "",
-      });
-      if (navbar) navbar.style.display = "";
-      document.body.classList.remove("modal-open");
-      // Desliga o scroll-behavior:smooth global durante a restauração pra não animar ("sobe e desce")
-      const docEl = document.documentElement;
-      const prevSB = docEl.style.scrollBehavior;
-      docEl.style.scrollBehavior = "auto";
-      window.scrollTo(0, y);
-      docEl.style.scrollBehavior = prevSB;
-    };
-  }, [isOpen]);
-
-  /* ── Escape key ─────────────────────────────────────────────────────── */
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+  useScrollLock(isOpen, { hideNavbar: true });
+  useEscapeKey(isOpen, onClose);
 
   return (
     <AnimatePresence>

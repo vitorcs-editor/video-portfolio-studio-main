@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { Send, Upload, CheckCircle2, X } from "lucide-react";
+import { useState } from "react";
+import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
+import { Send, Link2, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/lib/lang";
@@ -13,74 +14,18 @@ interface BudgetModalProps {
 const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
   const { t } = useLang();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    service: "",
     briefing: "",
     reference: "",
   });
 
-  const savedScrollY = useRef(0);
+  useScrollLock(isOpen);
+  useEscapeKey(isOpen, onClose);
 
-  useEffect(() => {
-    if (isOpen) {
-      savedScrollY.current = window.scrollY;
-      Object.assign(document.body.style, {
-        position: "fixed",
-        top: `-${savedScrollY.current}px`,
-        left: "0",
-        right: "0",
-        width: "100%",
-      });
-      document.body.classList.add("modal-open");
-    } else {
-      const y = savedScrollY.current;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-      });
-      document.body.classList.remove("modal-open");
-      const docEl = document.documentElement;
-      const prevSB = docEl.style.scrollBehavior;
-      docEl.style.scrollBehavior = "auto";
-      window.scrollTo(0, y);
-      docEl.style.scrollBehavior = prevSB;
-    }
-    return () => {
-      const y = savedScrollY.current;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-      });
-      document.body.classList.remove("modal-open");
-      const docEl = document.documentElement;
-      const prevSB = docEl.style.scrollBehavior;
-      docEl.style.scrollBehavior = "auto";
-      window.scrollTo(0, y);
-      docEl.style.scrollBehavior = prevSB;
-    };
-  }, [isOpen]);
-
-  // Close on Escape
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
     const message =
       `*Novo Orçamento - Portfólio*\n\n` +
@@ -89,14 +34,11 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
       `*Descrição:* ${formData.briefing}\n` +
       `*Link de Referência:* ${formData.reference || "Não informado"}`;
 
-    // Abre WhatsApp antes do await — evita bloqueio no mobile
+    // Abre o WhatsApp direto no clique — evita bloqueio de pop-up no mobile
     window.open(whatsappLink(message), "_blank");
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     toast({ title: t.budget.toastTitle, description: t.budget.toastDesc });
-    setIsSubmitting(false);
-    setFormData({ name: "", email: "", service: "", briefing: "", reference: "" });
+    setFormData({ name: "", email: "", briefing: "", reference: "" });
     onClose();
   };
 
@@ -204,7 +146,7 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
                       placeholder={t.budget.referencePlaceholder}
                       className={`${inputClasses} pr-12`}
                     />
-                    <Upload size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30" />
+                    <Link2 size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30" />
                   </div>
                 </div>
 
@@ -212,17 +154,10 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
                 <div className="mt-2 relative group">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 rounded-2xl bg-primary text-background font-extrabold text-sm tracking-wide flex items-center justify-center gap-3 hover:bg-white transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 shadow-[0_0_40px_hsl(var(--primary)/0.3)] group-hover:shadow-[0_0_60px_hsl(var(--primary)/0.5)] relative overflow-hidden"
+                    className="w-full py-4 rounded-2xl bg-primary text-background font-extrabold text-sm tracking-wide flex items-center justify-center gap-3 hover:bg-white transition-all duration-300 hover:scale-[1.02] shadow-[0_0_40px_hsl(var(--primary)/0.3)] group-hover:shadow-[0_0_60px_hsl(var(--primary)/0.5)] relative overflow-hidden"
                   >
-                    {isSubmitting ? (
-                      <div className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <Send size={18} className="fill-background -rotate-45 mb-1" />
-                        {t.budget.requestNow}
-                      </>
-                    )}
+                    <Send size={18} className="fill-background -rotate-45 mb-1" />
+                    {t.budget.requestNow}
                   </button>
                 </div>
 
