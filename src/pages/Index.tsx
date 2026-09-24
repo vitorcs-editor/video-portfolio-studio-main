@@ -23,6 +23,15 @@ const Index = () => {
     return () => window.removeEventListener("openBudgetModal", handler);
   }, []);
 
+  // O navegador tenta rolar até a âncora (ex.: /#portfolio) antes do React montar a página,
+  // então refazemos a rolagem depois da primeira renderização.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
     <>
       <Helmet>

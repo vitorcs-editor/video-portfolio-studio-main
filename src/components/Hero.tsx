@@ -128,7 +128,7 @@ const Hero = () => {
                 {t.hero.role}
               </span>
               <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.12em] text-primary/90 bg-primary/10 border border-primary/25 rounded-full px-2.5 py-1">
-                ✦ IA
+                ✦ {t.hero.stack.categories.ia}
               </span>
             </div>
 
