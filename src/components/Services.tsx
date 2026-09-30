@@ -1,70 +1,45 @@
 import { motion } from "framer-motion";
-import { Sparkles, Layers, TrendingUp, Tv } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/lang";
+import SectionHeader from "./common/SectionHeader";
+import { stagger, item } from "./common/motion";
 
-const icons = [Sparkles, Layers, TrendingUp, Tv];
+const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
 
+// Serviços como uma lista editorial numerada — cada linha abre o orçamento
 const Services = () => {
   const { t } = useLang();
-  const services = t.services.items.map((item, i) => ({ ...item, icon: icons[i] }));
 
   return (
-    <section id="servicos" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="servicos" className="relative scroll-mt-16 py-20 sm:py-28">
+      <div className="container">
+        <SectionHeader track="V2" label={t.services.label} title={t.services.title} accent={t.services.titleAccent} />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            {t.services.label}
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide">
-            <span className="text-white">{t.services.title}</span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">{t.services.titleAccent}</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
-        >
-          {services.map((s) => (
-            <motion.div
-              key={s.title}
-              variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
-              className="group relative rounded-2xl border border-primary/15 bg-primary/[0.03] p-6 sm:p-7 flex flex-col transition-all duration-300 hover:border-primary/35 hover:bg-primary/[0.06]"
-            >
-              <div className="flex items-start gap-4 mb-5">
-                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
-                  <s.icon size={19} className="text-primary" />
-                </div>
-                <h3 className="font-display text-lg sm:text-xl font-bold text-white leading-tight pt-1.5">
-                  {s.title}
-                </h3>
-              </div>
-
-              <p className="text-white/45 text-sm leading-relaxed mb-6 flex-1">
-                {s.desc}
-              </p>
-
+        <motion.ol {...stagger()} className="border-t border-line">
+          {t.services.items.map((service, i) => (
+            <motion.li key={service.title} variants={item} className="border-b border-line">
               <button
-                onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-                className="self-start text-xs font-semibold text-white/40 hover:text-primary transition-colors duration-200 flex items-center gap-1 group/btn uppercase tracking-wider"
+                onClick={openBudget}
+                aria-label={`${service.title} — ${t.services.cta}`}
+                className="group relative grid w-full grid-cols-[auto_1fr_auto] items-start gap-x-5 gap-y-3 overflow-hidden py-8 text-left sm:gap-x-8 sm:py-10 lg:grid-cols-[5rem_minmax(0,1.1fr)_minmax(0,1fr)_auto] lg:items-center"
               >
-                {t.services.cta}
-                <span className="group-hover/btn:translate-x-1 transition-transform duration-200">→</span>
-              </button>
-            </motion.div>
-          ))}
-        </motion.div>
+                {/* Varredura ciano no hover */}
+                <span className="absolute inset-0 origin-left scale-x-0 bg-gradient-to-r from-primary/[0.09] to-transparent transition-transform duration-700 ease-out group-hover:scale-x-100" />
 
+                <span className="relative pt-1 font-mono text-xs text-primary lg:pt-0">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="relative font-display text-[clamp(2rem,4vw,3.5rem)] font-black uppercase leading-[0.9] transition-transform duration-500 group-hover:translate-x-2">
+                  {service.title}
+                </h3>
+                <p className="relative col-span-2 col-start-2 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base lg:col-span-1 lg:col-start-3">
+                  {service.desc}
+                </p>
+                <span className="relative col-start-3 row-start-1 flex h-11 w-11 items-center justify-center rounded-full border border-foreground/15 text-foreground/70 transition-all duration-500 group-hover:rotate-45 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground lg:col-start-4">
+                  <ArrowUpRight size={18} />
+                </span>
+              </button>
+            </motion.li>
+          ))}
+        </motion.ol>
       </div>
     </section>
   );

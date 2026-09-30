@@ -1,61 +1,41 @@
 import { motion } from "framer-motion";
 import { useLang } from "@/lib/lang";
+import SectionHeader from "./common/SectionHeader";
+import { stagger, item } from "./common/motion";
 
-// Stack de produção — chips com nome da ferramenta + tag de categoria (estilo "stack")
+// Ferramentas como uma lista de trilhas: nome à esquerda, categoria à direita
 const Stack = () => {
   const { t } = useLang();
   const c = t.hero.stack.categories;
   const stack = [
-    { name: "Higgsfield AI", cat: c.ia },
-    { name: "ElevenLabs", cat: c.ia },
-    { name: "Claude / ChatGPT", cat: c.ia },
     { name: "Premiere Pro", cat: c.edicao },
     { name: "After Effects", cat: c.motion },
     { name: "CapCut", cat: c.edicao },
+    { name: "Higgsfield AI", cat: c.ia },
+    { name: "ElevenLabs", cat: c.ia },
+    { name: "Claude / ChatGPT", cat: c.ia },
     { name: "YouTube Studio", cat: c.analise },
     { name: "Meta Business Suite", cat: c.analise },
     { name: "Canva Pro", cat: c.design },
   ];
 
   return (
-    <section id="stack" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="stack" className="relative py-20 sm:py-28">
+      <div className="container">
+        <SectionHeader track="A2" label={t.hero.stack.label} title={t.hero.stack.title} />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            {t.hero.stack.label}
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide text-white">
-            {t.hero.stack.title}
-          </h2>
-        </motion.div>
-
-        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-          {stack.map((item, i) => (
-            <motion.div
-              key={item.name}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="group flex items-center gap-2.5 pl-3.5 pr-2 py-2.5 rounded-xl border border-primary/15 bg-primary/[0.03] backdrop-blur-md cursor-default transition-all duration-300 hover:border-primary/40 hover:bg-primary/[0.07] hover:shadow-[0_0_18px_hsl(var(--primary)/0.15)]"
+        <motion.ul {...stagger(0, 0.04)} className="grid border-t border-line sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-3">
+          {stack.map((tool) => (
+            <motion.li
+              key={tool.name}
+              variants={item}
+              className="group flex items-center justify-between gap-4 border-b border-line py-5"
             >
-              <span className="text-xs sm:text-sm font-medium text-white/85 group-hover:text-white transition-colors whitespace-nowrap">
-                {item.name}
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/[0.12] border border-primary/20 rounded-md px-1.5 py-0.5 group-hover:bg-primary/20 transition-colors">
-                {item.cat}
-              </span>
-            </motion.div>
+              <span className="text-lg font-medium text-foreground/90 transition-colors group-hover:text-primary">{tool.name}</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{tool.cat}</span>
+            </motion.li>
           ))}
-        </div>
-
+        </motion.ul>
       </div>
     </section>
   );

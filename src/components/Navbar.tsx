@@ -1,223 +1,101 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, ChevronDown, Search } from "lucide-react";
-import { useLang } from "@/lib/lang";
+import { Menu, X, ChevronDown, Check } from "lucide-react";
+import { useLang, type Lang } from "@/lib/lang";
+import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
+import Timecode from "./common/Timecode";
+import { EASE } from "./common/motion";
 
-const LanguageSwitcher = ({ inline = false }: { inline?: boolean }) => {
-  const { lang: currentLangCode, setLang, t } = useLang();
+const LANGUAGES: { code: Lang; short: string; name: string }[] = [
+  { code: "PT-BR", short: "PT", name: "Português (Brasil)" },
+  { code: "EN-US", short: "EN", name: "English (US)" },
+  { code: "EN-UK", short: "UK", name: "English (UK)" },
+  { code: "ES", short: "ES", name: "Español" },
+];
+
+// Monograma VC — o V em branco e o C no ciano da marca
+export const Monogram = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 120 64" className={className} aria-hidden>
+    <path d="M 12 12 L 34 52 L 56 12" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M 104 17 A 21 21 0 1 0 104 47" fill="none" stroke="hsl(var(--primary))" strokeWidth="9" strokeLinecap="round" />
+  </svg>
+);
+
+const LanguageSwitcher = () => {
+  const { lang, setLang, t } = useLang();
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+  const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
 
-  const languages = [
-    { code: "PT-BR", name: "Portuguese", nativeName: "Português", region: "Brasil" },
-    { code: "ES", name: "Spanish", nativeName: "Español", region: "—" },
-    { code: "EN-US", name: "English", nativeName: "English", region: "United States" },
-    { code: "EN-UK", name: "English", nativeName: "English", region: "United Kingdom" },
-  ];
+  // Fecha ao clicar fora
+  useEffect(() => {
+    if (!isOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [isOpen]);
 
-  const currentLang = languages.find(l => l.code === currentLangCode) || languages[0];
-
-  const filteredLanguages = languages.filter(l =>
-    [l.name, l.nativeName, l.region].some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
-  const handleSelect = (code: string) => {
-    setLang(code as Parameters<typeof setLang>[0]);
-    setIsOpen(false);
-    setSearchQuery("");
-  };
-
-  // ── INLINE mode (mobile menu) ──────────────────────────────────────────────
-  if (inline) {
-    return (
-      <div className="w-full flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold flex items-center gap-2">
-          <Globe size={12} /> {t.navbar.languages}
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {languages.map((l) => {
-            const isActive = currentLangCode === l.code;
-            return (
-              <button
-                key={l.code}
-                onClick={() => handleSelect(l.code)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all duration-200 ${isActive
-                  ? "bg-primary text-black border-primary"
-                  : "bg-white/5 text-white/60 border-white/10 hover:border-primary/40 hover:text-white"
-                  }`}
-              >
-                <span>{l.nativeName}</span>
-                <span className={`text-[10px] ${isActive ? "text-black/60" : "text-white/30"}`}>{l.region}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  // ── DROPDOWN mode (desktop navbar) ─────────────────────────────────────────
   return (
-    <div className="relative mx-2">
+    <div ref={ref} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#09090b]/80 border border-white/10 hover:bg-white/10 transition-colors"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-label={t.navbar.languages}
+        className="flex items-center gap-1.5 rounded-full border border-foreground/10 px-3 py-2 font-mono text-[11px] font-medium text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary"
       >
-        <Globe size={16} className="text-white/70" />
-        <span className="text-sm font-semibold text-white">{currentLang.nativeName}</span>
-        <span className="text-sm text-white/50">{currentLang.region}</span>
-        <ChevronDown size={14} className="text-white/50 ml-1" />
+        {current.short}
+        <ChevronDown size={12} className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full mt-2 right-0 w-64 bg-[#09090b] border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.8)] overflow-hidden z-50 p-2"
+          <motion.ul
+            role="listbox"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: EASE }}
+            className="absolute right-0 top-full mt-2 w-52 overflow-hidden rounded-lg border border-line bg-surface/95 p-1 shadow-2xl backdrop-blur-xl"
           >
-            {/* Search */}
-            <div className="flex items-center gap-2 px-3 py-2 bg-transparent border-b border-white/5 mb-2">
-              <Search size={14} className="text-white/40" />
-              <input
-                type="text"
-                placeholder={t.navbar.search}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent border-none outline-none text-sm text-white placeholder:text-white/30 w-full"
-              />
-            </div>
-
-            <div className="px-2 pb-2">
-              <span className="text-xs text-white/40 mb-2 block px-1">{t.navbar.languages}</span>
-              <div className="flex flex-col gap-1">
-                {filteredLanguages.map((l) => {
-                  const isActive = currentLangCode === l.code;
-                  return (
-                    <button
-                      key={l.code}
-                      onClick={() => handleSelect(l.code)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl w-full text-left transition-colors duration-200 ${isActive
-                        ? "bg-primary text-black"
-                        : "hover:bg-white/5 cursor-pointer text-white"
-                        }`}
-                    >
-                      <span className={isActive ? "font-bold" : "text-white font-medium"}>{l.name}</span>
-                      <span className={isActive ? "text-black/60 font-medium" : "text-white/40"}>{l.region}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </motion.div>
+            {LANGUAGES.map((l) => (
+              <li key={l.code}>
+                <button
+                  role="option"
+                  aria-selected={l.code === lang}
+                  onClick={() => {
+                    setLang(l.code);
+                    setIsOpen(false);
+                  }}
+                  className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm text-foreground/80 transition-colors hover:bg-primary/10 hover:text-foreground"
+                >
+                  <span className="w-6 font-mono text-[11px] text-primary">{l.short}</span>
+                  <span className="flex-1">{l.name}</span>
+                  {l.code === lang && <Check size={14} className="text-primary" />}
+                </button>
+              </li>
+            ))}
+          </motion.ul>
         )}
       </AnimatePresence>
     </div>
   );
 };
 
-const NeonLogo = () => {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="relative flex items-center justify-center w-32 h-16 sm:w-40 sm:h-20 overflow-visible"
-    >
-      <style>{`
-        @keyframes logo-glow-pulse {
-          0%, 100% { opacity: 0.15; transform: scale(1); }
-          50%       { opacity: 0.32; transform: scale(1.45); }
-        }
-        @keyframes logo-wisp {
-          0%   { stroke-dashoffset: 500; opacity: 0.1; }
-          50%  { opacity: 0.25; }
-          100% { stroke-dashoffset: 0;   opacity: 0.1; }
-        }
-        @keyframes logo-letter-flicker {
-          0%, 100% { opacity: 0.85; }
-          50%       { opacity: 1; }
-        }
-        .logo-orb   { animation: logo-glow-pulse 4s ease-in-out infinite; }
-        .logo-wisp1 { animation: logo-wisp 10s linear infinite; }
-        .logo-wisp2 { animation: logo-wisp 12s linear 1s infinite; }
-        .logo-letter { animation: logo-letter-flicker 3s ease-in-out infinite; }
-      `}</style>
-
-      {/* Background Energy Orb — CSS animated */}
-      <div className="logo-orb absolute inset-[-20px] bg-primary/30 rounded-full blur-[50px] pointer-events-none" />
-
-      {/* SVG Letters VC */}
-      <svg width="140" height="70" viewBox="0 0 180 100" className="relative z-10 overflow-visible">
-        <defs>
-          <linearGradient id="neon-primary" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(var(--primary))" />
-            <stop offset="100%" stopColor="hsl(var(--accent))" />
-          </linearGradient>
-          <filter id="neon-glow-logo" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="5" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
-
-        {/* Energy Wisps — CSS animated */}
-        <path
-          d="M 10 50 C 10 10, 170 10, 170 50 C 170 90, 10 90, 10 50"
-          fill="none" stroke="hsl(var(--primary))" strokeWidth="1.2"
-          strokeDasharray="100 400"
-          className="logo-wisp1"
-          filter="url(#neon-glow-logo)"
-        />
-        <path
-          d="M 170 50 C 170 90, 10 90, 10 50 C 10 10, 170 10, 170 50"
-          fill="none" stroke="hsl(var(--primary))" strokeWidth="1.2"
-          strokeDasharray="100 400"
-          className="logo-wisp2"
-          filter="url(#neon-glow-logo)"
-        />
-
-        {/* Letter V — single static path + CSS flicker */}
-        <g className="filter drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
-          <path
-            d="M 35 25 L 60 75 L 85 25"
-            fill="none" stroke="white" strokeWidth="12"
-            strokeLinecap="round" strokeLinejoin="round"
-            className="logo-letter"
-          />
-        </g>
-
-        {/* Letter C — single static path + CSS flicker */}
-        <g className="filter drop-shadow-[0_0_15px_hsl(var(--primary))]">
-          <path
-            d="M 125 30 A 25 25 0 1 0 125 70"
-            fill="none" stroke="url(#neon-primary)" strokeWidth="12"
-            strokeLinecap="round"
-            className="logo-letter"
-          />
-        </g>
-      </svg>
-    </motion.div>
-  );
-};
-
 const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
-  const { t } = useLang();
+  const { lang, setLang, t } = useLang();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleMobileNav = (href: string) => {
-    setIsMobileMenuOpen(false);
-    setTimeout(() => {
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
-  };
+  useScrollLock(isMobileMenuOpen);
+  useEscapeKey(isMobileMenuOpen, () => setIsMobileMenuOpen(false));
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 24);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -227,93 +105,132 @@ const Navbar = ({ onOpenBudget }: { onOpenBudget?: () => void }) => {
     { href: "#sobre", label: t.navbar.about },
   ];
 
+  const handleMobileNav = (href: string) => {
+    setIsMobileMenuOpen(false);
+    // Espera a trava de scroll do menu ser liberada antes de rolar
+    setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: "smooth" }), 50);
+  };
+
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-        ? "bg-background/80 backdrop-blur-xl border-b border-white/10 py-3 shadow-lg"
-        : "bg-transparent py-5"
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
+          isScrolled || isMobileMenuOpen
+            ? "border-b border-line/60 bg-background/75 backdrop-blur-xl"
+            : "border-b border-transparent"
         }`}
-    >
-      <div className="container mx-auto px-6 flex items-center justify-between gap-4">
-        {/* Logo — largura fixa para equilibrar */}
-        <div className="w-[200px] flex-shrink-0">
-          <a href="#" title={t.navbar.backToTop} aria-label={t.navbar.backToTop}>
-            <NeonLogo />
+      >
+        <div className="container flex h-16 items-center justify-between gap-6 sm:h-20">
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-3 text-foreground" aria-label={t.navbar.backToTop}>
+            <Monogram className="h-7 w-auto sm:h-8" />
+            <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground lg:inline">
+              Vitor Carvalho
+            </span>
           </a>
-        </div>
 
-        {/* Desktop nav — centro com orçamento */}
-        <nav className="hidden md:flex items-center gap-1 bg-white/5 border border-white/10 rounded-full pl-2 pr-1.5 py-1.5 backdrop-blur-md">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-[11px] uppercase tracking-[0.15em] font-semibold text-white/60 hover:text-white transition-colors duration-200 px-4 py-1.5 rounded-full hover:bg-white/10"
-            >
-              {link.label}
-            </a>
-          ))}
+          {/* Links — desktop */}
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
+            {navLinks.map((link, i) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="group flex items-baseline gap-1.5 text-sm text-foreground/70 transition-colors hover:text-foreground"
+              >
+                <span className="font-mono text-[10px] text-primary/70">0{i + 1}</span>
+                <span className="relative">
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+                </span>
+              </a>
+            ))}
+          </nav>
 
+          {/* Ações — desktop */}
+          <div className="hidden items-center gap-3 md:flex">
+            <div className="mr-2 hidden items-center gap-2 xl:flex" aria-hidden>
+              <span className="h-2 w-2 animate-blink rounded-full bg-rec shadow-[0_0_8px_hsl(var(--rec))]" />
+              <Timecode className="text-[11px] text-muted-foreground" />
+            </div>
+            <LanguageSwitcher />
+            <button onClick={onOpenBudget} className="btn-primary px-5 py-2.5 text-[13px]">
+              {t.navbar.requestBudget}
+            </button>
+          </div>
+
+          {/* Botão do menu — mobile */}
           <button
-            onClick={onOpenBudget}
-            className="ml-1 text-[11px] uppercase tracking-[0.15em] font-bold text-background bg-primary hover:brightness-110 transition-all duration-200 px-4 py-1.5 rounded-full shadow-[0_0_16px_hsl(var(--primary)/0.35)]"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="-mr-2 p-2 text-foreground md:hidden"
+            aria-label={t.navbar.openMenu}
+            aria-expanded={isMobileMenuOpen}
           >
-            {t.navbar.requestBudget}
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-        </nav>
-
-        {/* Idioma — direita com mesma largura do logo */}
-        <div className="hidden md:flex w-[200px] justify-end flex-shrink-0">
-          <LanguageSwitcher />
         </div>
 
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 text-white"
-          aria-label={t.navbar.openMenu}
-          aria-expanded={isMobileMenuOpen}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+      </header>
 
-      {/* Mobile Menu */}
+      {/* Menu — mobile, tela cheia. Fica fora do <header> porque o backdrop-blur dele
+          prenderia um elemento "fixed" dentro da própria barra. */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-card mt-2 mx-4 rounded-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-x-0 bottom-0 top-16 z-40 flex flex-col bg-background px-5 pb-8 pt-6 md:hidden"
           >
-            <nav className="flex flex-col p-6 gap-4">
-              {navLinks.map((link) => (
-                <button
-                  key={link.label}
+            <nav className="flex flex-col" aria-label="Principal">
+              {navLinks.map((link, i) => (
+                <motion.button
+                  key={link.href}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 + i * 0.06, duration: 0.5, ease: EASE }}
                   onClick={() => handleMobileNav(link.href)}
-                  className="text-lg font-medium text-white/60 hover:text-white transition-colors text-left uppercase tracking-wider"
+                  className="flex items-baseline gap-4 border-b border-line/60 py-5 text-left"
                 >
-                  {link.label}
-                </button>
+                  <span className="font-mono text-xs text-primary">0{i + 1}</span>
+                  <span className="font-display text-5xl font-black uppercase leading-none">{link.label}</span>
+                </motion.button>
               ))}
-              <div className="border-t border-white/10 pt-4 mt-2">
-                <LanguageSwitcher inline />
-              </div>
-              <button
-                onClick={() => { setIsMobileMenuOpen(false); onOpenBudget?.(); }}
-                className="mt-2 px-5 py-3 rounded-full border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] text-center hover:bg-white hover:text-black transition-all"
-              >
-                {t.navbar.requestBudget}
-              </button>
             </nav>
+
+            <div className="mt-8">
+              <span className="label-mono">{t.navbar.languages}</span>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {LANGUAGES.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => setLang(l.code)}
+                    aria-pressed={l.code === lang}
+                    className={`rounded-full border px-4 py-2 font-mono text-xs transition-colors ${
+                      l.code === lang
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-foreground/15 text-foreground/70"
+                    }`}
+                  >
+                    {l.short}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                onOpenBudget?.();
+              }}
+              className="btn-primary mt-auto w-full py-4"
+            >
+              {t.navbar.requestBudget}
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   );
 };
 

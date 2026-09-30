@@ -1,73 +1,35 @@
-@import '@fontsource/space-grotesk/500.css';
-@import '@fontsource/space-grotesk/600.css';
-@import '@fontsource/space-grotesk/700.css';
-@import '@fontsource/bebas-neue/400.css';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
+@import '@fontsource/big-shoulders-display/latin-700';
+@import '@fontsource/big-shoulders-display/latin-900';
+@import '@fontsource/instrument-serif/latin-400';
+@import '@fontsource/instrument-serif/latin-400-italic';
+@import '@fontsource/instrument-sans/latin-400';
+@import '@fontsource/instrument-sans/latin-500';
+@import '@fontsource/instrument-sans/latin-600';
+@import '@fontsource/jetbrains-mono/latin-400';
+@import '@fontsource/jetbrains-mono/latin-500';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Cinematic Video Editor Portfolio Design System */
+/*
+ * Sistema visual "sala de edição": fundo petróleo quase preto, um único ciano
+ * como luz de destaque e o vermelho do REC só para o que está "ao vivo".
+ */
 @layer base {
   :root {
-    --background: 193 100% 5%;
-    --foreground: 0 0% 95%;
-
-    --card: 212 51% 15%;
-    --card-foreground: 0 0% 95%;
-
-    --popover: 212 51% 15%;
-    --popover-foreground: 0 0% 95%;
-
+    --background: 195 85% 4%;
+    --surface: 195 60% 7%;
+    --line: 192 45% 16%;
+    --foreground: 190 25% 94%;
+    --muted: 192 14% 64%;
     --primary: 191 100% 47%;
-    --primary-foreground: 193 100% 5%;
+    --rec: 0 85% 60%;
+    --radius: 0.5rem;
 
-    --secondary: 195 90% 23%;
-    --secondary-foreground: 0 0% 95%;
-
-    --muted: 195 90% 23%;
-    --muted-foreground: 0 0% 65%;
-
-    --accent: 193 99% 33%;
-    --accent-foreground: 0 0% 95%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 195 90% 23%;
-    --input: 195 90% 23%;
-    --ring: 191 100% 47%;
-
-    --radius: 0.75rem;
-
-    /* Custom tokens */
-    --glow-primary: 191 100% 47%;
-    --glow-accent: 193 99% 33%;
-    --gradient-primary: linear-gradient(135deg, hsl(191 100% 47%) 0%, hsl(193 99% 33%) 100%);
-    --gradient-surface: linear-gradient(180deg, hsl(212 51% 15%) 0%, hsl(193 100% 5%) 100%);
-    --glass-background: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-
-    /* Typography */
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
-
-    /* Shadows */
-    --shadow-glow: 0 0 60px hsl(191 100% 47% / 0.15);
-    --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.4);
-    --shadow-elevated: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .dark {
-    --background: 193 100% 5%;
-    --foreground: 0 0% 95%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
@@ -75,124 +37,111 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: var(--font-body);
+    @apply bg-background text-foreground font-sans antialiased;
     overflow-x: hidden;
     width: 100%;
+    font-feature-settings: "ss01", "cv11";
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-display);
-    font-weight: 700;
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--background));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer components {
-
-  /* Glass morphism card */
-  .glass-card {
-    background: var(--glass-background);
-    border: 1px solid var(--glass-border);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+  /* Rótulo técnico em mono — "trilha" de cada seção */
+  .label-mono {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground;
   }
 
-  /* Gradient text */
-  .gradient-text {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  /* Título condensado de seção */
+  .heading-display {
+    @apply font-display font-black uppercase leading-[0.86] tracking-[-0.01em];
+    font-size: clamp(3rem, 8vw, 7rem);
   }
 
-  /* Glow effect */
-  .glow-primary {
-    box-shadow: var(--shadow-glow);
+  /* Acento em serifada itálica */
+  .accent-serif {
+    @apply font-serif italic font-normal normal-case tracking-normal text-primary;
   }
 
-  /* Adobe software icons container */
-  .software-icon {
-    @apply flex items-center justify-center rounded-xl transition-all duration-300 text-foreground font-display font-bold;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+  /* Texto só com contorno (usado no nome do hero) */
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px hsl(var(--primary));
   }
 
-  .software-icon:hover {
-    transform: translateY(-5px) scale(1.05);
-    border-color: hsl(var(--primary) / 0.7);
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.4), inset 0 0 15px hsl(var(--primary) / 0.2);
-    color: hsl(var(--primary));
+  /* Cantos de visor de câmera — os quatro cantos desenhados com gradientes */
+  .viewfinder {
+    --vf-size: 18px;
+    --vf-weight: 1.5px;
+    --vf-color: hsl(var(--primary) / 0.8);
+    background:
+      linear-gradient(var(--vf-color), var(--vf-color)) top left / var(--vf-size) var(--vf-weight),
+      linear-gradient(var(--vf-color), var(--vf-color)) top left / var(--vf-weight) var(--vf-size),
+      linear-gradient(var(--vf-color), var(--vf-color)) top right / var(--vf-size) var(--vf-weight),
+      linear-gradient(var(--vf-color), var(--vf-color)) top right / var(--vf-weight) var(--vf-size),
+      linear-gradient(var(--vf-color), var(--vf-color)) bottom left / var(--vf-size) var(--vf-weight),
+      linear-gradient(var(--vf-color), var(--vf-color)) bottom left / var(--vf-weight) var(--vf-size),
+      linear-gradient(var(--vf-color), var(--vf-color)) bottom right / var(--vf-size) var(--vf-weight),
+      linear-gradient(var(--vf-color), var(--vf-color)) bottom right / var(--vf-weight) var(--vf-size);
+    background-repeat: no-repeat;
   }
 
-  /* Cyber Card for Portfolio */
-  .cyber-card {
-    @apply relative overflow-hidden rounded-[2rem] transition-all duration-500;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  /* Régua de timeline: traço a cada 8px, traço maior a cada 64px */
+  .ruler {
+    height: 12px;
+    background:
+      repeating-linear-gradient(90deg, hsl(var(--primary) / 0.45) 0 1px, transparent 1px 64px) bottom / 100% 12px no-repeat,
+      repeating-linear-gradient(90deg, hsl(var(--line)) 0 1px, transparent 1px 8px) bottom / 100% 6px no-repeat;
   }
 
-  .cyber-card:hover {
-    transform: scale(1.02);
-    border-color: hsl(var(--primary) / 0.5);
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.15);
+  /* Botão principal */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-6 py-3.5 font-sans text-sm font-semibold text-primary-foreground transition-[transform,box-shadow,filter] duration-300;
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 10px 40px -10px hsl(var(--primary) / 0.7);
+    transform: translateY(-1px);
   }
 
-  /* Video thumbnail card */
-  .video-card {
-    @apply relative overflow-hidden rounded-xl transition-all duration-500;
-    background: var(--glass-background);
-    border: 1px solid var(--glass-border);
-  }
-
-  .video-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-elevated);
-    border-color: hsl(var(--primary) / 0.3);
-  }
-
-  .video-card::before {
-    content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
-    background: var(--gradient-primary);
-    z-index: 1;
-  }
-
-  .video-card:hover::before {
-    opacity: 0.1;
-  }
-
-  /* Section divider */
-  .section-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+  /* Botão secundário */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full border border-foreground/15 px-6 py-3.5 font-sans text-sm font-semibold text-foreground transition-colors duration-300 hover:border-primary/60 hover:text-primary;
   }
 }
 
 @layer utilities {
-
-  /* Hide scrollbar */
   .scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none;    /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-
-  /* Text balance */
   .text-balance {
-    text-wrap: balance; /* Modern browsers */
+    text-wrap: balance;
   }
-
 }

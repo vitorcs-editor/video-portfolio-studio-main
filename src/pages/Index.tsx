@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Stats from "@/components/Stats";
+import Numbers from "@/components/Numbers";
+import Clients from "@/components/Clients";
+import Contact from "@/components/Contact";
 import Portfolio from "@/components/Portfolio";
 import Services from "@/components/Services";
 import About from "@/components/About";
 import Stack from "@/components/Stack";
 import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
-import GlobalBackground from "@/components/GlobalBackground";
+import Atmosphere from "@/components/common/Atmosphere";
 import { useLang } from "@/lib/lang";
 import { SITE_URL } from "@/lib/contact";
 
@@ -28,8 +30,15 @@ const Index = () => {
   useEffect(() => {
     const id = decodeURIComponent(window.location.hash.slice(1));
     if (!id) return;
-    const frame = requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
-    return () => cancelAnimationFrame(frame);
+    const scroll = () => document.getElementById(id)?.scrollIntoView();
+    const frame = requestAnimationFrame(scroll);
+    // As fontes mudam a altura do hero ao carregar; rola de novo quando estiverem prontas
+    let cancelled = false;
+    document.fonts?.ready.then(() => { if (!cancelled) scroll(); });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -66,18 +75,22 @@ const Index = () => {
         </script>
       </Helmet>
 
-      <div className="min-h-screen bg-grain relative">
-        <GlobalBackground />
+      <div className="relative min-h-screen">
+        <Atmosphere />
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
-        <main className="relative z-10 w-full">
+        <main className="relative z-10">
           <Hero />
-          <Stats />
+          <Numbers />
+          <Clients />
           <Portfolio />
           <Services />
           <About />
           <Stack />
+          <Contact />
         </main>
-        <Footer />
+        <div className="relative z-10">
+          <Footer />
+        </div>
       </div>
 
       {/* Budget modal — all screen sizes */}

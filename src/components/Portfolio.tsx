@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play } from "lucide-react";
+import { motion } from "framer-motion";
+import { Play, Plus } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import {
   CATEGORIES,
@@ -13,6 +13,8 @@ import {
   type VideoCategory,
 } from "@/data/portfolio";
 import VideoModal from "./VideoModal";
+import SectionHeader from "./common/SectionHeader";
+import { EASE } from "./common/motion";
 
 const Portfolio = () => {
   const { t } = useLang();
@@ -34,6 +36,9 @@ const Portfolio = () => {
 
   const filteredClients = clients.filter((c) => c.niche === activeCategory);
 
+  const countByCategory = (cat: VideoCategory) =>
+    videos.filter((v) => clientById(v.clientId)?.niche === cat).length;
+
   const filteredVideos = videos.filter((v) => {
     if (activeClient !== "all") return v.clientId === activeClient;
     return clientById(v.clientId)?.niche === activeCategory;
@@ -50,159 +55,145 @@ const Portfolio = () => {
   ];
 
   return (
-    <section id="portfolio" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="portfolio" className="relative scroll-mt-16 py-20 sm:py-28">
+      <div className="container">
+        <SectionHeader
+          track="V1"
+          label={t.portfolio.label}
+          title={t.portfolio.title}
+          accent={t.portfolio.titleAccent}
+          description={t.portfolio.description}
+        />
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/50 font-bold mb-3 block">
-            {t.portfolio.label}
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide mb-3">
-            <span className="text-white">{t.portfolio.title}</span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">{t.portfolio.titleAccent}</span>
-          </h2>
-          <p className="text-white/35 text-sm max-w-md">
-            {t.portfolio.description}
-          </p>
-        </motion.div>
-
-        {/* Category filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-2 mb-5"
-        >
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => {
-                setActiveCategory(cat);
-                setActiveClient("all");
-              }}
-              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeCategory === cat
-                  ? "bg-primary text-background shadow-[0_0_16px_hsl(var(--primary)/0.4)]"
-                  : "bg-primary/[0.04] text-white/50 border border-primary/15 hover:text-white hover:border-primary/35 hover:bg-primary/[0.08]"
-              }`}
-            >
-              {t.portfolio.categories[cat]}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Client filters - scrollable row */}
-        <AnimatePresence mode="wait">
-          {filteredClients.length > 0 && (
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.2 }}
-              className="relative mb-10"
-            >
-              <div className="flex items-center justify-center flex-wrap gap-2">
-                {clientsWithAll.map((client) => (
-                  <button
-                    key={client.id}
-                    onClick={() => setActiveClient(client.id)}
-                    className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border whitespace-nowrap ${
-                      activeClient === client.id
-                        ? "border-primary/60 text-primary bg-primary/10"
-                        : "border-white/10 text-white/40 bg-transparent hover:text-white hover:border-white/30"
-                    }`}
-                  >
-                    {client.logo && (
-                      <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full" />
-                    )}
-                    {client.name}
-                  </button>
-                ))}
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-                  className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border border-dashed border-primary/40 text-primary/70 hover:text-primary hover:border-primary whitespace-nowrap"
-                >
-                  {t.portfolio.yourBrand}
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Video grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory + activeClient}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
-          >
-            {filteredVideos.map((video, idx) => {
-              const client = clientById(video.clientId);
+        {/* Categorias */}
+        <div className="-mx-5 mb-4 overflow-x-auto px-5 scrollbar-hide sm:mx-0 sm:px-0">
+          <div role="tablist" aria-label={t.portfolio.label} className="flex w-max gap-1 rounded-full border border-line bg-surface/60 p-1">
+            {CATEGORIES.map((cat) => {
+              const active = activeCategory === cat;
               return (
-                <motion.div
-                  key={`${video.clientId}-${video.driveId}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: idx * 0.05 }}
+                <button
+                  key={cat}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setActiveClient("all");
+                  }}
+                  className={`relative flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-medium transition-colors duration-300 sm:px-5 ${
+                    active ? "text-primary-foreground" : "text-foreground/65 hover:text-foreground"
+                  }`}
                 >
-                  <button
-                    onClick={() => openVideo(video)}
-                    className="w-full group/card text-left"
-                  >
-                    {/* Thumbnail — fundo de marca aparece caso a thumb do Drive falhe */}
-                    <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-3 shadow-lg shadow-black/40 bg-gradient-to-br from-[#0c0c0c] via-[#0a1418] to-primary/10">
-                      <img
-                        src={video.thumbnail ?? driveThumb(video.driveId)}
-                        alt={client?.name ?? ""}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                        onError={(e) => { e.currentTarget.style.opacity = "0"; }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                      <div className="absolute inset-0 bg-primary/0 group-hover/card:bg-primary/10 transition-colors duration-300" />
-
-                      {/* Play button */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover/card:opacity-100 transition-opacity duration-300">
-                        <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shadow-[0_0_24px_hsl(var(--primary)/0.6)] scale-90 group-hover/card:scale-100 transition-transform duration-300">
-                          <Play size={15} className="fill-black text-black ml-0.5" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Info below card */}
-                    <div className="flex items-center gap-2">
-                      {client?.logo && (
-                        <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full flex-shrink-0" />
-                      )}
-                      <span className="text-white/50 text-[11px] font-semibold uppercase tracking-wide truncate group-hover/card:text-white/80 transition-colors duration-200">
-                        {client?.name}
-                      </span>
-                    </div>
-                  </button>
-                </motion.div>
+                  {active && (
+                    <motion.span
+                      layoutId="category-pill"
+                      className="absolute inset-0 rounded-full bg-primary"
+                      transition={{ duration: 0.5, ease: EASE }}
+                    />
+                  )}
+                  <span className="relative">{t.portfolio.categories[cat]}</span>
+                  <span className={`relative font-mono text-[10px] ${active ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                    {String(countByCategory(cat)).padStart(2, "0")}
+                  </span>
+                </button>
               );
             })}
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Clientes da categoria */}
+        <div className="mb-10 flex flex-wrap items-center gap-2">
+          {clientsWithAll.map((client) => {
+            const active = activeClient === client.id;
+            return (
+              <button
+                key={client.id}
+                onClick={() => setActiveClient(client.id)}
+                aria-pressed={active}
+                className={`flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors duration-300 ${
+                  active
+                    ? "border-primary/70 bg-primary/10 text-primary"
+                    : "border-foreground/10 text-foreground/60 hover:border-foreground/30 hover:text-foreground"
+                }`}
+              >
+                {client.logo && <img src={client.logo} alt="" className="h-4 w-4 rounded-full object-contain" />}
+                {client.name}
+              </button>
+            );
+          })}
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
+            className="rounded-full border border-dashed border-primary/50 px-3.5 py-1.5 text-xs font-medium text-primary/80 transition-colors hover:border-primary hover:text-primary"
+          >
+            ✦ {t.portfolio.yourBrand}
+          </button>
+        </div>
+
+        {/* Grade de clipes */}
+        <motion.ul
+          key={activeCategory + activeClient}
+          initial="hidden"
+          animate="show"
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.045 } } }}
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 xl:grid-cols-5"
+        >
+          {filteredVideos.map((video, idx) => {
+            const client = clientById(video.clientId);
+            return (
+              <motion.li
+                key={`${video.clientId}-${video.driveId}`}
+                variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } } }}
+              >
+                <button
+                  onClick={() => openVideo(video)}
+                  className="group block w-full text-left"
+                  aria-label={`${client?.name ?? ""} — ${t.portfolio.categories[activeCategory]} ${idx + 1}`}
+                >
+                  <div className="relative aspect-[9/16] overflow-hidden rounded-md bg-gradient-to-br from-surface via-background to-primary/10 ring-1 ring-line transition-[box-shadow] duration-500 group-hover:ring-primary/70 group-hover:shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.5)]">
+                    <img
+                      src={video.thumbnail ?? driveThumb(video.driveId)}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                      onError={(e) => { e.currentTarget.style.opacity = "0"; }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-background/40" />
+
+                    <span className="absolute left-3 top-3 font-mono text-[10px] uppercase tracking-wider text-foreground/80">
+                      Clip {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <span className="viewfinder absolute inset-2 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [--vf-size:14px]" />
+
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.6)] transition-all duration-500 sm:scale-75 sm:opacity-0 sm:group-hover:scale-100 sm:group-hover:opacity-100">
+                        <Play size={16} className="ml-0.5 fill-current" />
+                      </span>
+                    </span>
+
+                    <span className="absolute inset-x-3 bottom-3 flex items-center gap-2">
+                      {client?.logo && <img src={client.logo} alt="" className="h-5 w-5 shrink-0 rounded-full object-contain" />}
+                      <span className="truncate text-xs font-semibold uppercase tracking-wide text-foreground">{client?.name}</span>
+                    </span>
+                  </div>
+                </button>
+              </motion.li>
+            );
+          })}
+
+          {/* Espaço reservado para o próximo cliente */}
+          <motion.li variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }} className="hidden sm:block">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
+              className="flex aspect-[9/16] w-full flex-col items-center justify-center gap-3 rounded-md border border-dashed border-line text-muted-foreground transition-colors hover:border-primary/60 hover:text-primary"
+            >
+              <Plus size={22} strokeWidth={1.5} />
+              <span className="px-4 text-center text-xs font-medium">{t.portfolio.yourBrand}</span>
+            </button>
+          </motion.li>
+        </motion.ul>
 
         {filteredVideos.length === 0 && (
-          <div className="flex items-center justify-center py-32 text-white/20 uppercase tracking-[0.4em] font-black text-xs text-center">
-            {t.portfolio.empty}
-          </div>
+          <p className="py-24 text-center font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">{t.portfolio.empty}</p>
         )}
-
       </div>
 
       <VideoModal

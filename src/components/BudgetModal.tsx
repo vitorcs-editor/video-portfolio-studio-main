@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
-import { Send, Link2, CheckCircle2, X } from "lucide-react";
+import { ArrowUpRight, Link2, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/lib/lang";
 import { whatsappLink } from "@/lib/contact";
+import { EASE } from "./common/motion";
 
 interface BudgetModalProps {
   isOpen: boolean;
@@ -43,133 +44,95 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
   };
 
   const inputClasses =
-    "w-full bg-[#1A1A1A] border border-white/5 rounded-2xl px-5 py-4 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all duration-300";
-  const labelClasses =
-    "text-[10px] tracking-[0.15em] uppercase text-white/50 font-semibold ml-1";
+    "w-full rounded-md border border-line bg-background/60 px-4 py-3.5 text-[15px] text-foreground placeholder:text-muted-foreground/60 transition-colors duration-300 focus:border-primary/70 focus:outline-none focus:ring-1 focus:ring-primary/40";
+
+  const field = (id: keyof typeof formData) => ({
+    id: `budget-${id}`,
+    value: formData[id],
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setFormData({ ...formData, [id]: e.target.value }),
+    className: inputClasses,
+  });
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="budget-title">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/85 backdrop-blur-md"
           />
 
-          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-[860px] max-h-[90svh] overflow-y-auto rounded-[2rem]"
+            exit={{ opacity: 0, scale: 0.96, y: 20 }}
+            transition={{ duration: 0.45, ease: EASE }}
+            className="relative max-h-[92svh] w-full max-w-[640px] overflow-y-auto rounded-lg border border-line bg-surface shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.4)]"
           >
-            {/* Card */}
-            <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-6 sm:p-8 shadow-[0_0_80px_hsl(var(--primary)/0.2)] relative overflow-hidden">
-              {/* X button — always visible inside card */}
+            {/* Barra superior */}
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-surface/95 px-6 py-3 backdrop-blur">
+              <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                <span className="h-1.5 w-1.5 animate-blink rounded-full bg-rec" />
+                {t.budget.ready}
+              </span>
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 border border-white/10"
+                className="-mr-2 flex h-9 w-9 items-center justify-center rounded-full text-foreground/70 transition-colors hover:bg-foreground/10 hover:text-foreground"
                 aria-label={t.common.close}
               >
-                <X size={16} strokeWidth={2} />
+                <X size={18} />
               </button>
+            </div>
 
-              {/* Inner glow */}
-              <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 blur-[100px] pointer-events-none" />
+            <div className="p-6 sm:p-8">
+              <h2 id="budget-title" className="font-display text-5xl font-black uppercase leading-[0.9] sm:text-6xl">
+                {t.budget.letsCreate}
+              </h2>
+              <p className="mt-3 text-muted-foreground">{t.budget.description}</p>
 
-              {/* Header */}
-              <div className="text-center mb-8">
-                <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/40">
-                  {t.budget.ready}
-                </span>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-1 mb-2 drop-shadow-[0_0_40px_hsl(var(--primary)/0.5)] tracking-tight">
-                  {t.budget.letsCreate}
-                </h2>
-                <p className="text-white/50 text-sm">
-                  {t.budget.description}
-                </p>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
-                {/* Name & Email */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div className="flex flex-col gap-2">
-                    <label className={labelClasses}>{t.budget.name}</label>
-                    <input
-                      type="text" required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder={t.budget.namePlaceholder}
-                      className={inputClasses}
-                    />
+                    <label htmlFor="budget-name" className="label-mono">{t.budget.name}</label>
+                    <input type="text" required autoComplete="name" placeholder={t.budget.namePlaceholder} {...field("name")} />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className={labelClasses}>{t.budget.email}</label>
-                    <input
-                      type="email" required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder={t.budget.emailPlaceholder}
-                      className={inputClasses}
-                    />
+                    <label htmlFor="budget-email" className="label-mono">{t.budget.email}</label>
+                    <input type="email" required autoComplete="email" placeholder={t.budget.emailPlaceholder} {...field("email")} />
                   </div>
                 </div>
 
-
-                {/* Briefing */}
                 <div className="flex flex-col gap-2">
-                  <label className={labelClasses}>{t.budget.briefing}</label>
-                  <textarea
-                    required rows={3}
-                    value={formData.briefing}
-                    onChange={(e) => setFormData({ ...formData, briefing: e.target.value })}
-                    placeholder={t.budget.briefingPlaceholder}
-                    className={`${inputClasses} resize-none`}
-                  />
+                  <label htmlFor="budget-briefing" className="label-mono">{t.budget.briefing}</label>
+                  <textarea required rows={4} placeholder={t.budget.briefingPlaceholder} {...field("briefing")} className={`${inputClasses} resize-none`} />
                 </div>
 
-                {/* Reference */}
                 <div className="flex flex-col gap-2">
-                  <label className={labelClasses}>{t.budget.reference}</label>
+                  <label htmlFor="budget-reference" className="label-mono">{t.budget.reference}</label>
                   <div className="relative">
-                    <input
-                      type="text"
-                      value={formData.reference}
-                      onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
-                      placeholder={t.budget.referencePlaceholder}
-                      className={`${inputClasses} pr-12`}
-                    />
-                    <Link2 size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30" />
+                    <input type="text" placeholder={t.budget.referencePlaceholder} {...field("reference")} className={`${inputClasses} pr-12`} />
+                    <Link2 size={17} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   </div>
                 </div>
 
-                {/* Submit */}
-                <div className="mt-2 relative group">
-                  <button
-                    type="submit"
-                    className="w-full py-4 rounded-2xl bg-primary text-background font-extrabold text-sm tracking-wide flex items-center justify-center gap-3 hover:bg-white transition-all duration-300 hover:scale-[1.02] shadow-[0_0_40px_hsl(var(--primary)/0.3)] group-hover:shadow-[0_0_60px_hsl(var(--primary)/0.5)] relative overflow-hidden"
-                  >
-                    <Send size={18} className="fill-background -rotate-45 mb-1" />
-                    {t.budget.requestNow}
-                  </button>
-                </div>
+                <button type="submit" className="btn-primary mt-2 w-full py-4 text-base">
+                  {t.budget.requestNow}
+                  <ArrowUpRight size={18} />
+                </button>
 
-                {/* Footer badges */}
-                <div className="flex justify-center items-center gap-8">
-                  {[t.budget.response24h, t.budget.freeBudget].map((text, i) => (
-                    <div key={i} className="flex items-center gap-2 text-white/60">
-                      <CheckCircle2 size={14} className="text-primary" />
-                      <span className="text-[9px] tracking-[0.2em] font-bold uppercase">{text}</span>
-                    </div>
+                <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                  {[t.budget.response24h, t.budget.freeBudget].map((text) => (
+                    <li key={text} className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <Check size={12} className="text-primary" />
+                      {text}
+                    </li>
                   ))}
-                </div>
+                </ul>
               </form>
             </div>
           </motion.div>

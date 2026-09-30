@@ -1,99 +1,10 @@
-import { motion } from "framer-motion";
-import { Play, Instagram, Linkedin, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Instagram, Linkedin, Mail, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/lang";
-
-// Client Marquee - Exibindo múltiplos quadros conforme preferência do usuário
-const ClientMarquee = () => {
-  const { t } = useLang();
-
-  // 5 logos reais + 1 slot vazio para manter a estética de marca em crescimento
-  const clientLogo = "/fenix-logo.png";
-  const placeholdersCount = 1;
-
-  interface MarqueeItem {
-    type: 'logo' | 'placeholder';
-    src?: string;
-    alt?: string;
-    link?: string;
-    imgClass?: string;
-    clientId?: string;
-    category?: string;
-  }
-
-  const items: MarqueeItem[] = [
-    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: '#portfolio', clientId: 'fenix_ads', category: 'ads', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: '/icons/projeto-draft.webp', alt: 'Projeto Draft', link: '#portfolio', clientId: 'projeto_draft', category: 'social', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: '/icons/1pra1.png', alt: '1pra1.bet', link: '#portfolio', clientId: '1pra1_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
-    { type: 'logo', src: '/icons/cruzeiro-basquete.webp', alt: 'Cruzeiro Basquete', link: '#portfolio', clientId: 'cruzeiro_basquete', category: 'social', imgClass: 'max-w-[80%] max-h-[80%] mix-blend-lighten' },
-    ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
-  ];
-
-  const scrollItems = [...items, ...items, ...items];
-
-  return (
-    <div className="w-full mt-auto relative z-10 pb-6">
-      {/* Header simples no padrão das seções */}
-      <div className="container mx-auto px-6 mb-4 flex items-center gap-3">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-primary/55 font-bold">
-          {t.hero.clients}
-        </span>
-        <span className="h-px flex-1 bg-gradient-to-r from-primary/25 to-transparent" />
-      </div>
-
-      {/* Marquee Slider — células bento */}
-      <div className="w-full overflow-hidden h-[88px] sm:h-24 flex items-center relative group">
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-
-        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] items-center gap-3 sm:gap-4 px-3">
-          {scrollItems.map((item, i) => (
-            <div
-              key={i}
-              className={`flex items-center justify-center w-36 sm:w-48 h-16 sm:h-20 rounded-2xl border transition-all duration-300 flex-shrink-0 group/item
-                ${item.type === 'logo'
-                  ? "border-primary/15 bg-primary/[0.03] hover:border-primary/40 hover:bg-primary/[0.07] hover:shadow-[0_0_18px_hsl(var(--primary)/0.2)]"
-                  : "border-primary/10 bg-primary/[0.01]"}`}
-            >
-              {item.type === 'logo' ? (
-                <a
-                  href={item.link}
-                  target={item.link?.startsWith('#') ? "_self" : "_blank"}
-                  rel={item.link?.startsWith('#') ? "" : "noopener noreferrer"}
-                  onClick={(e) => {
-                    if (item.clientId && item.category) {
-                      e.preventDefault();
-                      window.dispatchEvent(new CustomEvent('selectClient', { detail: { category: item.category, client: item.clientId } }));
-                    }
-                  }}
-                  className="w-full h-full flex items-center justify-center cursor-pointer relative"
-                >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className={`${item.imgClass ?? 'max-w-[70%] max-h-[70%]'} object-contain transition-all duration-300 group-hover/item:scale-105`}
-                  />
-                  <div className="absolute -bottom-1 -right-2 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/item:translate-y-0 z-20">
-                    <div className="bg-[#1a1a1a] border border-white/20 rounded-md px-3 py-1 shadow-2xl">
-                      <span className="text-white text-[10px] sm:text-[11px] font-medium whitespace-nowrap tracking-wide">
-                        {item.alt}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              ) : (
-                <span className="text-primary/15 text-2xl font-thin select-none">+</span>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Célula base do bento
-const cellBase =
-  "relative rounded-2xl border border-primary/15 bg-primary/[0.03] overflow-hidden transition-all duration-300 hover:border-primary/35";
+import { videos, clientById, driveThumb } from "@/data/portfolio";
+import Timecode from "./common/Timecode";
+import { EASE } from "./common/motion";
 
 const socials = [
   { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
@@ -101,138 +12,163 @@ const socials = [
   { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com", label: "Email" },
 ];
 
+// Um clipe de cada cliente para o monitor do hero
+const MONITOR_CLIPS = Array.from(new Map(videos.map((v) => [v.clientId, v])).values()).slice(0, 6);
+
+// "Monitor de programa": um quadro 9:16 que troca entre trabalhos do portfólio,
+// com HUD de câmera por cima.
+const ProgramMonitor = () => {
+  const { t } = useLang();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setIndex((i) => (i + 1) % MONITOR_CLIPS.length), 2800);
+    return () => clearInterval(id);
+  }, []);
+
+  const clip = MONITOR_CLIPS[index];
+  const client = clientById(clip.clientId);
+
+  return (
+    <a
+      href="#portfolio"
+      aria-label={t.hero.viewWork}
+      className="group relative block aspect-[9/16] w-full overflow-hidden rounded-md bg-surface ring-1 ring-line"
+    >
+      <AnimatePresence initial={false}>
+        <motion.img
+          key={clip.driveId}
+          src={clip.thumbnail ?? driveThumb(clip.driveId)}
+          alt=""
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.1, ease: EASE }}
+          className="absolute inset-0 h-full w-full object-cover"
+          onError={(e) => { e.currentTarget.style.opacity = "0"; }}
+        />
+      </AnimatePresence>
+
+      {/* Escurecimento e guias de área segura */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background/80" />
+      <div className="absolute inset-[8%] rounded-sm border border-dashed border-foreground/15" />
+      <div className="viewfinder absolute inset-3" />
+
+      {/* HUD */}
+      <div className="absolute inset-x-5 top-5 flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-foreground/85">
+        <span className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 animate-blink rounded-full bg-rec" /> REC
+        </span>
+        <span>4K · 24 FPS</span>
+      </div>
+      <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-3">
+        <div>
+          <span className="block font-mono text-[10px] uppercase tracking-wider text-primary">
+            CLIP {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="font-display text-2xl font-bold uppercase leading-none">{client?.name}</span>
+        </div>
+        <Timecode className="text-[10px] text-foreground/70" />
+      </div>
+
+      {/* Play no hover */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="flex h-16 w-16 scale-90 items-center justify-center rounded-full bg-primary/90 text-primary-foreground opacity-0 shadow-[0_0_40px_hsl(var(--primary)/0.6)] transition-all duration-500 group-hover:scale-100 group-hover:opacity-100">
+          <Play size={20} className="ml-1 fill-current" />
+        </span>
+      </div>
+    </a>
+  );
+};
+
 const Hero = () => {
   const { t } = useLang();
   const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
 
+  const reveal = (delay: number) => ({
+    initial: { opacity: 0, y: 28 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 1, delay, ease: EASE },
+  });
+
   return (
-    <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden pt-20 sm:pt-24">
-      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[110px] pointer-events-none opacity-50" />
-      <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-accent/8 rounded-full blur-[90px] pointer-events-none opacity-40" />
+    <section className="relative pt-24 sm:pt-28 lg:min-h-[100svh]">
+      <div className="container grid items-center gap-12 pb-16 lg:grid-cols-12 lg:gap-8 lg:pb-24">
+        {/* Texto */}
+        <div className="lg:col-span-8">
+          <motion.div {...reveal(0.1)} className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/80">
+              <span className="h-2 w-2 animate-blink rounded-full bg-rec shadow-[0_0_8px_hsl(var(--rec))]" />
+              {t.hero.role}
+            </span>
+            <span className="label-mono">iGaming · VSL · Ads · Motion</span>
+          </motion.div>
 
-      <div className="container mx-auto px-6 relative z-10 flex-1 flex items-center py-4">
+          <h1 className="font-display font-black uppercase leading-[0.8] tracking-[-0.02em]">
+            <motion.span {...reveal(0.2)} className="block text-[23vw] sm:text-[clamp(4.5rem,15vw,13.5rem)]">
+              Vitor
+            </motion.span>
+            <motion.span {...reveal(0.32)} className="text-outline block text-[23vw] sm:text-[clamp(4.5rem,15vw,13.5rem)]">
+              Carvalho
+            </motion.span>
+          </h1>
+
+          <motion.p
+            {...reveal(0.5)}
+            className="mt-8 max-w-2xl font-serif text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.1] text-foreground"
+          >
+            {t.hero.headline}
+            <em className="text-primary">{t.hero.headlineAccent}</em>
+          </motion.p>
+
+          <motion.p {...reveal(0.6)} className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {t.hero.pitch}
+          </motion.p>
+
+          <motion.div {...reveal(0.7)} className="mt-10 flex flex-wrap items-center gap-3">
+            <button onClick={openBudget} className="btn-primary">
+              {t.navbar.requestBudget}
+              <ArrowUpRight size={16} />
+            </button>
+            <a href="#portfolio" className="btn-ghost">
+              <Play size={14} className="fill-current" />
+              {t.hero.viewWork}
+            </a>
+            <span className="ml-1 font-mono text-[11px] text-muted-foreground">{t.hero.ctaNote}</span>
+          </motion.div>
+
+          <motion.div {...reveal(0.8)} className="mt-10 flex items-center gap-2">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 text-foreground/60 transition-colors hover:border-primary/60 hover:text-primary"
+              >
+                <s.icon size={16} strokeWidth={1.5} />
+              </a>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Monitor */}
         <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
-          className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:auto-rows-[150px]"
+          initial={{ opacity: 0, y: 40, rotate: 2 }}
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={{ duration: 1.2, delay: 0.4, ease: EASE }}
+          className="relative mx-auto w-full max-w-[300px] sm:max-w-[340px] lg:col-span-4 lg:max-w-[min(100%,calc(68svh*9/16))]"
         >
-          {/* Célula NOME — grande */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} col-span-2 lg:row-span-2 bg-primary/[0.05] flex flex-col justify-between p-6 sm:p-7`}
-          >
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-[#ff4646] shadow-[0_0_8px_#ff4646] animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-                {t.hero.role}
-              </span>
-              <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.12em] text-primary/90 bg-primary/10 border border-primary/25 rounded-full px-2.5 py-1">
-                ✦ {t.hero.stack.categories.ia}
-              </span>
-            </div>
-
-            <h1 className="flex-1 flex flex-col justify-center font-impact text-6xl sm:text-8xl lg:text-[6.5rem] tracking-[0.01em] leading-[0.84] text-white py-1">
-              <span>Vitor</span>
-              <span className="text-primary drop-shadow-[0_0_30px_hsl(var(--primary)/0.45)]">
-                Carvalho
-              </span>
-            </h1>
-
-            <div className="flex items-center gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={s.label}
-                  className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/55 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
-                >
-                  <s.icon size={15} strokeWidth={1.5} />
-                </a>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Célula VER TRABALHOS */}
-          <motion.a
-            href="#portfolio"
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} col-span-2 group flex flex-col justify-between p-5 hover:bg-primary/[0.06]`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold">{t.hero.portfolio}</span>
-              <span className="text-white/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300">↗</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Play size={15} className="fill-white text-white group-hover:fill-primary group-hover:text-primary transition-colors duration-300" />
-              <span className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.3em] text-white group-hover:text-primary transition-colors duration-300">
-                {t.hero.viewWork}
-              </span>
-            </div>
-            <span className="text-white/35 text-xs">{t.hero.showreel}</span>
-          </motion.a>
-
-          {/* Stats */}
-          {t.hero.quickStats.map((s) => (
-            <motion.div
-              key={s.label}
-              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-              className={`${cellBase} flex flex-col justify-center p-5`}
-            >
-              <div className="font-display text-3xl sm:text-4xl font-bold text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.35)]">
-                {s.value}
-              </div>
-              <span className="text-[10px] uppercase tracking-[0.12em] text-white/40 font-semibold mt-1">
-                {s.label}
-              </span>
-            </motion.div>
-          ))}
-
-          {/* Frase */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} col-span-2 flex flex-col justify-center gap-3 p-6`}
-          >
-            <p className="font-display text-xl sm:text-2xl font-bold leading-snug">
-              <span className="text-white">{t.hero.headline}</span>
-              <span className="text-primary">{t.hero.headlineAccent}</span>
-            </p>
-            <p className="text-white/45 text-sm leading-relaxed">
-              {t.hero.pitch}
-            </p>
-          </motion.div>
-
-          {/* Nichos */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} flex flex-col justify-center gap-2 p-5`}
-          >
-            <span className="text-[10px] uppercase tracking-[0.15em] text-white/35 font-bold">{t.hero.niches}</span>
-            <div className="flex flex-wrap gap-1.5">
-              {["iGaming", "VSL", "Ads", "Motion"].map((tag) => (
-                <span key={tag} className="text-[10px] font-bold uppercase tracking-wide text-primary/80 bg-primary/[0.08] border border-primary/20 rounded-md px-2 py-0.5">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* CTA */}
-          <motion.button
-            onClick={openBudget}
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className="relative rounded-2xl bg-primary text-background overflow-hidden flex flex-col items-start justify-center gap-1 p-5 text-left transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
-          >
-            <span className="font-display text-lg font-bold leading-tight">{t.hero.ctaLine1}<br />{t.hero.ctaLine2}</span>
-            <span className="text-xs font-bold opacity-70">{t.hero.ctaNote}</span>
-          </motion.button>
-
+          <div className="relative">
+            {/* Quadro de trás, deslocado, para dar profundidade */}
+            <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-md border border-primary/25" aria-hidden />
+            <ProgramMonitor />
+          </div>
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{t.hero.showreel}</p>
         </motion.div>
       </div>
-
-      <ClientMarquee />
     </section>
   );
 };

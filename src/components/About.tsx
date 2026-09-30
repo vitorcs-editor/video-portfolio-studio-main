@@ -1,106 +1,68 @@
 import { motion } from "framer-motion";
-import { Target, Zap, Shield, TrendingUp } from "lucide-react";
 import { useLang } from "@/lib/lang";
-
-const featureIcons = [Target, Zap, Shield, TrendingUp];
+import SectionHeader from "./common/SectionHeader";
+import { fadeUp, stagger, item } from "./common/motion";
 
 const clients = ["1pra1.bet", "Cruzeiro Basquete", "Group Phoenix", "Projeto Draft"];
 
-const cell = "relative rounded-2xl border border-primary/15 bg-primary/[0.03] transition-all duration-300 hover:border-primary/35";
-
 const About = () => {
   const { t } = useLang();
-  const features = t.about.features.map((f, i) => ({ ...f, icon: featureIcons[i] }));
 
   return (
-    <section id="sobre" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="sobre" className="relative scroll-mt-16 py-20 sm:py-28">
+      <div className="container">
+        <SectionHeader track="V3" label={t.about.label} title={t.about.title} accent={t.about.titleAccent} />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            {t.about.label}
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide">
-            <span className="text-white">{t.about.title}</span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">{t.about.titleAccent}</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
-        >
-          {/* Foto — grande à esquerda */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cell} col-span-2 lg:row-span-2 min-h-[340px] overflow-hidden`}
-          >
-            <img
-              src="/vitor-hero.webp"
-              alt={t.about.photoAlt}
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay pointer-events-none" />
-            <span className="absolute bottom-5 left-5 font-impact text-2xl tracking-wide text-white">
-              Vitor Carvalho
-            </span>
-          </motion.div>
-
-          {/* Bio */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cell} col-span-2 p-6 sm:p-7 flex items-center`}
-          >
-            <p className="text-white/55 text-sm sm:text-base leading-relaxed">
-              {t.about.bio}
-            </p>
-          </motion.div>
-
-          {/* Clientes */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cell} col-span-2 p-6 flex flex-col justify-center gap-3`}
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em] text-white/35 font-bold">
-              {t.about.clientsLabel}
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {clients.map((c) => (
-                <span key={c} className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/55 bg-white/[0.04] border border-white/10 rounded-full px-3 py-1.5">
-                  {c}
-                </span>
-              ))}
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Foto no visor */}
+          <motion.figure {...fadeUp} className="relative lg:col-span-5">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-md ring-1 ring-line">
+              <img
+                src="/vitor-hero.webp"
+                alt={t.about.photoAlt}
+                loading="lazy"
+                className="h-full w-full object-cover grayscale-[35%] transition-[filter] duration-700 hover:grayscale-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+              <div className="viewfinder absolute inset-4" />
+              <div className="absolute inset-x-6 top-6 flex justify-between font-mono text-[10px] uppercase tracking-wider text-foreground/80">
+                <span>ISO 800</span>
+                <span>f/1.8</span>
+              </div>
+              <figcaption className="absolute inset-x-6 bottom-6">
+                <span className="font-display text-4xl font-black uppercase leading-none">Vitor Carvalho</span>
+              </figcaption>
             </div>
-          </motion.div>
+          </motion.figure>
 
-          {/* Features */}
-          {features.map((f) => (
-            <motion.div
-              key={f.title}
-              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-              className={`${cell} col-span-1 p-5 flex flex-col gap-3 hover:bg-primary/[0.06]`}
-            >
-              <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                <f.icon size={15} className="text-primary" />
-              </div>
-              <div>
-                <p className="text-white text-xs font-bold mb-1.5">{f.title}</p>
-                <p className="text-white/40 text-xs leading-relaxed">{f.desc}</p>
-              </div>
+          {/* Texto */}
+          <div className="lg:col-span-7">
+            <motion.p {...fadeUp} className="font-serif text-[clamp(1.5rem,2.6vw,2.25rem)] leading-[1.25] text-foreground/90">
+              {t.about.bio}
+            </motion.p>
+
+            <motion.div {...fadeUp} className="mt-10">
+              <span className="label-mono">{t.about.clientsLabel}</span>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {clients.map((c) => (
+                  <li key={c} className="rounded-full border border-foreground/10 px-3.5 py-1.5 text-sm text-foreground/80">
+                    {c}
+                  </li>
+                ))}
+              </ul>
             </motion.div>
-          ))}
-        </motion.div>
 
+            <motion.ul {...stagger()} className="mt-12 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2">
+              {t.about.features.map((f, i) => (
+                <motion.li key={f.title} variants={item} className="bg-background p-6">
+                  <span className="font-mono text-[10px] text-primary">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-3 text-base font-semibold text-foreground">{f.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </div>
       </div>
     </section>
   );

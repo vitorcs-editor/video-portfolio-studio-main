@@ -14,14 +14,12 @@ const HTML_LANG: Record<Lang, string> = {
 type Item = { title: string; desc: string };
 
 interface T {
-  navbar: { projects: string; services: string; about: string; requestBudget: string; languages: string; search: string; backToTop: string; openMenu: string; };
+  navbar: { projects: string; services: string; about: string; requestBudget: string; languages: string; backToTop: string; openMenu: string; };
   hero: {
-    role: string; portfolio: string; viewWork: string; showreel: string;
-    quickStats: { value: string; label: string; }[];
-    headline: string; headlineAccent: string; pitch: string; niches: string;
-    ctaLine1: string; ctaLine2: string; ctaNote: string; clients: string;
+    role: string; viewWork: string; showreel: string;
+    headline: string; headlineAccent: string; pitch: string; ctaNote: string; clients: string;
     stack: { label: string; title: string; categories: { ia: string; edicao: string; motion: string; analise: string; design: string; }; };
-    stats: { label: string; title: string; titleAccent: string; items: { value: string; label: string; }[]; };
+    stats: { label: string; items: { value: string; label: string; }[]; };
   };
   portfolio: {
     label: string; title: string; titleAccent: string; description: string;
@@ -36,7 +34,8 @@ interface T {
     briefing: string; briefingPlaceholder: string; reference: string; referencePlaceholder: string;
     requestNow: string; toastTitle: string; toastDesc: string; response24h: string; freeBudget: string;
   };
-  footer: { tagline: string; cta: string; rights: string; };
+  contact: { label: string; title: string; titleAccent: string; description: string; whatsapp: string; };
+  footer: { tagline: string; rights: string; };
   common: { close: string; };
   notFound: { message: string; back: string; };
   seo: { title: string; description: string; keywords: string; };
@@ -49,26 +48,17 @@ const PT_BR: T = {
     about: "Sobre",
     requestBudget: "Solicitar Orçamento",
     languages: "Idiomas",
-    search: "Buscar...",
     backToTop: "Voltar ao início",
     openMenu: "Abrir menu",
   },
   hero: {
     role: "Editor de Vídeo Sênior",
-    portfolio: "Portfólio",
     viewWork: "Ver Trabalhos",
     showreel: "Showreel · melhores cortes em vídeo",
-    quickStats: [
-      { value: "150+", label: "Vídeos entregues" },
-      { value: "20+", label: "Clientes atendidos" },
-    ],
     headline: "Edição que prende. ",
     headlineAccent: "Resultado que converte.",
     pitch: "Atendo marcas de iGaming, VSL e redes sociais — vídeos com identidade, ritmo e foco em performance.",
-    niches: "Nichos",
-    ctaLine1: "Solicitar",
-    ctaLine2: "orçamento",
-    ctaNote: "Resposta em até 24h ↗",
+    ctaNote: "Resposta em até 24h",
     clients: "CLIENTES",
     stack: {
       label: "FERRAMENTAS & IA",
@@ -77,8 +67,6 @@ const PT_BR: T = {
     },
     stats: {
       label: "NÚMEROS",
-      title: "Resultado que ",
-      titleAccent: "fala por mim.",
       items: [
         { value: "10M+", label: "Views geradas" },
         { value: "4+", label: "Anos de experiência" },
@@ -93,7 +81,7 @@ const PT_BR: T = {
     titleAccent: "Selecionados",
     description: "Uma seleção de produções recentes sob medida. Clique no card para assistir ao projeto.",
     allClients: "Todos",
-    yourBrand: "✦ Pode ser você",
+    yourBrand: "Pode ser você",
     empty: "Nenhum projeto nesta categoria",
     categories: { igaming: "iGaming", vsl: "VSL", motion: "Motion & IA", ads: "Ads & Performance", social: "Social Media" },
   },
@@ -141,9 +129,15 @@ const PT_BR: T = {
     response24h: "Resposta em 24h",
     freeBudget: "Orçamento gratuito",
   },
+  contact: {
+    label: "Contato",
+    title: "Vamos criar",
+    titleAccent: "juntos.",
+    description: "Conte a ideia do seu vídeo e receba um orçamento gratuito em até 24h.",
+    whatsapp: "Ou chame no WhatsApp",
+  },
   footer: {
     tagline: "Editor de Vídeo Sênior · iGaming · VSL · Social",
-    cta: "Solicitar Orçamento ↗",
     rights: "Todos os direitos reservados.",
   },
   common: { close: "Fechar" },
@@ -162,26 +156,17 @@ const EN_US: T = {
     about: "About",
     requestBudget: "Request a Quote",
     languages: "Languages",
-    search: "Search...",
     backToTop: "Back to top",
     openMenu: "Open menu",
   },
   hero: {
     role: "Senior Video Editor",
-    portfolio: "Portfolio",
     viewWork: "View Work",
     showreel: "Showreel · best cuts on video",
-    quickStats: [
-      { value: "150+", label: "Videos delivered" },
-      { value: "20+", label: "Clients served" },
-    ],
     headline: "Editing that hooks. ",
     headlineAccent: "Results that convert.",
     pitch: "I work with iGaming, VSL and social media brands — videos with identity, rhythm and a focus on performance.",
-    niches: "Niches",
-    ctaLine1: "Request",
-    ctaLine2: "a quote",
-    ctaNote: "Reply within 24h ↗",
+    ctaNote: "Reply within 24h",
     clients: "CLIENTS",
     stack: {
       label: "TOOLS & AI",
@@ -190,8 +175,6 @@ const EN_US: T = {
     },
     stats: {
       label: "NUMBERS",
-      title: "Results that ",
-      titleAccent: "speak for me.",
       items: [
         { value: "10M+", label: "Views generated" },
         { value: "4+", label: "Years of experience" },
@@ -206,7 +189,7 @@ const EN_US: T = {
     titleAccent: "Work",
     description: "A selection of recent tailor-made productions. Click a card to watch the project.",
     allClients: "All",
-    yourBrand: "✦ This could be you",
+    yourBrand: "This could be you",
     empty: "No projects in this category",
     categories: { igaming: "iGaming", vsl: "VSL", motion: "Motion & AI", ads: "Ads & Performance", social: "Social Media" },
   },
@@ -254,9 +237,15 @@ const EN_US: T = {
     response24h: "Response in 24h",
     freeBudget: "Free quote",
   },
+  contact: {
+    label: "Contact",
+    title: "Let's create",
+    titleAccent: "together.",
+    description: "Tell me about your video idea and get a free quote within 24h.",
+    whatsapp: "Or message me on WhatsApp",
+  },
   footer: {
     tagline: "Senior Video Editor · iGaming · VSL · Social",
-    cta: "Request a Quote ↗",
     rights: "All rights reserved.",
   },
   common: { close: "Close" },
@@ -275,26 +264,17 @@ const ES: T = {
     about: "Sobre mí",
     requestBudget: "Solicitar Presupuesto",
     languages: "Idiomas",
-    search: "Buscar...",
     backToTop: "Volver al inicio",
     openMenu: "Abrir menú",
   },
   hero: {
     role: "Editor de Video Senior",
-    portfolio: "Portafolio",
     viewWork: "Ver Trabajos",
     showreel: "Showreel · mejores cortes en video",
-    quickStats: [
-      { value: "150+", label: "Videos entregados" },
-      { value: "20+", label: "Clientes atendidos" },
-    ],
     headline: "Edición que atrapa. ",
     headlineAccent: "Resultados que convierten.",
     pitch: "Trabajo con marcas de iGaming, VSL y redes sociales — videos con identidad, ritmo y foco en rendimiento.",
-    niches: "Nichos",
-    ctaLine1: "Solicitar",
-    ctaLine2: "presupuesto",
-    ctaNote: "Respuesta en menos de 24h ↗",
+    ctaNote: "Respuesta en menos de 24h",
     clients: "CLIENTES",
     stack: {
       label: "HERRAMIENTAS E IA",
@@ -303,8 +283,6 @@ const ES: T = {
     },
     stats: {
       label: "NÚMEROS",
-      title: "Resultados que ",
-      titleAccent: "hablan por mí.",
       items: [
         { value: "10M+", label: "Views generadas" },
         { value: "4+", label: "Años de experiencia" },
@@ -319,7 +297,7 @@ const ES: T = {
     titleAccent: "Seleccionados",
     description: "Una selección de producciones recientes a medida. Haz clic en una tarjeta para ver el proyecto.",
     allClients: "Todos",
-    yourBrand: "✦ Puedes ser tú",
+    yourBrand: "Puedes ser tú",
     empty: "No hay proyectos en esta categoría",
     categories: { igaming: "iGaming", vsl: "VSL", motion: "Motion & IA", ads: "Ads & Performance", social: "Social Media" },
   },
@@ -367,9 +345,15 @@ const ES: T = {
     response24h: "Respuesta en 24h",
     freeBudget: "Presupuesto gratuito",
   },
+  contact: {
+    label: "Contacto",
+    title: "Creemos",
+    titleAccent: "juntos.",
+    description: "Cuéntame la idea de tu video y recibe un presupuesto gratuito en menos de 24h.",
+    whatsapp: "O escríbeme por WhatsApp",
+  },
   footer: {
     tagline: "Editor de Video Senior · iGaming · VSL · Social",
-    cta: "Solicitar Presupuesto ↗",
     rights: "Todos los derechos reservados.",
   },
   common: { close: "Cerrar" },

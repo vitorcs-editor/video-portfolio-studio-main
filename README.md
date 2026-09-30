@@ -23,8 +23,8 @@ npm run preview  # serve o build de produção
 | Vídeos e clientes do portfólio | `src/data/portfolio.ts` |
 | Todos os textos do site (PT-BR, EN, ES) | `src/lib/lang.tsx` |
 | WhatsApp e URL do site | `src/lib/contact.ts` |
-| Seções da página | `src/components/` (Hero, Stats, Portfolio, Services, About, Stack, Footer) |
-| Cores e tema | `src/index.css` e `tailwind.config.ts` |
+| Seções da página | `src/components/` (Hero, Numbers, Clients, Portfolio, Services, About, Stack, Contact, Footer) |
+| Cores, fontes e tema | `src/index.css` (variáveis de cor) e `tailwind.config.ts` (fontes) |
 | Imagens, logos e thumbnails | `public/` |
 
 ### Adicionando um vídeo
