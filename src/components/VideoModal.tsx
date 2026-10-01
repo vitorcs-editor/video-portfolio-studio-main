@@ -48,7 +48,7 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
               </div>
 
               <div
-                className={`overflow-hidden rounded-md bg-black shadow-[0_30px_120px_-20px_hsl(var(--primary)/0.35)] ring-1 ring-line ${
+                className={`overflow-hidden rounded-[22px] border border-white/10 bg-black shadow-[0_30px_120px_-20px_hsl(var(--primary)/0.35)] ${
                   isVertical ? "aspect-[9/16] min-h-0 w-full flex-1" : "aspect-video w-full"
                 }`}
               >
@@ -63,7 +63,7 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
 
               <button
                 onClick={onClose}
-                className="btn-ghost min-h-[44px] touch-manipulation px-5 py-2.5 text-sm"
+                className="btn-glass min-h-[44px] touch-manipulation px-5 py-2.5 text-sm"
                 aria-label={t.common.close}
               >
                 <X size={15} strokeWidth={2.5} />

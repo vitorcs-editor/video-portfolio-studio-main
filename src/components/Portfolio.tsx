@@ -55,10 +55,10 @@ const Portfolio = () => {
   ];
 
   return (
-    <section id="portfolio" className="relative scroll-mt-16 py-20 sm:py-28">
+    <section id="portfolio" className="relative scroll-mt-24 py-20 sm:py-28">
       <div className="container">
         <SectionHeader
-          track="V1"
+          align="center"
           label={t.portfolio.label}
           title={t.portfolio.title}
           accent={t.portfolio.titleAccent}
@@ -66,8 +66,8 @@ const Portfolio = () => {
         />
 
         {/* Categorias */}
-        <div className="-mx-5 mb-4 overflow-x-auto px-5 scrollbar-hide sm:mx-0 sm:px-0">
-          <div role="tablist" aria-label={t.portfolio.label} className="flex w-max gap-1 rounded-full border border-line bg-surface/60 p-1">
+        <div className="-mx-5 mb-5 flex overflow-x-auto px-5 scrollbar-hide sm:mx-0 sm:justify-center sm:px-0">
+          <div role="tablist" aria-label={t.portfolio.label} className="glass flex w-max gap-1 rounded-full p-1.5">
             {CATEGORIES.map((cat) => {
               const active = activeCategory === cat;
               return (
@@ -79,20 +79,20 @@ const Portfolio = () => {
                     setActiveCategory(cat);
                     setActiveClient("all");
                   }}
-                  className={`relative flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-medium transition-colors duration-300 sm:px-5 ${
-                    active ? "text-primary-foreground" : "text-foreground/65 hover:text-foreground"
+                  className={`relative flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm transition-colors duration-300 sm:px-5 ${
+                    active ? "font-semibold text-background" : "text-foreground/70 hover:text-foreground"
                   }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="category-pill"
-                      className="absolute inset-0 rounded-full bg-primary"
+                      className="absolute inset-0 rounded-full bg-white"
                       transition={{ duration: 0.5, ease: EASE }}
                     />
                   )}
                   <span className="relative">{t.portfolio.categories[cat]}</span>
-                  <span className={`relative font-mono text-[10px] ${active ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                    {String(countByCategory(cat)).padStart(2, "0")}
+                  <span className={`relative font-mono text-[10px] ${active ? "text-background/60" : "text-muted-foreground"}`}>
+                    {countByCategory(cat)}
                   </span>
                 </button>
               );
@@ -101,7 +101,7 @@ const Portfolio = () => {
         </div>
 
         {/* Clientes da categoria */}
-        <div className="mb-10 flex flex-wrap items-center gap-2">
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
           {clientsWithAll.map((client) => {
             const active = activeClient === client.id;
             return (
@@ -109,10 +109,10 @@ const Portfolio = () => {
                 key={client.id}
                 onClick={() => setActiveClient(client.id)}
                 aria-pressed={active}
-                className={`flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors duration-300 ${
+                className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors duration-300 ${
                   active
-                    ? "border-primary/70 bg-primary/10 text-primary"
-                    : "border-foreground/10 text-foreground/60 hover:border-foreground/30 hover:text-foreground"
+                    ? "border-primary/60 bg-primary/10 text-primary"
+                    : "border-white/10 bg-white/[0.03] text-foreground/65 hover:border-white/25 hover:text-foreground"
                 }`}
               >
                 {client.logo && <img src={client.logo} alt="" className="h-4 w-4 rounded-full object-contain" />}
@@ -122,7 +122,7 @@ const Portfolio = () => {
           })}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-            className="rounded-full border border-dashed border-primary/50 px-3.5 py-1.5 text-xs font-medium text-primary/80 transition-colors hover:border-primary hover:text-primary"
+            className="rounded-full border border-dashed border-primary/50 px-3.5 py-2 text-xs font-medium text-primary/80 transition-colors hover:border-primary hover:text-primary"
           >
             ✦ {t.portfolio.yourBrand}
           </button>
@@ -148,30 +148,26 @@ const Portfolio = () => {
                   className="group block w-full text-left"
                   aria-label={`${client?.name ?? ""} — ${t.portfolio.categories[activeCategory]} ${idx + 1}`}
                 >
-                  <div className="relative aspect-[9/16] overflow-hidden rounded-md bg-gradient-to-br from-surface via-background to-primary/10 ring-1 ring-line transition-[box-shadow] duration-500 group-hover:ring-primary/70 group-hover:shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.5)]">
+                  <div className="relative aspect-[9/16] overflow-hidden rounded-[20px] border border-white/10 bg-surface shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] transition-[border-color,box-shadow,transform] duration-500 group-hover:-translate-y-1 group-hover:border-primary/60 group-hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.45)]">
                     <img
                       src={video.thumbnail ?? driveThumb(video.driveId)}
                       alt=""
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                       onError={(e) => { e.currentTarget.style.opacity = "0"; }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-background/40" />
-
-                    <span className="absolute left-3 top-3 font-mono text-[10px] uppercase tracking-wider text-foreground/80">
-                      Clip {String(idx + 1).padStart(2, "0")}
-                    </span>
-                    <span className="viewfinder absolute inset-2 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [--vf-size:14px]" />
+                    {/* Reflexo de vidro no topo e escurecimento embaixo */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent via-30% to-background/85" />
 
                     <span className="absolute inset-0 flex items-center justify-center">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.6)] transition-all duration-500 sm:scale-75 sm:opacity-0 sm:group-hover:scale-100 sm:group-hover:opacity-100">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.7)] transition-all duration-500 sm:scale-75 sm:opacity-0 sm:group-hover:scale-100 sm:group-hover:opacity-100">
                         <Play size={16} className="ml-0.5 fill-current" />
                       </span>
                     </span>
 
-                    <span className="absolute inset-x-3 bottom-3 flex items-center gap-2">
-                      {client?.logo && <img src={client.logo} alt="" className="h-5 w-5 shrink-0 rounded-full object-contain" />}
-                      <span className="truncate text-xs font-semibold uppercase tracking-wide text-foreground">{client?.name}</span>
+                    <span className="absolute inset-x-3.5 bottom-3.5 flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      <span className="truncate text-xs font-semibold text-white">{client?.name}</span>
                     </span>
                   </div>
                 </button>
@@ -183,7 +179,7 @@ const Portfolio = () => {
           <motion.li variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }} className="hidden sm:block">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-              className="flex aspect-[9/16] w-full flex-col items-center justify-center gap-3 rounded-md border border-dashed border-line text-muted-foreground transition-colors hover:border-primary/60 hover:text-primary"
+              className="flex aspect-[9/16] w-full flex-col items-center justify-center gap-3 rounded-[20px] border border-dashed border-white/15 text-muted-foreground transition-colors hover:border-primary/60 hover:text-primary"
             >
               <Plus size={22} strokeWidth={1.5} />
               <span className="px-4 text-center text-xs font-medium">{t.portfolio.yourBrand}</span>

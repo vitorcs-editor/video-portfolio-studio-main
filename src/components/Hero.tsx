@@ -1,174 +1,271 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, Instagram, Linkedin, Mail, ArrowUpRight } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Play, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLang } from "@/lib/lang";
-import { videos, clientById, driveThumb } from "@/data/portfolio";
-import Timecode from "./common/Timecode";
+import { videos, clientById, driveEmbed, driveThumb, type Video } from "@/data/portfolio";
+import VideoModal from "./VideoModal";
 import { EASE } from "./common/motion";
 
-const socials = [
-  { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com", label: "Email" },
-];
+// Um clipe de cada cliente/nicho para a vitrine do hero
+const HIGHLIGHTS: Video[] = Array.from(new Map(videos.map((v) => [v.clientId, v])).values());
 
-// Um clipe de cada cliente para o monitor do hero
-const MONITOR_CLIPS = Array.from(new Map(videos.map((v) => [v.clientId, v])).values()).slice(0, 6);
+// Posição de cada cartão conforme a distância até o central (0 = centro).
+// Deslocamentos em múltiplos da largura do cartão; no mobile ficam mais próximos.
+const LAYOUT = {
+  desktop: { x: [0, 1, 1.78, 2.43], rotate: [0, 38, 48, 55], scale: [1, 0.88, 0.76, 0.64], opacity: [1, 1, 0.7, 0.4] },
+  mobile: { x: [0, 0.82, 1.35, 1.76], rotate: [0, 38, 48, 55], scale: [1, 0.84, 0.7, 0.6], opacity: [1, 1, 0, 0] },
+};
 
-// "Monitor de programa": um quadro 9:16 que troca entre trabalhos do portfólio,
-// com HUD de câmera por cima.
-const ProgramMonitor = () => {
-  const { t } = useLang();
-  const [index, setIndex] = useState(0);
+const MOBILE_QUERY = "(max-width: 767px)";
 
+// Largura do cartão central: 170px no mobile; no desktop cresce com a altura da
+// tela (até 230px) para a vitrine inteira caber na primeira dobra.
+const measure = () => {
+  const isMobile = window.matchMedia(MOBILE_QUERY).matches;
+  const width = isMobile ? 170 : Math.round(Math.min(230, Math.max(160, ((window.innerHeight - 560) * 9) / 16)));
+  return { isMobile, width };
+};
+
+const useCardSize = () => {
+  const [size, setSize] = useState(measure);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % MONITOR_CLIPS.length), 2800);
-    return () => clearInterval(id);
+    const onResize = () => setSize(measure());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
+  return size;
+};
 
-  const clip = MONITOR_CLIPS[index];
-  const client = clientById(clip.clientId);
+// Vitrine 3D: cartões verticais em leque, o central em destaque e tocável
+const Coverflow = ({ onPlay }: { onPlay: (video: Video) => void }) => {
+  const { t } = useLang();
+  const { isMobile, width: cardWidth } = useCardSize();
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const dragStart = useRef<number | null>(null);
+  const total = HIGHLIGHTS.length;
+  const layout = isMobile ? LAYOUT.mobile : LAYOUT.desktop;
+
+  const go = useCallback((step: number) => setIndex((i) => (i + step + total) % total), [total]);
+
+  // Avança sozinho, exceto com o mouse em cima ou com "reduzir movimento"
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => go(1), 4000);
+    return () => clearInterval(id);
+  }, [paused, go]);
+
+  // Distância circular do cartão até o central, de -3 a +3
+  const offsetOf = (i: number) => {
+    let d = i - index;
+    if (d > total / 2) d -= total;
+    if (d < -total / 2) d += total;
+    return d;
+  };
 
   return (
-    <a
-      href="#portfolio"
-      aria-label={t.hero.viewWork}
-      className="group relative block aspect-[9/16] w-full overflow-hidden rounded-md bg-surface ring-1 ring-line"
+    <div
+      className="relative w-full"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowLeft") go(-1);
+        if (e.key === "ArrowRight") go(1);
+      }}
     >
-      <AnimatePresence initial={false}>
-        <motion.img
-          key={clip.driveId}
-          src={clip.thumbnail ?? driveThumb(clip.driveId)}
-          alt=""
-          initial={{ opacity: 0, scale: 1.06 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.1, ease: EASE }}
-          className="absolute inset-0 h-full w-full object-cover"
-          onError={(e) => { e.currentTarget.style.opacity = "0"; }}
-        />
-      </AnimatePresence>
+      <div
+        className="relative mx-auto w-full touch-pan-y [perspective:1200px]"
+        style={{ height: Math.round((cardWidth * 16) / 9) + 24 }}
+        onPointerDown={(e) => { dragStart.current = e.clientX; }}
+        onPointerUp={(e) => {
+          if (dragStart.current === null) return;
+          const dx = e.clientX - dragStart.current;
+          dragStart.current = null;
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+        }}
+        role="region"
+        aria-roledescription="carrossel"
+        aria-label={t.hero.highlights}
+      >
+        {HIGHLIGHTS.map((video, i) => {
+          const offset = offsetOf(i);
+          const distance = Math.abs(offset);
+          if (distance > 3) return null;
+          const side = Math.sign(offset);
+          const client = clientById(video.clientId);
+          const isCenter = offset === 0;
 
-      {/* Escurecimento e guias de área segura */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background/80" />
-      <div className="absolute inset-[8%] rounded-sm border border-dashed border-foreground/15" />
-      <div className="viewfinder absolute inset-3" />
-
-      {/* HUD */}
-      <div className="absolute inset-x-5 top-5 flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-foreground/85">
-        <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 animate-blink rounded-full bg-rec" /> REC
-        </span>
-        <span>4K · 24 FPS</span>
+          return (
+            <motion.button
+              key={`${video.clientId}-${video.driveId}`}
+              onClick={() => (isCenter ? onPlay(video) : setIndex(i))}
+              tabIndex={isCenter ? 0 : -1}
+              aria-hidden={!isCenter}
+              aria-label={isCenter ? `${client?.name} — ${t.portfolio.categories[client?.niche ?? "social"]}` : undefined}
+              initial={false}
+              animate={{
+                x: side * layout.x[distance] * cardWidth,
+                rotateY: -side * layout.rotate[distance],
+                scale: layout.scale[distance],
+                opacity: layout.opacity[distance],
+                z: isCenter ? 80 : 0,
+              }}
+              transition={{ duration: 0.7, ease: EASE }}
+              style={{ zIndex: 10 - distance, width: cardWidth, marginLeft: -cardWidth / 2 }}
+              className={`group absolute left-1/2 top-0 aspect-[9/16] overflow-hidden rounded-[22px] border sm:rounded-[26px] ${
+                isCenter
+                  ? "border-primary/60 shadow-[0_40px_120px_-20px_hsl(var(--primary)/0.55)]"
+                  : "border-white/15 shadow-[0_40px_90px_-20px_rgba(0,0,0,0.9)]"
+              }`}
+            >
+              <img
+                src={video.thumbnail ?? driveThumb(video.driveId)}
+                alt=""
+                draggable={false}
+                className="h-full w-full bg-surface object-cover"
+                onError={(e) => { e.currentTarget.style.opacity = "0"; }}
+              />
+              {/* Sombra lateral nos cartões de trás; gradiente inferior no central */}
+              <span
+                className={`absolute inset-0 transition-opacity duration-700 ${
+                  isCenter
+                    ? "bg-gradient-to-b from-transparent from-55% to-background/90"
+                    : "bg-gradient-to-r from-background/55 via-transparent to-background/55"
+                }`}
+              />
+              {isCenter && (
+                <span className="absolute inset-x-3.5 bottom-3.5 flex items-center justify-between gap-2 text-left sm:inset-x-4 sm:bottom-4">
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-semibold text-white">{client?.name}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-primary">
+                      {client && t.portfolio.categories[client.niche]}
+                    </span>
+                  </span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.8)] transition-transform duration-300 group-hover:scale-110">
+                    <Play size={16} className="ml-0.5 fill-current" />
+                  </span>
+                </span>
+              )}
+            </motion.button>
+          );
+        })}
       </div>
-      <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-3">
-        <div>
-          <span className="block font-mono text-[10px] uppercase tracking-wider text-primary">
-            CLIP {String(index + 1).padStart(2, "0")}
-          </span>
-          <span className="font-display text-2xl font-bold uppercase leading-none">{client?.name}</span>
+
+      {/* Controles */}
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <button onClick={() => go(-1)} aria-label={t.hero.prev} className="glass flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:text-white">
+          <ChevronLeft size={18} />
+        </button>
+        <div className="flex items-center gap-1.5" aria-hidden>
+          {HIGHLIGHTS.map((_, i) => (
+            <span
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-500 ${i === index ? "w-6 bg-primary" : "w-1.5 bg-white/25"}`}
+            />
+          ))}
         </div>
-        <Timecode className="text-[10px] text-foreground/70" />
+        <button onClick={() => go(1)} aria-label={t.hero.next} className="glass flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:text-white">
+          <ChevronRight size={18} />
+        </button>
       </div>
-
-      {/* Play no hover */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="flex h-16 w-16 scale-90 items-center justify-center rounded-full bg-primary/90 text-primary-foreground opacity-0 shadow-[0_0_40px_hsl(var(--primary)/0.6)] transition-all duration-500 group-hover:scale-100 group-hover:opacity-100">
-          <Play size={20} className="ml-1 fill-current" />
-        </span>
-      </div>
-    </a>
+    </div>
   );
 };
 
 const Hero = () => {
   const { t } = useLang();
+  const [playing, setPlaying] = useState<Video | null>(null);
   const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
 
   const reveal = (delay: number) => ({
-    initial: { opacity: 0, y: 28 },
+    initial: { opacity: 0, y: 24 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 1, delay, ease: EASE },
+    transition: { duration: 0.9, delay, ease: EASE },
   });
 
   return (
-    <section className="relative pt-24 sm:pt-28 lg:min-h-[100svh]">
-      <div className="container grid items-center gap-12 pb-16 lg:grid-cols-12 lg:gap-8 lg:pb-24">
-        {/* Texto */}
-        <div className="lg:col-span-8">
-          <motion.div {...reveal(0.1)} className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/80">
-              <span className="h-2 w-2 animate-blink rounded-full bg-rec shadow-[0_0_8px_hsl(var(--rec))]" />
-              {t.hero.role}
-            </span>
-            <span className="label-mono">iGaming · VSL · Ads · Motion</span>
-          </motion.div>
+    <section className="relative overflow-hidden pt-28">
+      {/* Brilho e piso em perspectiva atrás da vitrine */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[55%] h-[520px] w-[1100px] max-w-[160vw] -translate-x-1/2 blur-xl"
+        style={{ background: "radial-gradient(closest-side, hsl(var(--primary) / 0.26), transparent)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-[10%] bottom-0 h-[34%] origin-bottom [transform:perspective(600px)_rotateX(60deg)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(hsl(var(--primary) / 0.16) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.16) 1px, transparent 1px)",
+          backgroundSize: "70px 70px",
+          maskImage: "linear-gradient(transparent, black 70%)",
+          WebkitMaskImage: "linear-gradient(transparent, black 70%)",
+        }}
+      />
 
-          <h1 className="font-display font-black uppercase leading-[0.8] tracking-[-0.02em]">
-            <motion.span {...reveal(0.2)} className="block text-[23vw] sm:text-[clamp(4.5rem,15vw,13.5rem)]">
-              Vitor
-            </motion.span>
-            <motion.span {...reveal(0.32)} className="text-outline block text-[23vw] sm:text-[clamp(4.5rem,15vw,13.5rem)]">
-              Carvalho
-            </motion.span>
-          </h1>
+      <div className="container relative flex flex-col items-center text-center">
+        <motion.span {...reveal(0.05)} className="eyebrow">
+          <span className="h-2 w-2 rounded-full bg-live shadow-[0_0_0_4px_hsl(var(--live)/0.15)]" />
+          {t.hero.available}
+          <span className="hidden sm:inline">· {t.hero.ctaNote}</span>
+        </motion.span>
 
-          <motion.p
-            {...reveal(0.5)}
-            className="mt-8 max-w-2xl font-serif text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.1] text-foreground"
-          >
-            {t.hero.headline}
-            <em className="text-primary">{t.hero.headlineAccent}</em>
-          </motion.p>
-
-          <motion.p {...reveal(0.6)} className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {t.hero.pitch}
-          </motion.p>
-
-          <motion.div {...reveal(0.7)} className="mt-10 flex flex-wrap items-center gap-3">
-            <button onClick={openBudget} className="btn-primary">
-              {t.navbar.requestBudget}
-              <ArrowUpRight size={16} />
-            </button>
-            <a href="#portfolio" className="btn-ghost">
-              <Play size={14} className="fill-current" />
-              {t.hero.viewWork}
-            </a>
-            <span className="ml-1 font-mono text-[11px] text-muted-foreground">{t.hero.ctaNote}</span>
-          </motion.div>
-
-          <motion.div {...reveal(0.8)} className="mt-10 flex items-center gap-2">
-            {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 text-foreground/60 transition-colors hover:border-primary/60 hover:text-primary"
-              >
-                <s.icon size={16} strokeWidth={1.5} />
-              </a>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Monitor */}
-        <motion.div
-          initial={{ opacity: 0, y: 40, rotate: 2 }}
-          animate={{ opacity: 1, y: 0, rotate: 0 }}
-          transition={{ duration: 1.2, delay: 0.4, ease: EASE }}
-          className="relative mx-auto w-full max-w-[300px] sm:max-w-[340px] lg:col-span-4 lg:max-w-[min(100%,calc(68svh*9/16))]"
+        <motion.h1
+          {...reveal(0.15)}
+          className="mt-6 max-w-5xl text-balance text-[clamp(2.6rem,5.6vw,4.75rem)] font-semibold leading-[1] tracking-[-0.05em]"
         >
-          <div className="relative">
-            {/* Quadro de trás, deslocado, para dar profundidade */}
-            <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-md border border-primary/25" aria-hidden />
-            <ProgramMonitor />
-          </div>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{t.hero.showreel}</p>
+          {t.hero.headline}
+          <span className="text-gradient block">{t.hero.headlineAccent}</span>
+        </motion.h1>
+
+        <motion.p {...reveal(0.25)} className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {t.hero.pitch}
+        </motion.p>
+
+        <motion.div {...reveal(0.35)} className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <button onClick={openBudget} className="btn-primary">
+            {t.navbar.requestBudget}
+            <ArrowUpRight size={17} />
+          </button>
+          <a href="#portfolio" className="btn-glass">
+            <Play size={14} className="fill-current" />
+            {t.hero.viewWork}
+          </a>
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.45, ease: EASE }}
+          className="mt-10 w-full sm:mt-12"
+        >
+          <Coverflow onPlay={setPlaying} />
+        </motion.div>
+
+        {/* Números */}
+        <motion.dl
+          {...reveal(0.7)}
+          className="mt-14 grid w-full max-w-4xl grid-cols-2 gap-y-6 border-t border-white/10 pb-16 pt-8 sm:grid-cols-4 sm:pb-20"
+        >
+          {t.hero.stats.items.map((stat) => (
+            <div key={stat.label} className="flex flex-col items-center gap-1">
+              <dt className="order-2 text-xs text-muted-foreground sm:text-sm">{stat.label}</dt>
+              <dd className="order-1 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
+                {stat.value.replace(/\+$/, "")}
+                {stat.value.endsWith("+") && <span className="text-primary">+</span>}
+              </dd>
+            </div>
+          ))}
+        </motion.dl>
       </div>
+
+      <VideoModal
+        isOpen={playing !== null}
+        onClose={() => setPlaying(null)}
+        videoUrl={playing ? driveEmbed(playing.driveId) : ""}
+        title={playing ? clientById(playing.clientId)?.name ?? "" : ""}
+        isVertical={!playing?.horizontal}
+      />
     </section>
   );
 };

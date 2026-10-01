@@ -6,11 +6,11 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="text-center px-6">
-        <h1 className="font-display font-black text-9xl text-primary drop-shadow-[0_0_30px_hsl(var(--primary)/0.4)] mb-2">404</h1>
+        <h1 className="text-gradient text-9xl font-semibold tracking-[-0.06em] mb-2">404</h1>
         <p className="mb-6 text-lg text-white/60">{t.notFound.message}</p>
         <a
           href="/"
-          className="inline-block px-6 py-3 rounded-full bg-primary text-background font-bold text-sm uppercase tracking-widest hover:brightness-110 transition-all"
+          className="btn-primary"
         >
           {t.notFound.back}
         </a>

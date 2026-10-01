@@ -13,13 +13,13 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative border-t border-line/70">
+    <footer className="relative border-t border-white/10">
       <div className="container flex flex-col gap-8 py-10 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <Monogram className="h-7 w-auto text-foreground" />
           <div>
             <p className="text-sm font-semibold text-foreground">Vitor Carvalho</p>
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{t.footer.tagline}</p>
+            <p className="text-xs text-muted-foreground">{t.footer.tagline}</p>
           </div>
         </div>
 
@@ -31,7 +31,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 text-foreground/60 transition-colors hover:border-primary/60 hover:text-primary"
+              className="glass flex h-10 w-10 items-center justify-center rounded-full text-foreground/60 transition-colors hover:border-primary/60 hover:text-primary"
             >
               <social.icon size={16} strokeWidth={1.5} />
             </a>
@@ -39,7 +39,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="container flex items-center justify-between border-t border-line/50 py-6">
+      <div className="container flex items-center justify-between border-t border-white/5 py-6">
         <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
           © {new Date().getFullYear()} · {t.footer.rights}
         </p>

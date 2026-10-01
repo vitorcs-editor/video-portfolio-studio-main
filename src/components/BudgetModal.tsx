@@ -44,7 +44,7 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
   };
 
   const inputClasses =
-    "w-full rounded-md border border-line bg-background/60 px-4 py-3.5 text-[15px] text-foreground placeholder:text-muted-foreground/60 transition-colors duration-300 focus:border-primary/70 focus:outline-none focus:ring-1 focus:ring-primary/40";
+    "w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-[15px] text-foreground placeholder:text-muted-foreground/60 transition-colors duration-300 focus:border-primary/70 focus:outline-none focus:ring-1 focus:ring-primary/40";
 
   const field = (id: keyof typeof formData) => ({
     id: `budget-${id}`,
@@ -72,12 +72,12 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 20 }}
             transition={{ duration: 0.45, ease: EASE }}
-            className="relative max-h-[92svh] w-full max-w-[640px] overflow-y-auto rounded-lg border border-line bg-surface shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.4)]"
+            className="glass relative max-h-[92svh] w-full max-w-[600px] overflow-y-auto rounded-[28px] bg-background/80 shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.45)]"
           >
             {/* Barra superior */}
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-surface/95 px-6 py-3 backdrop-blur">
-              <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                <span className="h-1.5 w-1.5 animate-blink rounded-full bg-rec" />
+            <div className="flex items-center justify-between px-6 pt-5 sm:px-8">
+              <span className="eyebrow">
+                <span className="h-2 w-2 rounded-full bg-live" />
                 {t.budget.ready}
               </span>
               <button
@@ -89,8 +89,8 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
               </button>
             </div>
 
-            <div className="p-6 sm:p-8">
-              <h2 id="budget-title" className="font-display text-5xl font-black uppercase leading-[0.9] sm:text-6xl">
+            <div className="px-6 pb-7 pt-6 sm:px-8 sm:pb-8">
+              <h2 id="budget-title" className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
                 {t.budget.letsCreate}
               </h2>
               <p className="mt-3 text-muted-foreground">{t.budget.description}</p>
@@ -98,22 +98,22 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
               <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="budget-name" className="label-mono">{t.budget.name}</label>
+                    <label htmlFor="budget-name" className="text-sm font-medium text-foreground/80">{t.budget.name}</label>
                     <input type="text" required autoComplete="name" placeholder={t.budget.namePlaceholder} {...field("name")} />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="budget-email" className="label-mono">{t.budget.email}</label>
+                    <label htmlFor="budget-email" className="text-sm font-medium text-foreground/80">{t.budget.email}</label>
                     <input type="email" required autoComplete="email" placeholder={t.budget.emailPlaceholder} {...field("email")} />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="budget-briefing" className="label-mono">{t.budget.briefing}</label>
+                  <label htmlFor="budget-briefing" className="text-sm font-medium text-foreground/80">{t.budget.briefing}</label>
                   <textarea required rows={4} placeholder={t.budget.briefingPlaceholder} {...field("briefing")} className={`${inputClasses} resize-none`} />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="budget-reference" className="label-mono">{t.budget.reference}</label>
+                  <label htmlFor="budget-reference" className="text-sm font-medium text-foreground/80">{t.budget.reference}</label>
                   <div className="relative">
                     <input type="text" placeholder={t.budget.referencePlaceholder} {...field("reference")} className={`${inputClasses} pr-12`} />
                     <Link2 size={17} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -127,7 +127,7 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
 
                 <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
                   {[t.budget.response24h, t.budget.freeBudget].map((text) => (
-                    <li key={text} className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <li key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Check size={12} className="text-primary" />
                       {text}
                     </li>

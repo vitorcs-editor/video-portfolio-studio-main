@@ -1,65 +1,58 @@
 import { motion } from "framer-motion";
+import { Target, Zap, ShieldCheck, TrendingUp } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import SectionHeader from "./common/SectionHeader";
 import { fadeUp, stagger, item } from "./common/motion";
 
-const clients = ["1pra1.bet", "Cruzeiro Basquete", "Group Phoenix", "Projeto Draft"];
+const FEATURE_ICONS = [Target, Zap, ShieldCheck, TrendingUp];
 
 const About = () => {
   const { t } = useLang();
 
   return (
-    <section id="sobre" className="relative scroll-mt-16 py-20 sm:py-28">
+    <section id="sobre" className="relative scroll-mt-24 overflow-x-clip py-20 sm:py-28">
       <div className="container">
-        <SectionHeader track="V3" label={t.about.label} title={t.about.title} accent={t.about.titleAccent} />
-
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Foto no visor */}
-          <motion.figure {...fadeUp} className="relative lg:col-span-5">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-md ring-1 ring-line">
-              <img
-                src="/vitor-hero.webp"
-                alt={t.about.photoAlt}
-                loading="lazy"
-                className="h-full w-full object-cover grayscale-[35%] transition-[filter] duration-700 hover:grayscale-0"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-              <div className="viewfinder absolute inset-4" />
-              <div className="absolute inset-x-6 top-6 flex justify-between font-mono text-[10px] uppercase tracking-wider text-foreground/80">
-                <span>ISO 800</span>
-                <span>f/1.8</span>
-              </div>
-              <figcaption className="absolute inset-x-6 bottom-6">
-                <span className="font-display text-4xl font-black uppercase leading-none">Vitor Carvalho</span>
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Foto */}
+          <motion.figure {...fadeUp} className="relative mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none">
+            <div
+              aria-hidden
+              className="absolute -inset-6 rounded-[40px] opacity-70 blur-3xl"
+              style={{ background: "radial-gradient(closest-side, hsl(var(--primary) / 0.3), transparent)" }}
+            />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-white/10">
+              <img src="/vitor-hero.webp" alt={t.about.photoAlt} loading="lazy" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent via-40% to-background/80" />
+              <figcaption className="glass absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl px-5 py-4">
+                <span>
+                  <span className="block font-semibold">Vitor Carvalho</span>
+                  <span className="text-xs text-muted-foreground">{t.hero.role}</span>
+                </span>
+                <span className="h-2.5 w-2.5 rounded-full bg-live shadow-[0_0_0_4px_hsl(var(--live)/0.15)]" />
               </figcaption>
             </div>
           </motion.figure>
 
           {/* Texto */}
           <div className="lg:col-span-7">
-            <motion.p {...fadeUp} className="font-serif text-[clamp(1.5rem,2.6vw,2.25rem)] leading-[1.25] text-foreground/90">
+            <SectionHeader label={t.about.label} title={t.about.title} accent={t.about.titleAccent} />
+            <motion.p {...fadeUp} className="-mt-4 text-lg leading-relaxed text-foreground/80">
               {t.about.bio}
             </motion.p>
 
-            <motion.div {...fadeUp} className="mt-10">
-              <span className="label-mono">{t.about.clientsLabel}</span>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {clients.map((c) => (
-                  <li key={c} className="rounded-full border border-foreground/10 px-3.5 py-1.5 text-sm text-foreground/80">
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            <motion.ul {...stagger()} className="mt-12 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2">
-              {t.about.features.map((f, i) => (
-                <motion.li key={f.title} variants={item} className="bg-background p-6">
-                  <span className="font-mono text-[10px] text-primary">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className="mt-3 text-base font-semibold text-foreground">{f.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
-                </motion.li>
-              ))}
+            <motion.ul {...stagger()} className="mt-10 grid gap-3 sm:grid-cols-2">
+              {t.about.features.map((f, i) => {
+                const Icon = FEATURE_ICONS[i] ?? Target;
+                return (
+                  <motion.li key={f.title} variants={item} className="glass flex gap-4 rounded-2xl p-5">
+                    <Icon size={18} className="mt-0.5 shrink-0 text-primary" />
+                    <span>
+                      <span className="block font-medium">{f.title}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{f.desc}</span>
+                    </span>
+                  </motion.li>
+                );
+              })}
             </motion.ul>
           </div>
         </div>

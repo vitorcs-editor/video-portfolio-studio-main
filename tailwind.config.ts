@@ -21,12 +21,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        // Condensada de impacto para títulos, serifada itálica para acentos,
-        // sans refinada para texto corrido e mono para timecodes/rótulos técnicos.
-        display: ['"Big Shoulders Display"', "Impact", "sans-serif"],
-        serif: ['"Instrument Serif"', "Georgia", "serif"],
-        sans: ['"Instrument Sans"', "system-ui", "sans-serif"],
-        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+        sans: ['"Geist Sans"', "system-ui", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--line))",
@@ -45,6 +41,7 @@ export default {
           foreground: "hsl(var(--background))",
         },
         rec: "hsl(var(--rec))",
+        live: "hsl(var(--live))",
         destructive: {
           DEFAULT: "hsl(var(--rec))",
           foreground: "hsl(var(--foreground))",
@@ -60,14 +57,14 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
-        blink: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.25" },
+        drift: {
+          "0%": { transform: "translate(0, 0) scale(1)" },
+          "100%": { transform: "translate(6vw, 8vh) scale(1.15)" },
         },
       },
       animation: {
         marquee: "marquee 60s linear infinite",
-        blink: "blink 1.6s ease-in-out infinite",
+        drift: "drift 18s ease-in-out infinite alternate",
       },
     },
   },

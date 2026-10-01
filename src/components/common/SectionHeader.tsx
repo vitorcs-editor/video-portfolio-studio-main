@@ -2,29 +2,27 @@ import { motion } from "framer-motion";
 import { fadeUp } from "./motion";
 
 interface SectionHeaderProps {
-  /** Nome da trilha, como numa timeline: V1, V2, A1... */
-  track: string;
   label: string;
   title: string;
   accent?: string;
   description?: string;
+  align?: "left" | "center";
 }
 
-const SectionHeader = ({ track, label, title, accent, description }: SectionHeaderProps) => (
-  <motion.div {...fadeUp} className="mb-12 sm:mb-16">
-    <div className="mb-6 flex items-center gap-4">
-      <span className="rounded-sm border border-primary/40 px-1.5 py-0.5 font-mono text-[10px] font-medium text-primary">
-        {track}
-      </span>
-      <span className="label-mono">{label}</span>
-      <span className="ruler flex-1 opacity-70" />
-    </div>
-    <h2 className="heading-display text-balance">
+const SectionHeader = ({ label, title, accent, description, align = "left" }: SectionHeaderProps) => (
+  <motion.div {...fadeUp} className={`mb-12 sm:mb-16 ${align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}`}>
+    <span className="eyebrow">
+      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+      {label}
+    </span>
+    <h2 className="heading mt-6">
       {title}
-      {accent && <span className="accent-serif"> {accent}</span>}
+      {accent && <span className="text-gradient"> {accent}</span>}
     </h2>
     {description && (
-      <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{description}</p>
+      <p className={`mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg ${align === "center" ? "mx-auto" : ""}`}>
+        {description}
+      </p>
     )}
   </motion.div>
 );

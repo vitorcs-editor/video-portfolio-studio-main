@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Numbers from "@/components/Numbers";
 import Clients from "@/components/Clients";
 import Contact from "@/components/Contact";
 import Portfolio from "@/components/Portfolio";
@@ -80,7 +79,6 @@ const Index = () => {
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10">
           <Hero />
-          <Numbers />
           <Clients />
           <Portfolio />
           <Services />

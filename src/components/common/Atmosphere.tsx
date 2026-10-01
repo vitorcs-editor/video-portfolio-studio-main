@@ -1,34 +1,31 @@
-// Fundo fixo do site: luz ciano vazando do topo, vinheta e granulação de película.
-// Tudo estático (sem animação) — barato para a GPU e sem distrair do conteúdo.
-
-const GRAIN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+// Fundo fixo do site: "aurora" de luz ciano se movendo devagar + grade sutil.
+// Fica oculto enquanto um modal está aberto, para o navegador não re-borrar
+// a luz em movimento por baixo do backdrop-blur.
 
 const Atmosphere = () => (
-  <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-    {/* Luz ciano no topo */}
+  <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden [body.modal-open_&]:hidden">
     <div
-      className="absolute -top-[30vh] left-1/2 h-[80vh] w-[120vw] -translate-x-1/2"
-      style={{ background: "radial-gradient(closest-side, hsl(var(--primary) / 0.13), transparent)" }}
+      className="absolute -left-[10vw] -top-[35vw] h-[60vw] w-[60vw] animate-drift rounded-full opacity-50 blur-[90px]"
+      style={{ background: "radial-gradient(circle, #00a6d6, transparent 65%)" }}
     />
-    {/* Grade sutil de guias, como a tela de um editor */}
     <div
-      className="absolute inset-0 opacity-[0.35]"
-      style={{
-        backgroundImage:
-          "linear-gradient(hsl(var(--line) / 0.35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--line) / 0.35) 1px, transparent 1px)",
-        backgroundSize: "96px 96px",
-        maskImage: "radial-gradient(ellipse at 50% 0%, black 10%, transparent 70%)",
-        WebkitMaskImage: "radial-gradient(ellipse at 50% 0%, black 10%, transparent 70%)",
-      }}
+      className="absolute -right-[15vw] -top-[20vw] h-[50vw] w-[50vw] animate-drift rounded-full opacity-50 blur-[90px] [animation-duration:22s]"
+      style={{ background: "radial-gradient(circle, #0a5b73, transparent 65%)" }}
     />
-    {/* Vinheta */}
+    <div
+      className="absolute left-[30vw] top-[10vh] h-[40vw] w-[40vw] animate-drift rounded-full opacity-40 blur-[90px] [animation-duration:26s]"
+      style={{ background: "radial-gradient(circle, rgba(0, 200, 240, 0.35), transparent 65%)" }}
+    />
     <div
       className="absolute inset-0"
-      style={{ background: "radial-gradient(ellipse at center, transparent 55%, hsl(var(--background) / 0.85) 100%)" }}
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px)",
+        backgroundSize: "64px 64px",
+        maskImage: "radial-gradient(ellipse 70% 60% at 50% 15%, black, transparent)",
+        WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 50% 15%, black, transparent)",
+      }}
     />
-    {/* Granulação */}
-    <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
   </div>
 );
 
