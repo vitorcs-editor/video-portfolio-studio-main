@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { fadeUp } from "./motion";
+import SplitReveal from "./SplitReveal";
 
 interface SectionHeaderProps {
   label: string;
@@ -16,8 +17,7 @@ const SectionHeader = ({ label, title, accent, description, align = "left" }: Se
       {label}
     </span>
     <h2 className="heading mt-6">
-      {title}
-      {accent && <span className="text-gradient"> {accent}</span>}
+      <SplitReveal segments={[{ text: title }, ...(accent ? [{ text: ` ` }, { text: accent, className: "text-gradient" }] : [])]} delay={0.15} />
     </h2>
     {description && (
       <p className={`mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg ${align === "center" ? "mx-auto" : ""}`}>

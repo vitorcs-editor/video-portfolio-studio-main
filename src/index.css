@@ -122,3 +122,18 @@
     text-wrap: balance;
   }
 }
+
+/* Cursor personalizado: esconde o nativo, exceto em campos de texto e com modal aberto
+   (o vídeo do modal fica num iframe, onde o cursor personalizado não acompanha). */
+html.custom-cursor body:not(.modal-open),
+html.custom-cursor body:not(.modal-open) a,
+html.custom-cursor body:not(.modal-open) button {
+  cursor: none;
+}
+html.custom-cursor input,
+html.custom-cursor textarea {
+  cursor: text;
+}
+body.modal-open .custom-cursor-layer {
+  display: none;
+}

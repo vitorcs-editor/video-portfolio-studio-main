@@ -5,6 +5,8 @@ import { useLang } from "@/lib/lang";
 import { videos, clientById, driveEmbed, driveThumb, type Video } from "@/data/portfolio";
 import VideoModal from "./VideoModal";
 import { EASE } from "./common/motion";
+import SplitReveal from "./common/SplitReveal";
+import CountUp from "./common/CountUp";
 
 // Um clipe de cada cliente/nicho para a vitrine do hero
 const HIGHLIGHTS: Video[] = Array.from(new Map(videos.map((v) => [v.clientId, v])).values());
@@ -100,6 +102,7 @@ const Coverflow = ({ onPlay }: { onPlay: (video: Video) => void }) => {
               key={`${video.clientId}-${video.driveId}`}
               onClick={() => (isCenter ? onPlay(video) : setIndex(i))}
               tabIndex={isCenter ? 0 : -1}
+              data-cursor={isCenter ? "play" : undefined}
               aria-hidden={!isCenter}
               aria-label={isCenter ? `${client?.name} — ${t.portfolio.categories[client?.niche ?? "social"]}` : undefined}
               initial={false}
@@ -210,13 +213,13 @@ const Hero = () => {
           <span className="hidden sm:inline">· {t.hero.ctaNote}</span>
         </motion.span>
 
-        <motion.h1
-          {...reveal(0.15)}
-          className="mt-6 max-w-5xl text-balance text-[clamp(2.6rem,5.6vw,4.75rem)] font-semibold leading-[1] tracking-[-0.05em]"
-        >
-          {t.hero.headline}
-          <span className="text-gradient block">{t.hero.headlineAccent}</span>
-        </motion.h1>
+        <h1 className="mt-6 max-w-5xl text-balance text-[clamp(2.6rem,5.6vw,4.75rem)] font-semibold leading-[1] tracking-[-0.05em]">
+          <SplitReveal
+            trigger="load"
+            delay={0.15}
+            segments={[{ text: t.hero.headline }, { text: t.hero.headlineAccent, className: "text-gradient block" }]}
+          />
+        </h1>
 
         <motion.p {...reveal(0.25)} className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
           {t.hero.pitch}
@@ -251,7 +254,7 @@ const Hero = () => {
             <div key={stat.label} className="flex flex-col items-center gap-1">
               <dt className="order-2 text-xs text-muted-foreground sm:text-sm">{stat.label}</dt>
               <dd className="order-1 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
-                {stat.value.replace(/\+$/, "")}
+                <CountUp value={stat.value.replace(/\+$/, "")} />
                 {stat.value.endsWith("+") && <span className="text-primary">+</span>}
               </dd>
             </div>

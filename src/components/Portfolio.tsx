@@ -15,6 +15,7 @@ import {
 import VideoModal from "./VideoModal";
 import SectionHeader from "./common/SectionHeader";
 import { EASE } from "./common/motion";
+import { tiltHandlers } from "./common/useTilt";
 
 const Portfolio = () => {
   const { t } = useLang();
@@ -145,10 +146,15 @@ const Portfolio = () => {
               >
                 <button
                   onClick={() => openVideo(video)}
-                  className="group block w-full text-left"
+                  data-cursor="play"
+                  className="group block w-full text-left [perspective:900px]"
                   aria-label={`${client?.name ?? ""} — ${t.portfolio.categories[activeCategory]} ${idx + 1}`}
                 >
-                  <div className="relative aspect-[9/16] overflow-hidden rounded-[20px] border border-white/10 bg-surface shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] transition-[border-color,box-shadow,transform] duration-500 group-hover:-translate-y-1 group-hover:border-primary/60 group-hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.45)]">
+                  <div
+                    {...tiltHandlers}
+                    style={{ transform: "rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))" }}
+                    className="relative aspect-[9/16] overflow-hidden rounded-[20px] border border-white/10 bg-surface shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] transition-[border-color,box-shadow,transform] duration-300 ease-out [transform-style:preserve-3d] group-hover:border-primary/60 group-hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.45)]"
+                  >
                     <img
                       src={video.thumbnail ?? driveThumb(video.driveId)}
                       alt=""
@@ -158,6 +164,11 @@ const Portfolio = () => {
                     />
                     {/* Reflexo de vidro no topo e escurecimento embaixo */}
                     <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent via-30% to-background/85" />
+                    {/* Brilho que acompanha o cursor */}
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      style={{ background: "radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,0.22), transparent 55%)" }}
+                    />
 
                     <span className="absolute inset-0 flex items-center justify-center">
                       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.7)] transition-all duration-500 sm:scale-75 sm:opacity-0 sm:group-hover:scale-100 sm:group-hover:opacity-100">
