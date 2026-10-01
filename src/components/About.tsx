@@ -1,107 +1,61 @@
 import { motion } from "framer-motion";
-import { Target, Zap, Shield, TrendingUp } from "lucide-react";
+import { Target, Zap, ShieldCheck, TrendingUp } from "lucide-react";
+import { useLang } from "@/lib/lang";
+import SectionHeader from "./common/SectionHeader";
+import { fadeUp, stagger, item } from "./common/motion";
 
-const features = [
-  { icon: Target, title: "Visão Estratégica", desc: "Cada peça tem uma função: prender, comunicar ou converter." },
-  { icon: Zap, title: "IA na Fronteira", desc: "IA como parte do fluxo criativo — não como substituto de ideia." },
-  { icon: Shield, title: "Qualidade Absoluta", desc: "Cor, corte, áudio e timing. Cada detalhe é intencional." },
-  { icon: TrendingUp, title: "Foco em Conversão", desc: "Estética e resultado andam juntos. O resto é só vídeo bonito." },
-];
-
-const clients = ["1pra1.bet", "Cruzeiro Basquete", "Grupo Fênix", "Projeto Draft"];
-
-const cell = "relative rounded-2xl border border-primary/15 bg-primary/[0.03] transition-all duration-300 hover:border-primary/35";
+const FEATURE_ICONS = [Target, Zap, ShieldCheck, TrendingUp];
 
 const About = () => {
+  const { t } = useLang();
+
   return (
-    <section id="sobre" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            O Diretor Criativo
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide">
-            <span className="text-white">Especializado em iGaming, </span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">VSL e Social.</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
-        >
-          {/* Foto — grande à esquerda */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cell} col-span-2 lg:row-span-2 min-h-[340px] overflow-hidden`}
-          >
-            <img
-              src="/vitor-hero.jpg"
-              alt="Vitor Carvalho, editor de vídeo"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+    <section id="sobre" className="relative scroll-mt-24 overflow-x-clip py-20 sm:py-28">
+      <div className="container">
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Foto */}
+          <motion.figure {...fadeUp} className="relative mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none">
+            <div
+              aria-hidden
+              className="absolute -inset-6 rounded-[40px] opacity-70 blur-3xl"
+              style={{ background: "radial-gradient(closest-side, hsl(var(--primary) / 0.3), transparent)" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay pointer-events-none" />
-            <span className="absolute bottom-5 left-5 font-impact text-2xl tracking-wide text-white">
-              Vitor Carvalho
-            </span>
-          </motion.div>
-
-          {/* Bio */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cell} col-span-2 p-6 sm:p-7 flex items-center`}
-          >
-            <p className="text-white/55 text-sm sm:text-base leading-relaxed">
-              Edição de vídeo, motion design, color grading, direção criativa e integração com IA. Do roteiro ao arquivo final, cuido de cada etapa com atenção técnica e visão criativa. Já atuei para 1pra1.bet, Cruzeiro Basquete, Grupo Fênix e Draft — marcas que exigem padrão e recebem exatamente isso.
-            </p>
-          </motion.div>
-
-          {/* Clientes */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cell} col-span-2 p-6 flex flex-col justify-center gap-3`}
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em] text-white/35 font-bold">
-              Marcas que confiaram no meu corte
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {clients.map((c) => (
-                <span key={c} className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/55 bg-white/[0.04] border border-white/10 rounded-full px-3 py-1.5">
-                  {c}
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-white/10">
+              <img src="/vitor-hero.webp" alt={t.about.photoAlt} loading="lazy" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent via-40% to-background/80" />
+              <figcaption className="glass absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl px-5 py-4">
+                <span>
+                  <span className="block font-semibold">Vitor Carvalho</span>
+                  <span className="text-xs text-muted-foreground">{t.hero.role}</span>
                 </span>
-              ))}
+                <span className="h-2.5 w-2.5 rounded-full bg-live shadow-[0_0_0_4px_hsl(var(--live)/0.15)]" />
+              </figcaption>
             </div>
-          </motion.div>
+          </motion.figure>
 
-          {/* Features */}
-          {features.map((f) => (
-            <motion.div
-              key={f.title}
-              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-              className={`${cell} col-span-1 p-5 flex flex-col gap-3 hover:bg-primary/[0.06]`}
-            >
-              <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                <f.icon size={15} className="text-primary" />
-              </div>
-              <div>
-                <p className="text-white text-xs font-bold mb-1.5">{f.title}</p>
-                <p className="text-white/40 text-xs leading-relaxed">{f.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* Texto */}
+          <div className="lg:col-span-7">
+            <SectionHeader label={t.about.label} title={t.about.title} accent={t.about.titleAccent} />
+            <motion.p {...fadeUp} className="-mt-4 text-lg leading-relaxed text-foreground/80">
+              {t.about.bio}
+            </motion.p>
 
+            <motion.ul {...stagger()} className="mt-10 grid gap-3 sm:grid-cols-2">
+              {t.about.features.map((f, i) => {
+                const Icon = FEATURE_ICONS[i] ?? Target;
+                return (
+                  <motion.li key={f.title} variants={item} className="glass flex gap-4 rounded-2xl p-5">
+                    <Icon size={18} className="mt-0.5 shrink-0 text-primary" />
+                    <span>
+                      <span className="block font-medium">{f.title}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{f.desc}</span>
+                    </span>
+                  </motion.li>
+                );
+              })}
+            </motion.ul>
+          </div>
+        </div>
       </div>
     </section>
   );

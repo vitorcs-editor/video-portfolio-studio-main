@@ -1,87 +1,59 @@
 import { motion } from "framer-motion";
-import { Sparkles, Layers, TrendingUp, Tv } from "lucide-react";
+import { Sparkles, Layers, TrendingUp, Megaphone, ArrowUpRight } from "lucide-react";
+import { useLang } from "@/lib/lang";
+import SectionHeader from "./common/SectionHeader";
+import { stagger, item } from "./common/motion";
 
-const services = [
-  {
-    icon: Sparkles,
-    title: "Direção Criativa & IA",
-    desc: "Cada vídeo começa com uma ideia forte. Uso IA como ferramenta criativa — não como atalho — para construir estéticas que ninguém vai confundir com template.",
-  },
-  {
-    icon: Layers,
-    title: "Motion Design Premium",
-    desc: "Movimento, timing e tipografia que fazem o vídeo parecer caro antes de qualquer palavra aparecer na tela.",
-  },
-  {
-    icon: TrendingUp,
-    title: "VSLs de Alta Conversão",
-    desc: "VSLs que prendem do primeiro segundo ao CTA. Estrutura, ritmo e áudio pensados para manter o espectador até o final — e convencer.",
-  },
-  {
-    icon: Tv,
-    title: "Campanhas & Performance",
-    desc: "Criativos que param o scroll e vendem. Feitos para rodar em tráfego pago e parecerem conteúdo, não anúncio.",
-  },
-];
+const ICONS = [Sparkles, Layers, TrendingUp, Megaphone];
+
+const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
+
+// Luz que segue o mouse dentro do cartão (posição passada por variáveis CSS)
+const trackSpotlight = (e: React.MouseEvent<HTMLElement>) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
+  e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
+};
 
 const Services = () => {
+  const { t } = useLang();
+
   return (
-    <section id="servicos" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="servicos" className="relative scroll-mt-24 py-20 sm:py-28">
+      <div className="container">
+        <SectionHeader label={t.services.label} title={t.services.title} accent={t.services.titleAccent} />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/60 font-bold mb-3 block">
-            Serviços de Elite
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide">
-            <span className="text-white">Direção audiovisual que </span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">gera valor.</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
-        >
-          {services.map((s) => (
-            <motion.div
-              key={s.title}
-              variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
-              className="group relative rounded-2xl border border-primary/15 bg-primary/[0.03] p-6 sm:p-7 flex flex-col transition-all duration-300 hover:border-primary/35 hover:bg-primary/[0.06]"
-            >
-              <div className="flex items-start gap-4 mb-5">
-                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
-                  <s.icon size={19} className="text-primary" />
-                </div>
-                <h3 className="font-display text-lg sm:text-xl font-bold text-white leading-tight pt-1.5">
-                  {s.title}
-                </h3>
-              </div>
-
-              <p className="text-white/45 text-sm leading-relaxed mb-6 flex-1">
-                {s.desc}
-              </p>
-
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-                className="self-start text-xs font-semibold text-white/40 hover:text-primary transition-colors duration-200 flex items-center gap-1 group/btn uppercase tracking-wider"
-              >
-                Solicitar este serviço
-                <span className="group-hover/btn:translate-x-1 transition-transform duration-200">→</span>
-              </button>
-            </motion.div>
-          ))}
-        </motion.div>
-
+        <motion.ul {...stagger()} className="grid gap-4 sm:grid-cols-2">
+          {t.services.items.map((service, i) => {
+            const Icon = ICONS[i] ?? Sparkles;
+            return (
+              <motion.li key={service.title} variants={item}>
+                <button
+                  onClick={openBudget}
+                  onMouseMove={trackSpotlight}
+                  className="glass group relative flex h-full w-full flex-col overflow-hidden rounded-3xl p-7 text-left transition-colors duration-500 hover:border-primary/40 sm:p-8"
+                >
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ background: "radial-gradient(420px circle at var(--x) var(--y), hsl(var(--primary) / 0.14), transparent 60%)" }}
+                  />
+                  <span className="relative flex items-start justify-between">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary shadow-[0_0_30px_-5px_hsl(var(--primary)/0.5)]">
+                      <Icon size={20} />
+                    </span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-foreground/60 transition-all duration-500 group-hover:rotate-45 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                      <ArrowUpRight size={17} />
+                    </span>
+                  </span>
+                  <h3 className="relative mt-8 text-2xl font-semibold tracking-[-0.03em] sm:text-[1.7rem]">{service.title}</h3>
+                  <p className="relative mt-3 text-[15px] leading-relaxed text-muted-foreground">{service.desc}</p>
+                  <span className="relative mt-6 text-sm font-medium text-primary/90">{t.services.cta} →</span>
+                </button>
+              </motion.li>
+            );
+          })}
+        </motion.ul>
       </div>
     </section>
   );

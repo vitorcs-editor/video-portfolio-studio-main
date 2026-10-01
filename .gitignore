@@ -21,8 +21,9 @@ dist-ssr
 tmp/
 lint_output.txt
 
-# Config local de ferramentas
-.claude/
+# Config local de ferramentas (skills do projeto são versionadas)
+.claude/*
+!.claude/skills/
 
 # Editor directories and files
 .vscode/*

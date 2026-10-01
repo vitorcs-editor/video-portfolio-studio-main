@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import { Send, Upload, CheckCircle2, X } from "lucide-react";
+import { useState } from "react";
+import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
+import { ArrowUpRight, Link2, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/lib/lang";
 import { whatsappLink } from "@/lib/contact";
+import { EASE } from "./common/motion";
 
 interface BudgetModalProps {
   isOpen: boolean;
@@ -13,74 +15,18 @@ interface BudgetModalProps {
 const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
   const { t } = useLang();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    service: "",
     briefing: "",
     reference: "",
   });
 
-  const savedScrollY = useRef(0);
+  useScrollLock(isOpen);
+  useEscapeKey(isOpen, onClose);
 
-  useEffect(() => {
-    if (isOpen) {
-      savedScrollY.current = window.scrollY;
-      Object.assign(document.body.style, {
-        position: "fixed",
-        top: `-${savedScrollY.current}px`,
-        left: "0",
-        right: "0",
-        width: "100%",
-      });
-      document.body.classList.add("modal-open");
-    } else {
-      const y = savedScrollY.current;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-      });
-      document.body.classList.remove("modal-open");
-      const docEl = document.documentElement;
-      const prevSB = docEl.style.scrollBehavior;
-      docEl.style.scrollBehavior = "auto";
-      window.scrollTo(0, y);
-      docEl.style.scrollBehavior = prevSB;
-    }
-    return () => {
-      const y = savedScrollY.current;
-      Object.assign(document.body.style, {
-        position: "",
-        top: "",
-        left: "",
-        right: "",
-        width: "",
-      });
-      document.body.classList.remove("modal-open");
-      const docEl = document.documentElement;
-      const prevSB = docEl.style.scrollBehavior;
-      docEl.style.scrollBehavior = "auto";
-      window.scrollTo(0, y);
-      docEl.style.scrollBehavior = prevSB;
-    };
-  }, [isOpen]);
-
-  // Close on Escape
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
     const message =
       `*Novo Orçamento - Portfólio*\n\n` +
@@ -89,152 +35,104 @@ const BudgetModal = ({ isOpen, onClose }: BudgetModalProps) => {
       `*Descrição:* ${formData.briefing}\n` +
       `*Link de Referência:* ${formData.reference || "Não informado"}`;
 
-    // Abre WhatsApp antes do await — evita bloqueio no mobile
+    // Abre o WhatsApp direto no clique — evita bloqueio de pop-up no mobile
     window.open(whatsappLink(message), "_blank");
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     toast({ title: t.budget.toastTitle, description: t.budget.toastDesc });
-    setIsSubmitting(false);
-    setFormData({ name: "", email: "", service: "", briefing: "", reference: "" });
+    setFormData({ name: "", email: "", briefing: "", reference: "" });
     onClose();
   };
 
   const inputClasses =
-    "w-full bg-[#1A1A1A] border border-white/5 rounded-2xl px-5 py-4 text-white text-sm placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all duration-300";
-  const labelClasses =
-    "text-[10px] tracking-[0.15em] uppercase text-white/50 font-semibold ml-1";
+    "w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-[15px] text-foreground placeholder:text-muted-foreground/60 transition-colors duration-300 focus:border-primary/70 focus:outline-none focus:ring-1 focus:ring-primary/40";
+
+  const field = (id: keyof typeof formData) => ({
+    id: `budget-${id}`,
+    value: formData[id],
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setFormData({ ...formData, [id]: e.target.value }),
+    className: inputClasses,
+  });
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="budget-title">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/85 backdrop-blur-md"
           />
 
-          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-[860px] max-h-[90svh] overflow-y-auto rounded-[2rem]"
+            exit={{ opacity: 0, scale: 0.96, y: 20 }}
+            transition={{ duration: 0.45, ease: EASE }}
+            className="glass relative max-h-[92svh] w-full max-w-[600px] overflow-y-auto rounded-[28px] bg-background/80 shadow-[0_40px_120px_-30px_hsl(var(--primary)/0.45)]"
           >
-            {/* Card */}
-            <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-6 sm:p-8 shadow-[0_0_80px_hsl(var(--primary)/0.2)] relative overflow-hidden">
-              {/* X button — always visible inside card */}
+            {/* Barra superior */}
+            <div className="flex items-center justify-between px-6 pt-5 sm:px-8">
+              <span className="eyebrow">
+                <span className="h-2 w-2 rounded-full bg-live" />
+                {t.budget.ready}
+              </span>
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 border border-white/10"
-                aria-label="Fechar"
+                className="-mr-2 flex h-9 w-9 items-center justify-center rounded-full text-foreground/70 transition-colors hover:bg-foreground/10 hover:text-foreground"
+                aria-label={t.common.close}
               >
-                <X size={16} strokeWidth={2} />
+                <X size={18} />
               </button>
+            </div>
 
-              {/* Inner glow */}
-              <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 blur-[100px] pointer-events-none" />
+            <div className="px-6 pb-7 pt-6 sm:px-8 sm:pb-8">
+              <h2 id="budget-title" className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
+                {t.budget.letsCreate}
+              </h2>
+              <p className="mt-3 text-muted-foreground">{t.budget.description}</p>
 
-              {/* Header */}
-              <div className="text-center mb-8">
-                <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-white/40">
-                  {t.budget.ready}
-                </span>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-1 mb-2 drop-shadow-[0_0_40px_hsl(var(--primary)/0.5)] tracking-tight">
-                  {t.budget.letsCreate}
-                </h2>
-                <p className="text-white/50 text-sm">
-                  {t.budget.description}
-                </p>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5 relative z-10">
-                {/* Name & Email */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div className="flex flex-col gap-2">
-                    <label className={labelClasses}>{t.budget.name}</label>
-                    <input
-                      type="text" required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder={t.budget.namePlaceholder}
-                      className={inputClasses}
-                    />
+                    <label htmlFor="budget-name" className="text-sm font-medium text-foreground/80">{t.budget.name}</label>
+                    <input type="text" required autoComplete="name" placeholder={t.budget.namePlaceholder} {...field("name")} />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className={labelClasses}>{t.budget.email}</label>
-                    <input
-                      type="email" required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder={t.budget.emailPlaceholder}
-                      className={inputClasses}
-                    />
+                    <label htmlFor="budget-email" className="text-sm font-medium text-foreground/80">{t.budget.email}</label>
+                    <input type="email" required autoComplete="email" placeholder={t.budget.emailPlaceholder} {...field("email")} />
                   </div>
                 </div>
 
-
-                {/* Briefing */}
                 <div className="flex flex-col gap-2">
-                  <label className={labelClasses}>{t.budget.briefing}</label>
-                  <textarea
-                    required rows={3}
-                    value={formData.briefing}
-                    onChange={(e) => setFormData({ ...formData, briefing: e.target.value })}
-                    placeholder={t.budget.briefingPlaceholder}
-                    className={`${inputClasses} resize-none`}
-                  />
+                  <label htmlFor="budget-briefing" className="text-sm font-medium text-foreground/80">{t.budget.briefing}</label>
+                  <textarea required rows={4} placeholder={t.budget.briefingPlaceholder} {...field("briefing")} className={`${inputClasses} resize-none`} />
                 </div>
 
-                {/* Reference */}
                 <div className="flex flex-col gap-2">
-                  <label className={labelClasses}>{t.budget.reference}</label>
+                  <label htmlFor="budget-reference" className="text-sm font-medium text-foreground/80">{t.budget.reference}</label>
                   <div className="relative">
-                    <input
-                      type="text"
-                      value={formData.reference}
-                      onChange={(e) => setFormData({ ...formData, reference: e.target.value })}
-                      placeholder={t.budget.referencePlaceholder}
-                      className={`${inputClasses} pr-12`}
-                    />
-                    <Upload size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30" />
+                    <input type="text" placeholder={t.budget.referencePlaceholder} {...field("reference")} className={`${inputClasses} pr-12`} />
+                    <Link2 size={17} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   </div>
                 </div>
 
-                {/* Submit */}
-                <div className="mt-2 relative group">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 rounded-2xl bg-primary text-background font-extrabold text-sm tracking-wide flex items-center justify-center gap-3 hover:bg-white transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 shadow-[0_0_40px_hsl(var(--primary)/0.3)] group-hover:shadow-[0_0_60px_hsl(var(--primary)/0.5)] relative overflow-hidden"
-                  >
-                    {isSubmitting ? (
-                      <div className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <Send size={18} className="fill-background -rotate-45 mb-1" />
-                        {t.budget.requestNow}
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button type="submit" className="btn-primary mt-2 w-full py-4 text-base">
+                  {t.budget.requestNow}
+                  <ArrowUpRight size={18} />
+                </button>
 
-                {/* Footer badges */}
-                <div className="flex justify-center items-center gap-8">
-                  {[t.budget.response24h, t.budget.freeBudget].map((text, i) => (
-                    <div key={i} className="flex items-center gap-2 text-white/60">
-                      <CheckCircle2 size={14} className="text-primary" />
-                      <span className="text-[9px] tracking-[0.2em] font-bold uppercase">{text}</span>
-                    </div>
+                <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                  {[t.budget.response24h, t.budget.freeBudget].map((text) => (
+                    <li key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Check size={12} className="text-primary" />
+                      {text}
+                    </li>
                   ))}
-                </div>
+                </ul>
               </form>
             </div>
           </motion.div>

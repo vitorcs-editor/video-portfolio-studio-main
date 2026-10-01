@@ -1,267 +1,271 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Play, Instagram, Linkedin, Mail } from "lucide-react";
+import { Play, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLang } from "@/lib/lang";
+import { videos, clientById, driveEmbed, driveThumb, type Video } from "@/data/portfolio";
+import VideoModal from "./VideoModal";
+import { EASE } from "./common/motion";
 
-// CSS keyframes injected once for cheap line-shimmer animations
-const lineShimmerStyle = (
-  <style>{`
-    @keyframes shimmer-right {
-      0%   { transform: translateX(-200%); opacity: 0.2; }
-      50%  { opacity: 0.8; }
-      100% { transform: translateX(300%);  opacity: 0.2; }
-    }
-    @keyframes shimmer-left {
-      0%   { transform: translateX(200%);  opacity: 0.2; }
-      50%  { opacity: 0.8; }
-      100% { transform: translateX(-300%); opacity: 0.2; }
-    }
-    @keyframes chevron-bounce {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(4px); }
-    }
-    .shimmer-r { animation: shimmer-right 4s ease-in-out infinite; }
-    .shimmer-l { animation: shimmer-left  4s ease-in-out infinite; }
-    .chevron-anim { animation: chevron-bounce 1.5s ease-in-out infinite; }
-  `}</style>
-);
+// Um clipe de cada cliente/nicho para a vitrine do hero
+const HIGHLIGHTS: Video[] = Array.from(new Map(videos.map((v) => [v.clientId, v])).values());
 
+// Posição de cada cartão conforme a distância até o central (0 = centro).
+// Deslocamentos em múltiplos da largura do cartão; no mobile ficam mais próximos.
+const LAYOUT = {
+  desktop: { x: [0, 1, 1.78, 2.43], rotate: [0, 38, 48, 55], scale: [1, 0.88, 0.76, 0.64], opacity: [1, 1, 0.7, 0.4] },
+  mobile: { x: [0, 0.82, 1.35, 1.76], rotate: [0, 38, 48, 55], scale: [1, 0.84, 0.7, 0.6], opacity: [1, 1, 0, 0] },
+};
 
+const MOBILE_QUERY = "(max-width: 767px)";
 
-// Client Marquee - Exibindo múltiplos quadros conforme preferência do usuário
-const ClientMarquee = () => {
+// Largura do cartão central: 170px no mobile; no desktop cresce com a altura da
+// tela (até 230px) para a vitrine inteira caber na primeira dobra.
+const measure = () => {
+  const isMobile = window.matchMedia(MOBILE_QUERY).matches;
+  const width = isMobile ? 170 : Math.round(Math.min(230, Math.max(160, ((window.innerHeight - 560) * 9) / 16)));
+  return { isMobile, width };
+};
+
+const useCardSize = () => {
+  const [size, setSize] = useState(measure);
+  useEffect(() => {
+    const onResize = () => setSize(measure());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return size;
+};
+
+// Vitrine 3D: cartões verticais em leque, o central em destaque e tocável
+const Coverflow = ({ onPlay }: { onPlay: (video: Video) => void }) => {
   const { t } = useLang();
+  const { isMobile, width: cardWidth } = useCardSize();
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const dragStart = useRef<number | null>(null);
+  const total = HIGHLIGHTS.length;
+  const layout = isMobile ? LAYOUT.mobile : LAYOUT.desktop;
 
-  // 5 logos reais + 1 slot vazio para manter a estética de marca em crescimento
-  const clientLogo = "/fenix-logo.png";
-  const placeholdersCount = 1;
+  const go = useCallback((step: number) => setIndex((i) => (i + step + total) % total), [total]);
 
-  interface MarqueeItem {
-    type: 'logo' | 'placeholder';
-    src?: string;
-    alt?: string;
-    link?: string;
-    imgClass?: string;
-    clientId?: string;
-    category?: string;
-  }
+  // Avança sozinho, exceto com o mouse em cima ou com "reduzir movimento"
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => go(1), 4000);
+    return () => clearInterval(id);
+  }, [paused, go]);
 
-  const items: MarqueeItem[] = [
-    { type: 'logo', src: clientLogo, alt: 'Group Phoenix', link: '#portfolio', clientId: 'fenix_ads', category: 'ads', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: '/projeto-draft-logo.png', alt: 'Projeto Draft', link: '#portfolio', clientId: 'projeto_draft', category: 'social', imgClass: 'max-w-[70%] max-h-[70%]' },
-    { type: 'logo', src: '/icons/1pra1.png', alt: '1pra1.bet', link: '#portfolio', clientId: '1pra1_bet', category: 'igaming', imgClass: 'max-w-[45%] max-h-[45%]' },
-    { type: 'logo', src: '/cruzeiro-basquete-logo.png.png', alt: 'Cruzeiro Basquete', link: '#portfolio', clientId: 'cruzeiro_basquete', category: 'social', imgClass: 'max-w-[80%] max-h-[80%] mix-blend-lighten' },
-    ...Array.from({ length: placeholdersCount }).map((): MarqueeItem => ({ type: 'placeholder' }))
-  ];
-
-  const scrollItems = [...items, ...items, ...items];
+  // Distância circular do cartão até o central, de -3 a +3
+  const offsetOf = (i: number) => {
+    let d = i - index;
+    if (d > total / 2) d -= total;
+    if (d < -total / 2) d += total;
+    return d;
+  };
 
   return (
-    <div className="w-full mt-auto relative z-10 pb-6">
-      {/* Header simples no padrão das seções */}
-      <div className="container mx-auto px-6 mb-4 flex items-center gap-3">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-primary/55 font-bold">
-          {t.hero.clients}
-        </span>
-        <span className="h-px flex-1 bg-gradient-to-r from-primary/25 to-transparent" />
+    <div
+      className="relative w-full"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowLeft") go(-1);
+        if (e.key === "ArrowRight") go(1);
+      }}
+    >
+      <div
+        className="relative mx-auto w-full touch-pan-y [perspective:1200px]"
+        style={{ height: Math.round((cardWidth * 16) / 9) + 24 }}
+        onPointerDown={(e) => { dragStart.current = e.clientX; }}
+        onPointerUp={(e) => {
+          if (dragStart.current === null) return;
+          const dx = e.clientX - dragStart.current;
+          dragStart.current = null;
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+        }}
+        role="region"
+        aria-roledescription="carrossel"
+        aria-label={t.hero.highlights}
+      >
+        {HIGHLIGHTS.map((video, i) => {
+          const offset = offsetOf(i);
+          const distance = Math.abs(offset);
+          if (distance > 3) return null;
+          const side = Math.sign(offset);
+          const client = clientById(video.clientId);
+          const isCenter = offset === 0;
+
+          return (
+            <motion.button
+              key={`${video.clientId}-${video.driveId}`}
+              onClick={() => (isCenter ? onPlay(video) : setIndex(i))}
+              tabIndex={isCenter ? 0 : -1}
+              aria-hidden={!isCenter}
+              aria-label={isCenter ? `${client?.name} — ${t.portfolio.categories[client?.niche ?? "social"]}` : undefined}
+              initial={false}
+              animate={{
+                x: side * layout.x[distance] * cardWidth,
+                rotateY: -side * layout.rotate[distance],
+                scale: layout.scale[distance],
+                opacity: layout.opacity[distance],
+                z: isCenter ? 80 : 0,
+              }}
+              transition={{ duration: 0.7, ease: EASE }}
+              style={{ zIndex: 10 - distance, width: cardWidth, marginLeft: -cardWidth / 2 }}
+              className={`group absolute left-1/2 top-0 aspect-[9/16] overflow-hidden rounded-[22px] border sm:rounded-[26px] ${
+                isCenter
+                  ? "border-primary/60 shadow-[0_40px_120px_-20px_hsl(var(--primary)/0.55)]"
+                  : "border-white/15 shadow-[0_40px_90px_-20px_rgba(0,0,0,0.9)]"
+              }`}
+            >
+              <img
+                src={video.thumbnail ?? driveThumb(video.driveId)}
+                alt=""
+                draggable={false}
+                className="h-full w-full bg-surface object-cover"
+                onError={(e) => { e.currentTarget.style.opacity = "0"; }}
+              />
+              {/* Sombra lateral nos cartões de trás; gradiente inferior no central */}
+              <span
+                className={`absolute inset-0 transition-opacity duration-700 ${
+                  isCenter
+                    ? "bg-gradient-to-b from-transparent from-55% to-background/90"
+                    : "bg-gradient-to-r from-background/55 via-transparent to-background/55"
+                }`}
+              />
+              {isCenter && (
+                <span className="absolute inset-x-3.5 bottom-3.5 flex items-center justify-between gap-2 text-left sm:inset-x-4 sm:bottom-4">
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-semibold text-white">{client?.name}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-primary">
+                      {client && t.portfolio.categories[client.niche]}
+                    </span>
+                  </span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.8)] transition-transform duration-300 group-hover:scale-110">
+                    <Play size={16} className="ml-0.5 fill-current" />
+                  </span>
+                </span>
+              )}
+            </motion.button>
+          );
+        })}
       </div>
 
-      {/* Marquee Slider — células bento */}
-      <div className="w-full overflow-hidden h-[88px] sm:h-24 flex items-center relative group">
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-
-        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] items-center gap-3 sm:gap-4 px-3">
-          {scrollItems.map((item, i) => (
-            <div
+      {/* Controles */}
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <button onClick={() => go(-1)} aria-label={t.hero.prev} className="glass flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:text-white">
+          <ChevronLeft size={18} />
+        </button>
+        <div className="flex items-center gap-1.5" aria-hidden>
+          {HIGHLIGHTS.map((_, i) => (
+            <span
               key={i}
-              className={`flex items-center justify-center w-36 sm:w-48 h-16 sm:h-20 rounded-2xl border transition-all duration-300 flex-shrink-0 group/item
-                ${item.type === 'logo'
-                  ? "border-primary/15 bg-primary/[0.03] hover:border-primary/40 hover:bg-primary/[0.07] hover:shadow-[0_0_18px_hsl(var(--primary)/0.2)]"
-                  : "border-primary/10 bg-primary/[0.01]"}`}
-            >
-              {item.type === 'logo' ? (
-                <a
-                  href={item.link}
-                  target={item.link?.startsWith('#') ? "_self" : "_blank"}
-                  rel={item.link?.startsWith('#') ? "" : "noopener noreferrer"}
-                  onClick={(e) => {
-                    if (item.clientId && item.category) {
-                      e.preventDefault();
-                      window.dispatchEvent(new CustomEvent('selectClient', { detail: { category: item.category, client: item.clientId } }));
-                    }
-                  }}
-                  className="w-full h-full flex items-center justify-center cursor-pointer relative"
-                >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className={`${item.imgClass ?? 'max-w-[70%] max-h-[70%]'} object-contain transition-all duration-300 group-hover/item:scale-105`}
-                  />
-                  <div className="absolute -bottom-1 -right-2 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/item:translate-y-0 z-20">
-                    <div className="bg-[#1a1a1a] border border-white/20 rounded-md px-3 py-1 shadow-2xl">
-                      <span className="text-white text-[10px] sm:text-[11px] font-medium whitespace-nowrap tracking-wide">
-                        {item.alt}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              ) : (
-                <span className="text-primary/15 text-2xl font-thin select-none">+</span>
-              )}
-            </div>
+              className={`h-1.5 rounded-full transition-all duration-500 ${i === index ? "w-6 bg-primary" : "w-1.5 bg-white/25"}`}
+            />
           ))}
         </div>
+        <button onClick={() => go(1)} aria-label={t.hero.next} className="glass flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:text-white">
+          <ChevronRight size={18} />
+        </button>
       </div>
     </div>
   );
 };
 
-// Célula base do bento
-const cellBase =
-  "relative rounded-2xl border border-primary/15 bg-primary/[0.03] overflow-hidden transition-all duration-300 hover:border-primary/35";
-
-const socials = [
-  { icon: Instagram, href: "https://www.instagram.com/vitorcarvalhods/", label: "Instagram" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/vitor-carvalho-b26a52361/", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:vitorcarvalhods.edicao@gmail.com", label: "Email" },
-];
-
 const Hero = () => {
   const { t } = useLang();
+  const [playing, setPlaying] = useState<Video | null>(null);
   const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
 
+  const reveal = (delay: number) => ({
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.9, delay, ease: EASE },
+  });
+
   return (
-    <section className="relative min-h-[100svh] flex flex-col overflow-x-hidden pt-20 sm:pt-24">
-      {lineShimmerStyle}
-      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[110px] pointer-events-none opacity-50" />
-      <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-accent/8 rounded-full blur-[90px] pointer-events-none opacity-40" />
+    <section className="relative overflow-hidden pt-28">
+      {/* Brilho e piso em perspectiva atrás da vitrine */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[55%] h-[520px] w-[1100px] max-w-[160vw] -translate-x-1/2 blur-xl"
+        style={{ background: "radial-gradient(closest-side, hsl(var(--primary) / 0.26), transparent)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-[10%] bottom-0 h-[34%] origin-bottom [transform:perspective(600px)_rotateX(60deg)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(hsl(var(--primary) / 0.16) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.16) 1px, transparent 1px)",
+          backgroundSize: "70px 70px",
+          maskImage: "linear-gradient(transparent, black 70%)",
+          WebkitMaskImage: "linear-gradient(transparent, black 70%)",
+        }}
+      />
 
-      <div className="container mx-auto px-6 relative z-10 flex-1 flex items-center py-4">
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
-          className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:auto-rows-[150px]"
+      <div className="container relative flex flex-col items-center text-center">
+        <motion.span {...reveal(0.05)} className="eyebrow">
+          <span className="h-2 w-2 rounded-full bg-live shadow-[0_0_0_4px_hsl(var(--live)/0.15)]" />
+          {t.hero.available}
+          <span className="hidden sm:inline">· {t.hero.ctaNote}</span>
+        </motion.span>
+
+        <motion.h1
+          {...reveal(0.15)}
+          className="mt-6 max-w-5xl text-balance text-[clamp(2.6rem,5.6vw,4.75rem)] font-semibold leading-[1] tracking-[-0.05em]"
         >
-          {/* Célula NOME — grande */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} col-span-2 lg:row-span-2 bg-primary/[0.05] flex flex-col justify-between p-6 sm:p-7`}
-          >
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-[#ff4646] shadow-[0_0_8px_#ff4646] animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">
-                Editor de Vídeo Sênior
-              </span>
-              <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.12em] text-primary/90 bg-primary/10 border border-primary/25 rounded-full px-2.5 py-1">
-                ✦ IA
-              </span>
-            </div>
+          {t.hero.headline}
+          <span className="text-gradient block">{t.hero.headlineAccent}</span>
+        </motion.h1>
 
-            <h1 className="flex-1 flex flex-col justify-center font-impact text-6xl sm:text-8xl lg:text-[6.5rem] tracking-[0.01em] leading-[0.84] text-white py-1">
-              <span>Vitor</span>
-              <span className="text-primary drop-shadow-[0_0_30px_hsl(var(--primary)/0.45)]">
-                Carvalho
-              </span>
-            </h1>
+        <motion.p {...reveal(0.25)} className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {t.hero.pitch}
+        </motion.p>
 
-            <div className="flex items-center gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={s.label}
-                  className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/55 hover:text-primary hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
-                >
-                  <s.icon size={15} strokeWidth={1.5} />
-                </a>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Célula VER TRABALHOS */}
-          <motion.a
-            href="#portfolio"
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} col-span-2 group flex flex-col justify-between p-5 hover:bg-primary/[0.06]`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-white/35 font-bold">Portfólio</span>
-              <span className="text-white/30 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-300">↗</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Play size={15} className="fill-white text-white group-hover:fill-primary group-hover:text-primary transition-colors duration-300" />
-              <span className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.3em] text-white group-hover:text-primary transition-colors duration-300">
-                Ver Trabalhos
-              </span>
-            </div>
-            <span className="text-white/35 text-xs">Showreel · melhores cortes em vídeo</span>
-          </motion.a>
-
-          {/* Stats */}
-          {[
-            { value: "150+", label: "Vídeos entregues" },
-            { value: "20+", label: "Clientes atendidos" },
-          ].map((s) => (
-            <motion.div
-              key={s.label}
-              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-              className={`${cellBase} flex flex-col justify-center p-5`}
-            >
-              <div className="font-display text-3xl sm:text-4xl font-bold text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.35)]">
-                {s.value}
-              </div>
-              <span className="text-[10px] uppercase tracking-[0.12em] text-white/40 font-semibold mt-1">
-                {s.label}
-              </span>
-            </motion.div>
-          ))}
-
-          {/* Frase */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} col-span-2 flex flex-col justify-center gap-3 p-6`}
-          >
-            <p className="font-display text-xl sm:text-2xl font-bold leading-snug">
-              <span className="text-white">Edição que prende. </span>
-              <span className="text-primary">Resultado que converte.</span>
-            </p>
-            <p className="text-white/45 text-sm leading-relaxed">
-              Atendo marcas de iGaming, VSL e redes sociais — vídeos com identidade, ritmo e foco em performance.
-            </p>
-          </motion.div>
-
-          {/* Nichos */}
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className={`${cellBase} flex flex-col justify-center gap-2 p-5`}
-          >
-            <span className="text-[10px] uppercase tracking-[0.15em] text-white/35 font-bold">Nichos</span>
-            <div className="flex flex-wrap gap-1.5">
-              {["iGaming", "VSL", "Ads", "Motion"].map((tag) => (
-                <span key={tag} className="text-[10px] font-bold uppercase tracking-wide text-primary/80 bg-primary/[0.08] border border-primary/20 rounded-md px-2 py-0.5">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* CTA */}
-          <motion.button
-            onClick={openBudget}
-            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-            className="relative rounded-2xl bg-primary text-background overflow-hidden flex flex-col items-start justify-center gap-1 p-5 text-left transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_0_30px_hsl(var(--primary)/0.3)]"
-          >
-            <span className="font-display text-lg font-bold leading-tight">Solicitar<br />orçamento</span>
-            <span className="text-xs font-bold opacity-70">Resposta em até 24h ↗</span>
-          </motion.button>
-
+        <motion.div {...reveal(0.35)} className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <button onClick={openBudget} className="btn-primary">
+            {t.navbar.requestBudget}
+            <ArrowUpRight size={17} />
+          </button>
+          <a href="#portfolio" className="btn-glass">
+            <Play size={14} className="fill-current" />
+            {t.hero.viewWork}
+          </a>
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.45, ease: EASE }}
+          className="mt-10 w-full sm:mt-12"
+        >
+          <Coverflow onPlay={setPlaying} />
+        </motion.div>
+
+        {/* Números */}
+        <motion.dl
+          {...reveal(0.7)}
+          className="mt-14 grid w-full max-w-4xl grid-cols-2 gap-y-6 border-t border-white/10 pb-16 pt-8 sm:grid-cols-4 sm:pb-20"
+        >
+          {t.hero.stats.items.map((stat) => (
+            <div key={stat.label} className="flex flex-col items-center gap-1">
+              <dt className="order-2 text-xs text-muted-foreground sm:text-sm">{stat.label}</dt>
+              <dd className="order-1 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
+                {stat.value.replace(/\+$/, "")}
+                {stat.value.endsWith("+") && <span className="text-primary">+</span>}
+              </dd>
+            </div>
+          ))}
+        </motion.dl>
       </div>
 
-      <ClientMarquee />
+      <VideoModal
+        isOpen={playing !== null}
+        onClose={() => setPlaying(null)}
+        videoUrl={playing ? driveEmbed(playing.driveId) : ""}
+        title={playing ? clientById(playing.clientId)?.name ?? "" : ""}
+        isVertical={!playing?.horizontal}
+      />
     </section>
   );
 };

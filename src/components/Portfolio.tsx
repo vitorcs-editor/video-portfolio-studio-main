@@ -1,37 +1,20 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play } from "lucide-react";
+import { motion } from "framer-motion";
+import { Play, Plus } from "lucide-react";
 import { useLang } from "@/lib/lang";
+import {
+  CATEGORIES,
+  clients,
+  videos,
+  clientById,
+  driveEmbed,
+  driveThumb,
+  type Video,
+  type VideoCategory,
+} from "@/data/portfolio";
 import VideoModal from "./VideoModal";
-
-type VideoCategory = "igaming" | "vsl" | "motion" | "ads" | "social";
-
-interface Client {
-  id: string;
-  name: string;
-  logo?: string;
-  niche: VideoCategory;
-}
-
-interface Video {
-  id: string;
-  title: string;
-  thumbnail: string;
-  videoUrl: string;
-  category: VideoCategory;
-  clientId: string;
-  views: string;
-  isVertical?: boolean;
-}
-
-// Monta a URL de player do Google Drive a partir do ID do arquivo.
-// O arquivo precisa estar compartilhado como "Qualquer pessoa com o link".
-const driveEmbed = (fileId: string) =>
-  `https://drive.google.com/file/d/${fileId}/preview`;
-
-// Monta a URL da thumbnail do Google Drive a partir do ID do arquivo.
-const driveThumb = (fileId: string) =>
-  `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+import SectionHeader from "./common/SectionHeader";
+import { EASE } from "./common/motion";
 
 const Portfolio = () => {
   const { t } = useLang();
@@ -51,549 +34,170 @@ const Portfolio = () => {
     return () => window.removeEventListener("selectClient", handleSelectClient);
   }, []);
 
-  const categories: { id: VideoCategory; label: string }[] = [
-    { id: "igaming", label: t.portfolio.categories.igaming },
-    { id: "vsl", label: t.portfolio.categories.vsl },
-    { id: "motion", label: t.portfolio.categories.motion },
-    { id: "ads", label: t.portfolio.categories.ads },
-    { id: "social", label: t.portfolio.categories.social },
-  ];
-
-  const clients: Client[] = [
-    { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "/icons/groupphoenix.png" },
-    { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "/icons/groupphoenix.png" },
-    { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "/icons/1pra1.png" },
-    { id: "1pra1_motion", name: "1pra1.bet", niche: "motion", logo: "/icons/1pra1.png" },
-    { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/projeto-draft-logo.png" },
-    { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/cruzeiro-basquete-logo.png.png" },
-    { id: "1pra1_social", name: "1pra1.bet", niche: "social", logo: "/icons/1pra1.png" },
-  ];
-
-  const videos: Video[] = [
-    {
-      id: "1pra1_1",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1gxFfZL1jyYny5WEJPxwIfQumCaDR_dbZ"),
-      videoUrl: driveEmbed("1gxFfZL1jyYny5WEJPxwIfQumCaDR_dbZ"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_2",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1T2lqpfZJtG-8BJ77NRHS-xALPwEPHVm5"),
-      videoUrl: driveEmbed("1T2lqpfZJtG-8BJ77NRHS-xALPwEPHVm5"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_3",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("129Ah3ujYY2wDrBXzEAixUyGw59I0Sbiq"),
-      videoUrl: driveEmbed("129Ah3ujYY2wDrBXzEAixUyGw59I0Sbiq"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_4",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      videoUrl: driveEmbed("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_5",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      videoUrl: driveEmbed("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_6",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      videoUrl: driveEmbed("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_7",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      videoUrl: driveEmbed("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_8",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      videoUrl: driveEmbed("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      category: "igaming",
-      clientId: "1pra1_bet",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_1",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1HxAy5GdGXdRGFpTlnHmfcQTJCF59yvIJ"),
-      videoUrl: driveEmbed("1HxAy5GdGXdRGFpTlnHmfcQTJCF59yvIJ"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_2",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1_g_Xj61kaQr2XP3FSTKclo12nNJOUBCZ"),
-      videoUrl: driveEmbed("1_g_Xj61kaQr2XP3FSTKclo12nNJOUBCZ"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_3",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1AGEsJ5D71YLIQTNJH_XIX9ml_kkKLlla"),
-      videoUrl: driveEmbed("1AGEsJ5D71YLIQTNJH_XIX9ml_kkKLlla"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_motion_4",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      videoUrl: driveEmbed("1AZoqNPjvP7OeqN_BttQ75KppPQErTYRu"),
-      category: "motion",
-      clientId: "1pra1_motion",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "projeto_draft_1",
-      title: "Projeto Draft",
-      thumbnail: "/ruzeiro-basquete-thumb.jpg.png",
-      videoUrl: driveEmbed("1TmmeqsfNGqqG-ICzzqHvytNQ3Vw37FSo"),
-      category: "social",
-      clientId: "projeto_draft",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "cruzeiro_basquete_1",
-      title: "Cruzeiro Basquete",
-      thumbnail: driveThumb("1j8Gryyp0-YbtWQHUy-ZQgH6NdkfXsHyw"),
-      videoUrl: driveEmbed("1j8Gryyp0-YbtWQHUy-ZQgH6NdkfXsHyw"),
-      category: "social",
-      clientId: "cruzeiro_basquete",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "cruzeiro_basquete_2",
-      title: "Cruzeiro Basquete",
-      thumbnail: "/projeto-draft-thumb.jpg.png",
-      videoUrl: driveEmbed("1uot6SjYDxBQQrOWlpOuTipBcQ_sSFS2W"),
-      category: "social",
-      clientId: "cruzeiro_basquete",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "cruzeiro_basquete_3",
-      title: "Cruzeiro Basquete",
-      thumbnail: driveThumb("1CAo5vTb5p0OOq-9CdQGjS4wEKfnrRbns"),
-      videoUrl: driveEmbed("1CAo5vTb5p0OOq-9CdQGjS4wEKfnrRbns"),
-      category: "social",
-      clientId: "cruzeiro_basquete",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_1",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      videoUrl: driveEmbed("1KW5drgoZnVxK2rw6KL7Kfa1ELAy9afZU"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_2",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      videoUrl: driveEmbed("1Lfwolbtyk8BWxzf7XlVlF0tK9sd_7gtP"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_3",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      videoUrl: driveEmbed("11x8rikTbE-1eHtqmnMgrsEIp1bj3JZFz"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "1pra1_social_4",
-      title: "1pra1.bet",
-      thumbnail: driveThumb("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      videoUrl: driveEmbed("1kcnaZ5V4e6PrjlqA87j515Q1M9O6Gj3e"),
-      category: "social",
-      clientId: "1pra1_social",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_1",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("16vh8lHJtgJs0orRZOwpqkBlOVxbSG5-x"),
-      videoUrl: driveEmbed("16vh8lHJtgJs0orRZOwpqkBlOVxbSG5-x"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_2",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("15-7hhNBHbEHpqCSCWmfmW2_fn0tddXhm"),
-      videoUrl: driveEmbed("15-7hhNBHbEHpqCSCWmfmW2_fn0tddXhm"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_3",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1fDdJ4TaWy0zIlrBw27GNm9KwTDMSlbou"),
-      videoUrl: driveEmbed("1fDdJ4TaWy0zIlrBw27GNm9KwTDMSlbou"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_4",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1LjRKPbaBQQuEPQGDol7ZGLVcJO2EGA3g"),
-      videoUrl: driveEmbed("1LjRKPbaBQQuEPQGDol7ZGLVcJO2EGA3g"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_5",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1lJDTPrJZNzGeGjuBDKKJYKYJxuJJxDG0"),
-      videoUrl: driveEmbed("1lJDTPrJZNzGeGjuBDKKJYKYJxuJJxDG0"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_6",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1jUft6etXETQSku_nTr6DjrZt_rO9Cgl5"),
-      videoUrl: driveEmbed("1jUft6etXETQSku_nTr6DjrZt_rO9Cgl5"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_7",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1iol_L1BpbVJximPemAHX90aNQ4b5h3OY"),
-      videoUrl: driveEmbed("1iol_L1BpbVJximPemAHX90aNQ4b5h3OY"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_8",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1jVMH7gQSiYbDAcIuzmEuLg6XtTGxAXmd"),
-      videoUrl: driveEmbed("1jVMH7gQSiYbDAcIuzmEuLg6XtTGxAXmd"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_9",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1mM1GYkZUYcwi9b3K-HQqbPWnwj1E4YMW"),
-      videoUrl: driveEmbed("1mM1GYkZUYcwi9b3K-HQqbPWnwj1E4YMW"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_10",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1Ufex1neFqGHJWH3wl1_gbwkrlkhCgpa1"),
-      videoUrl: driveEmbed("1Ufex1neFqGHJWH3wl1_gbwkrlkhCgpa1"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_11",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1H4U2PaYvHvP3LV0VA3NBexM9Z-e2Hx7V"),
-      videoUrl: driveEmbed("1H4U2PaYvHvP3LV0VA3NBexM9Z-e2Hx7V"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_12",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1qdEOd1GbOqJB6oD5w1AZ1y5nEofYvGRj"),
-      videoUrl: driveEmbed("1qdEOd1GbOqJB6oD5w1AZ1y5nEofYvGRj"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_ads_13",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1Mg3Bd7a29D6mkL6rkIBlc-i4r3XwzozT"),
-      videoUrl: driveEmbed("1Mg3Bd7a29D6mkL6rkIBlc-i4r3XwzozT"),
-      category: "ads",
-      clientId: "fenix_ads",
-      views: "0",
-      isVertical: true,
-    },
-    {
-      id: "fenix_vsl_1",
-      title: "Group Phoenix",
-      thumbnail: driveThumb("1hEQOG_8z83qxfNGvYDKIoBUh56IiGSVX"),
-      videoUrl: driveEmbed("1hEQOG_8z83qxfNGvYDKIoBUh56IiGSVX"),
-      category: "vsl",
-      clientId: "fenix_vsl",
-      views: "0",
-      isVertical: true,
-    },
-  ];
-
   const filteredClients = clients.filter((c) => c.niche === activeCategory);
 
+  const countByCategory = (cat: VideoCategory) =>
+    videos.filter((v) => clientById(v.clientId)?.niche === cat).length;
+
   const filteredVideos = videos.filter((v) => {
-    const categoryMatch = v.category === activeCategory;
-    const clientMatch = activeClient === "all" || v.clientId === activeClient;
-    return categoryMatch && clientMatch;
+    if (activeClient !== "all") return v.clientId === activeClient;
+    return clientById(v.clientId)?.niche === activeCategory;
   });
 
   const openVideo = (video: Video) => {
-    if (video.videoUrl !== "#") {
-      setSelectedVideo(video);
-      setIsModalOpen(true);
-    }
+    setSelectedVideo(video);
+    setIsModalOpen(true);
   };
 
   const clientsWithAll: Array<{ id: string; name: string; logo?: string }> = [
-    { id: "all", name: "Todos" },
+    { id: "all", name: t.portfolio.allClients },
     ...filteredClients,
   ];
 
   return (
-    <section id="portfolio" className="py-20 sm:py-28 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="portfolio" className="relative scroll-mt-24 py-20 sm:py-28">
+      <div className="container">
+        <SectionHeader
+          align="center"
+          label={t.portfolio.label}
+          title={t.portfolio.title}
+          accent={t.portfolio.titleAccent}
+          description={t.portfolio.description}
+        />
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
-        >
-          <span className="text-[10px] uppercase tracking-[0.35em] text-primary/50 font-bold mb-3 block">
-            Showcase Recente
-          </span>
-          <h2 className="font-impact text-5xl sm:text-6xl md:text-7xl leading-[0.9] tracking-wide mb-3">
-            <span className="text-white">Trabalhos </span>
-            <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary)/0.4)]">Selecionados</span>
-          </h2>
-          <p className="text-white/35 text-sm max-w-md">
-            Uma seleção de produções recentes sob medida. Clique no card para assistir ao projeto.
-          </p>
-        </motion.div>
-
-        {/* Category filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-2 mb-5"
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => {
-                setActiveCategory(cat.id);
-                setActiveClient("all");
-              }}
-              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
-                activeCategory === cat.id
-                  ? "bg-primary text-background shadow-[0_0_16px_hsl(var(--primary)/0.4)]"
-                  : "bg-primary/[0.04] text-white/50 border border-primary/15 hover:text-white hover:border-primary/35 hover:bg-primary/[0.08]"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Client filters - scrollable row */}
-        <AnimatePresence mode="wait">
-          {filteredClients.length > 0 && (
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.2 }}
-              className="relative mb-10"
-            >
-              <div className="flex items-center justify-center flex-wrap gap-2">
-                {clientsWithAll.map((client) => (
-                  <button
-                    key={client.id}
-                    onClick={() => setActiveClient(client.id)}
-                    className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border whitespace-nowrap ${
-                      activeClient === client.id
-                        ? "border-primary/60 text-primary bg-primary/10"
-                        : "border-white/10 text-white/40 bg-transparent hover:text-white hover:border-white/30"
-                    }`}
-                  >
-                    {client.logo && (
-                      <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full" />
-                    )}
-                    {client.name}
-                  </button>
-                ))}
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
-                  className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border border-dashed border-primary/40 text-primary/70 hover:text-primary hover:border-primary whitespace-nowrap"
-                >
-                  ✦ Pode ser você
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Video grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory + activeClient}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
-          >
-            {filteredVideos.map((video, idx) => {
-              const client = clients.find((c) => c.id === video.clientId);
+        {/* Categorias */}
+        <div className="-mx-5 mb-5 flex overflow-x-auto px-5 scrollbar-hide sm:mx-0 sm:justify-center sm:px-0">
+          <div role="tablist" aria-label={t.portfolio.label} className="glass flex w-max gap-1 rounded-full p-1.5">
+            {CATEGORIES.map((cat) => {
+              const active = activeCategory === cat;
               return (
-                <motion.div
-                  key={video.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: idx * 0.05 }}
+                <button
+                  key={cat}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setActiveClient("all");
+                  }}
+                  className={`relative flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm transition-colors duration-300 sm:px-5 ${
+                    active ? "font-semibold text-background" : "text-foreground/70 hover:text-foreground"
+                  }`}
                 >
-                  <button
-                    onClick={() => openVideo(video)}
-                    className="w-full group/card text-left"
-                  >
-                    {/* Thumbnail — fundo de marca aparece caso a thumb do Drive falhe */}
-                    <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-3 shadow-lg shadow-black/40 bg-gradient-to-br from-[#0c0c0c] via-[#0a1418] to-primary/10">
-                      <img
-                        src={video.thumbnail}
-                        alt={video.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                        onError={(e) => { e.currentTarget.style.opacity = "0"; }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                      <div className="absolute inset-0 bg-primary/0 group-hover/card:bg-primary/10 transition-colors duration-300" />
-
-                      {/* Play button */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover/card:opacity-100 transition-opacity duration-300">
-                        <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shadow-[0_0_24px_hsl(var(--primary)/0.6)] scale-90 group-hover/card:scale-100 transition-transform duration-300">
-                          <Play size={15} className="fill-black text-black ml-0.5" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Info below card */}
-                    <div className="flex items-center gap-2">
-                      {client?.logo && (
-                        <img src={client.logo} alt="" className="w-4 h-4 object-contain rounded-full flex-shrink-0" />
-                      )}
-                      <span className="text-white/50 text-[11px] font-semibold uppercase tracking-wide truncate group-hover/card:text-white/80 transition-colors duration-200">
-                        {client?.name ?? video.title}
-                      </span>
-                    </div>
-                  </button>
-                </motion.div>
+                  {active && (
+                    <motion.span
+                      layoutId="category-pill"
+                      className="absolute inset-0 rounded-full bg-white"
+                      transition={{ duration: 0.5, ease: EASE }}
+                    />
+                  )}
+                  <span className="relative">{t.portfolio.categories[cat]}</span>
+                  <span className={`relative font-mono text-[10px] ${active ? "text-background/60" : "text-muted-foreground"}`}>
+                    {countByCategory(cat)}
+                  </span>
+                </button>
               );
             })}
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Clientes da categoria */}
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
+          {clientsWithAll.map((client) => {
+            const active = activeClient === client.id;
+            return (
+              <button
+                key={client.id}
+                onClick={() => setActiveClient(client.id)}
+                aria-pressed={active}
+                className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors duration-300 ${
+                  active
+                    ? "border-primary/60 bg-primary/10 text-primary"
+                    : "border-white/10 bg-white/[0.03] text-foreground/65 hover:border-white/25 hover:text-foreground"
+                }`}
+              >
+                {client.logo && <img src={client.logo} alt="" className="h-4 w-4 rounded-full object-contain" />}
+                {client.name}
+              </button>
+            );
+          })}
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
+            className="rounded-full border border-dashed border-primary/50 px-3.5 py-2 text-xs font-medium text-primary/80 transition-colors hover:border-primary hover:text-primary"
+          >
+            ✦ {t.portfolio.yourBrand}
+          </button>
+        </div>
+
+        {/* Grade de clipes */}
+        <motion.ul
+          key={activeCategory + activeClient}
+          initial="hidden"
+          animate="show"
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.045 } } }}
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 xl:grid-cols-5"
+        >
+          {filteredVideos.map((video, idx) => {
+            const client = clientById(video.clientId);
+            return (
+              <motion.li
+                key={`${video.clientId}-${video.driveId}`}
+                variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } } }}
+              >
+                <button
+                  onClick={() => openVideo(video)}
+                  className="group block w-full text-left"
+                  aria-label={`${client?.name ?? ""} — ${t.portfolio.categories[activeCategory]} ${idx + 1}`}
+                >
+                  <div className="relative aspect-[9/16] overflow-hidden rounded-[20px] border border-white/10 bg-surface shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] transition-[border-color,box-shadow,transform] duration-500 group-hover:-translate-y-1 group-hover:border-primary/60 group-hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.45)]">
+                    <img
+                      src={video.thumbnail ?? driveThumb(video.driveId)}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      onError={(e) => { e.currentTarget.style.opacity = "0"; }}
+                    />
+                    {/* Reflexo de vidro no topo e escurecimento embaixo */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent via-30% to-background/85" />
+
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_30px_hsl(var(--primary)/0.7)] transition-all duration-500 sm:scale-75 sm:opacity-0 sm:group-hover:scale-100 sm:group-hover:opacity-100">
+                        <Play size={16} className="ml-0.5 fill-current" />
+                      </span>
+                    </span>
+
+                    <span className="absolute inset-x-3.5 bottom-3.5 flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      <span className="truncate text-xs font-semibold text-white">{client?.name}</span>
+                    </span>
+                  </div>
+                </button>
+              </motion.li>
+            );
+          })}
+
+          {/* Espaço reservado para o próximo cliente */}
+          <motion.li variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }} className="hidden sm:block">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("openBudgetModal"))}
+              className="flex aspect-[9/16] w-full flex-col items-center justify-center gap-3 rounded-[20px] border border-dashed border-white/15 text-muted-foreground transition-colors hover:border-primary/60 hover:text-primary"
+            >
+              <Plus size={22} strokeWidth={1.5} />
+              <span className="px-4 text-center text-xs font-medium">{t.portfolio.yourBrand}</span>
+            </button>
+          </motion.li>
+        </motion.ul>
 
         {filteredVideos.length === 0 && (
-          <div className="flex items-center justify-center py-32 text-white/20 uppercase tracking-[0.4em] font-black text-xs text-center">
-            Nenhum projeto nesta categoria
-          </div>
+          <p className="py-24 text-center font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">{t.portfolio.empty}</p>
         )}
-
       </div>
 
       <VideoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        videoUrl={selectedVideo?.videoUrl || ""}
-        title={selectedVideo?.title || ""}
-        isVertical={selectedVideo?.isVertical}
+        videoUrl={selectedVideo ? driveEmbed(selectedVideo.driveId) : ""}
+        title={selectedVideo ? clientById(selectedVideo.clientId)?.name ?? "" : ""}
+        isVertical={!selectedVideo?.horizontal}
       />
     </section>
   );
