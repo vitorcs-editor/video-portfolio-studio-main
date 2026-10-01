@@ -42,6 +42,7 @@ export default {
         },
         rec: "hsl(var(--rec))",
         live: "hsl(var(--live))",
+        accent: "hsl(var(--accent))",
         destructive: {
           DEFAULT: "hsl(var(--rec))",
           foreground: "hsl(var(--foreground))",

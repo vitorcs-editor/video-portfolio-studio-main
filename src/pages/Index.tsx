@@ -10,7 +10,7 @@ import About from "@/components/About";
 import Stack from "@/components/Stack";
 import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
-import Atmosphere from "@/components/common/Atmosphere";
+import GlobalBackground from "@/components/GlobalBackground";
 import { useLang } from "@/lib/lang";
 import { SITE_URL } from "@/lib/contact";
 
@@ -75,7 +75,7 @@ const Index = () => {
       </Helmet>
 
       <div className="relative min-h-screen">
-        <Atmosphere />
+        <GlobalBackground />
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10">
           <Hero />
