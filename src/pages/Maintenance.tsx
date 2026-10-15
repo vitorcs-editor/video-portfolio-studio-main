@@ -70,7 +70,7 @@ const Maintenance = () => {
             <SplitReveal
               trigger="load"
               delay={0.15}
-              segments={[{ text: t.maintenance.title }, { text: t.maintenance.titleAccent, className: "text-gradient block" }]}
+              segments={[{ text: t.maintenance.title }, { text: " " }, { text: t.maintenance.titleAccent, className: "text-gradient" }]}
             />
           </h1>
 
@@ -91,9 +91,9 @@ const Maintenance = () => {
           </motion.div>
 
           {/* Outros canais */}
-          <motion.div {...reveal(0.55)} className="mt-14 w-full max-w-3xl">
+          <motion.div {...reveal(0.55)} className="mt-14 w-full max-w-4xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{t.maintenance.social}</p>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-3">
+            <ul className="mt-5 grid gap-3 sm:grid-cols-[1.45fr_1fr_1fr]">
               <li>
                 <a
                   href={`mailto:${EMAIL}`}

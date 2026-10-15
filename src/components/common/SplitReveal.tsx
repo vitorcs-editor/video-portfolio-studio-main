@@ -34,7 +34,7 @@ const SplitReveal = ({ segments, trigger = "view", delay = 0 }: SplitRevealProps
         // o degradê recomeçar em cada palavra.
         if (segment.className?.includes("text-gradient")) {
           return (
-            <motion.span key={s} className={`inline-block ${segment.className}`} variants={WORD}>
+            <motion.span key={s} className={`${/\bblock\b/.test(segment.className) ? "" : "inline-block"} ${segment.className}`} variants={WORD}>
               {segment.text}
             </motion.span>
           );
