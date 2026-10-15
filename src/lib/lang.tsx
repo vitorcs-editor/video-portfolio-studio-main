@@ -38,6 +38,7 @@ interface T {
   footer: { tagline: string; rights: string; };
   common: { close: string; };
   notFound: { message: string; back: string; };
+  maintenance: { label: string; title: string; titleAccent: string; description: string; whatsapp: string; email: string; social: string; };
   seo: { title: string; description: string; keywords: string; };
 }
 
@@ -145,6 +146,15 @@ const PT_BR: T = {
   },
   common: { close: "Fechar" },
   notFound: { message: "Página não encontrada", back: "Voltar para o início" },
+  maintenance: {
+    label: "Site em manutenção",
+    title: "Estou renovando",
+    titleAccent: "o portfólio.",
+    description: "Novos trabalhos chegando em breve. Enquanto isso, os orçamentos seguem abertos — fale comigo direto:",
+    whatsapp: "Chamar no WhatsApp",
+    email: "Enviar e-mail",
+    social: "Também estou por aqui",
+  },
   seo: {
     title: "Vitor Carvalho | Editor de Vídeo Profissional",
     description: "Editor de vídeo profissional especializado em VSLs, Ads, vídeos curtos e conteúdo para redes sociais. Transformando ideias em histórias visuais impactantes.",
@@ -256,6 +266,15 @@ const EN_US: T = {
   },
   common: { close: "Close" },
   notFound: { message: "Page not found", back: "Back to home" },
+  maintenance: {
+    label: "Site under maintenance",
+    title: "I'm refreshing",
+    titleAccent: "my portfolio.",
+    description: "New work is coming soon. Meanwhile, I'm still taking projects — get in touch directly:",
+    whatsapp: "Message on WhatsApp",
+    email: "Send an e-mail",
+    social: "You can also find me here",
+  },
   seo: {
     title: "Vitor Carvalho | Professional Video Editor",
     description: "Professional video editor specializing in VSLs, Ads, short videos, and social media content. Transforming ideas into impactful visual stories.",
@@ -367,6 +386,15 @@ const ES: T = {
   },
   common: { close: "Cerrar" },
   notFound: { message: "Página no encontrada", back: "Volver al inicio" },
+  maintenance: {
+    label: "Sitio en mantenimiento",
+    title: "Estoy renovando",
+    titleAccent: "el portafolio.",
+    description: "Nuevos trabajos muy pronto. Mientras tanto, sigo aceptando proyectos — escríbeme directamente:",
+    whatsapp: "Escribir por WhatsApp",
+    email: "Enviar e-mail",
+    social: "También estoy aquí",
+  },
   seo: {
     title: "Vitor Carvalho | Editor de Video Profesional",
     description: "Editor de video profesional especializado en VSLs, Ads, videos cortos y contenido para redes sociales. Transformando ideas en historias visuales impactantes.",

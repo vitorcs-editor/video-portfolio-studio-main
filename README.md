@@ -41,6 +41,10 @@ A thumbnail vem do próprio Drive. Para usar uma imagem sua, coloque o arquivo e
 
 Para um cliente novo, adicione-o em `clients` no mesmo arquivo, com o logo em `public/icons/`.
 
+### Modo manutenção
+
+Com `MAINTENANCE_MODE = true` em `src/config.ts`, o site mostra só uma tela de manutenção (mesmo visual, com WhatsApp, formulário de orçamento, e-mail, Instagram e LinkedIn). Para voltar ao site completo, troque para `false` e publique — nada do site foi apagado.
+
 ### Formulário de orçamento
 
 O formulário não salva dados: ele monta uma mensagem e abre uma conversa no WhatsApp com o número definido em `src/lib/contact.ts`.

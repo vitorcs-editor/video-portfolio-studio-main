@@ -4,6 +4,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { MotionConfig } from "framer-motion";
 import { LangProvider } from "./lib/lang";
 import Index from "./pages/Index";
+import Maintenance from "./pages/Maintenance";
+import { MAINTENANCE_MODE } from "./config";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -14,7 +16,7 @@ const App = () => (
         <Toaster />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={MAINTENANCE_MODE ? <Maintenance /> : <Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

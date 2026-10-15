@@ -20,7 +20,7 @@ export const Monogram = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const LanguageSwitcher = () => {
+export const LanguageSwitcher = () => {
   const { lang, setLang, t } = useLang();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
