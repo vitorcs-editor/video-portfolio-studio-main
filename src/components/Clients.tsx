@@ -24,8 +24,8 @@ const Clients = () => {
   const track = [...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS];
 
   return (
-    <section aria-label={t.hero.clients} className="relative py-12 sm:py-16">
-      <p className="mb-8 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+    <section aria-label={t.hero.clients} className="relative py-6 sm:py-8">
+      <p className="mb-5 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
         {t.about.clientsLabel}
       </p>
       <div className="group relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">

@@ -187,7 +187,7 @@ const Hero = () => {
   });
 
   return (
-    <section className="relative overflow-hidden pt-28">
+    <section className="relative overflow-hidden pt-24">
       {/* Brilho e piso em perspectiva atrás da vitrine */}
       <div
         aria-hidden
@@ -239,7 +239,7 @@ const Hero = () => {
         {/* Números */}
         <motion.dl
           {...reveal(0.7)}
-          className="mt-14 grid w-full max-w-4xl grid-cols-2 gap-y-6 border-t border-white/10 pb-16 pt-8 sm:grid-cols-4 sm:pb-20"
+          className="mt-8 grid w-full max-w-4xl grid-cols-2 gap-y-6 border-t border-white/10 pb-8 pt-6 sm:grid-cols-4 sm:pb-10"
         >
           {t.hero.stats.items.map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1">
