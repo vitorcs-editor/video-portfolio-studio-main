@@ -68,7 +68,7 @@ export const videos: Video[] = [
   // Projeto Draft (Social)
   { clientId: "projeto_draft", driveId: "1-Csg49jsQEn3kgNnM3dDtiF5iUneCror", thumbnail: "/thumbs/projeto-draft.webp" },
   // Cruzeiro Basquete (Social)
-  { clientId: "cruzeiro_basquete", driveId: "1ZxVeqmWX8xQPZpBnmlsk5TQdzb-RiYQ4" },
+  { clientId: "cruzeiro_basquete", driveId: "1ZxVeqmWX8xQPZpBnmlsk5TQdzb-RiYQ4", thumbnail: "/thumbs/cruzeiro-cabe-dentro.webp" },
   { clientId: "cruzeiro_basquete", driveId: "1_f5PEY0zbC5KL1maHQRjcuaGke2L-Xat" },
   { clientId: "cruzeiro_basquete", driveId: "1D4z_d_od0DOlSOB_fOQPLy4qG6nbJKGv" },
   // 1pra1 — IA (Motion & IA)
