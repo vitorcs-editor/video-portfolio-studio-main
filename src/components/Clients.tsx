@@ -9,6 +9,9 @@ interface ClientLogo {
 }
 
 const LOGOS: ClientLogo[] = [
+  { name: "1pra1.bet", logo: "/icons/1pra1.png", clientId: "1pra1_ads", category: "ads" },
+  { name: "Projeto Draft", logo: "/icons/projeto-draft.webp", clientId: "projeto_draft", category: "social" },
+  { name: "Cruzeiro Basquete", logo: "/icons/cruzeiro-basquete.webp", clientId: "cruzeiro_basquete", category: "social" },
   { name: "Group Phoenix", logo: "/fenix-logo.png", clientId: "fenix_vsl", category: "vsl" },
 ];
 

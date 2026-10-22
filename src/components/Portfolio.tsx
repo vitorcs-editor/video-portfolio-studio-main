@@ -19,7 +19,7 @@ import { tiltHandlers } from "./common/useTilt";
 
 const Portfolio = () => {
   const { t } = useLang();
-  const [activeCategory, setActiveCategory] = useState<VideoCategory>("vsl");
+  const [activeCategory, setActiveCategory] = useState<VideoCategory>("ads");
   const [activeClient, setActiveClient] = useState<string>("all");
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
