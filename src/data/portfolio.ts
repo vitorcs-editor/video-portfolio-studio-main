@@ -3,7 +3,7 @@
 
 export type VideoCategory = "igaming" | "vsl" | "motion" | "ads" | "social";
 
-export const CATEGORIES: VideoCategory[] = ["vsl"];
+export const CATEGORIES: VideoCategory[] = ["vsl", "social"];
 
 export interface Client {
   id: string;
@@ -24,6 +24,7 @@ export interface Video {
 
 export const clients: Client[] = [
   { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "/icons/groupphoenix.png" },
+  { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/icons/cruzeiro-basquete.webp" },
 ];
 
 export const videos: Video[] = [
@@ -34,6 +35,10 @@ export const videos: Video[] = [
   { clientId: "fenix_vsl", driveId: "1ImRRGbxwR2jbeDMBsm9r9F-hY8X74kIR", horizontal: true },
   { clientId: "fenix_vsl", driveId: "17xlLvnC6nxgJPbOWgaQzG7MGxoO-V-Qo", horizontal: true },
   { clientId: "fenix_vsl", driveId: "1ajRCjQIdHr6go0QiNggCx9XpU2qdRqtI", horizontal: true },
+  // Cruzeiro Basquete — Social Media
+  { clientId: "cruzeiro_basquete", driveId: "1ZxVeqmWX8xQPZpBnmlsk5TQdzb-RiYQ4" },
+  { clientId: "cruzeiro_basquete", driveId: "1_f5PEY0zbC5KL1maHQRjcuaGke2L-Xat" },
+  { clientId: "cruzeiro_basquete", driveId: "1D4z_d_od0DOlSOB_fOQPLy4qG6nbJKGv" },
 ];
 
 export const clientById = (id: string) => clients.find((c) => c.id === id);
