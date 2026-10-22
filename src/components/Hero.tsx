@@ -236,6 +236,15 @@ const Hero = () => {
           </a>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.45, ease: EASE }}
+          className="mt-10 w-full sm:mt-12"
+        >
+          <Coverflow onPlay={setPlaying} />
+        </motion.div>
+
         {/* Números */}
         <motion.dl
           {...reveal(0.7)}
@@ -252,6 +261,14 @@ const Hero = () => {
           ))}
         </motion.dl>
       </div>
+
+      <VideoModal
+        isOpen={playing !== null}
+        onClose={() => setPlaying(null)}
+        videoUrl={playing ? driveEmbed(playing.driveId) : ""}
+        title={playing ? clientById(playing.clientId)?.name ?? "" : ""}
+        isVertical={!playing?.horizontal}
+      />
     </section>
   );
 };
