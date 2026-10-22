@@ -12,7 +12,6 @@ import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
 import GlobalBackground from "@/components/GlobalBackground";
 import KineticBand from "@/components/KineticBand";
-import CustomCursor from "@/components/common/CustomCursor";
 import ScrollProgress from "@/components/common/ScrollProgress";
 import { useLang } from "@/lib/lang";
 import { SITE_URL } from "@/lib/contact";
@@ -80,7 +79,6 @@ const Index = () => {
       <div className="relative min-h-screen">
         <GlobalBackground />
         <ScrollProgress />
-        <CustomCursor />
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10">
           <Hero />
