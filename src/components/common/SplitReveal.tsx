@@ -11,6 +11,8 @@ interface SplitRevealProps {
   /** "load" anima ao abrir a página (hero); "view" anima ao rolar até o texto. */
   trigger?: "load" | "view";
   delay?: number;
+  /** Com trigger "load": só anima quando `play` for true (ex.: depois da abertura). */
+  play?: boolean;
 }
 
 const WORD = {
@@ -20,13 +22,13 @@ const WORD = {
 
 // Revela o texto palavra por palavra, saindo do desfoque. Cada palavra é um
 // <span> próprio, então classes como text-gradient se aplicam por palavra.
-const SplitReveal = ({ segments, trigger = "view", delay = 0 }: SplitRevealProps) => {
-  const play = trigger === "load" ? { animate: "show" } : { whileInView: "show", viewport: { once: true, margin: "0px 0px -10% 0px" } };
+const SplitReveal = ({ segments, trigger = "view", delay = 0, play = true }: SplitRevealProps) => {
+  const anim = trigger === "load" ? { animate: play ? "show" : "hidden" } : { whileInView: "show", viewport: { once: true, margin: "0px 0px -10% 0px" } };
 
   return (
     <motion.span
       initial="hidden"
-      {...play}
+      {...anim}
       variants={{ hidden: {}, show: { transition: { delayChildren: delay, staggerChildren: 0.06 } } }}
     >
       {segments.map((segment, s) => {

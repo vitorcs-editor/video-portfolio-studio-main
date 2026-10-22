@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
-import { Target, Zap, ShieldCheck, TrendingUp } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import SectionHeader from "./common/SectionHeader";
 import { fadeUp, stagger, item } from "./common/motion";
-
-const FEATURE_ICONS = [Target, Zap, ShieldCheck, TrendingUp];
 
 const About = () => {
   const { t } = useLang();
@@ -40,20 +37,24 @@ const About = () => {
               {t.about.bio}
             </motion.p>
 
-            <motion.ul {...stagger()} className="mt-10 grid gap-3 sm:grid-cols-2">
-              {t.about.features.map((f, i) => {
-                const Icon = FEATURE_ICONS[i] ?? Target;
-                return (
-                  <motion.li key={f.title} variants={item} className="glass flex gap-4 rounded-2xl p-5">
-                    <Icon size={18} className="mt-0.5 shrink-0 text-primary" />
-                    <span>
-                      <span className="block font-medium">{f.title}</span>
-                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{f.desc}</span>
+            {/* Como eu trabalho: etapas numa linha do tempo, como clipes numa trilha */}
+            <motion.div {...fadeUp} className="mt-12">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{t.about.processLabel}</p>
+              <motion.ol {...stagger(0.1, 0.12)} className="relative mt-6">
+                <span aria-hidden className="absolute bottom-3 left-[15px] top-3 w-px bg-gradient-to-b from-primary via-primary/40 to-transparent" />
+                {t.about.process.map((step, i) => (
+                  <motion.li key={step.title} variants={item} className="relative flex gap-5 pb-7 last:pb-0">
+                    <span className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary/50 bg-background font-mono text-[11px] text-primary shadow-[0_0_20px_-4px_hsl(var(--primary)/0.7)]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="pt-1">
+                      <span className="block font-medium">{step.title}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{step.desc}</span>
                     </span>
                   </motion.li>
-                );
-              })}
-            </motion.ul>
+                ))}
+              </motion.ol>
+            </motion.div>
           </div>
         </div>
       </div>

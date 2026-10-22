@@ -175,14 +175,13 @@ const Coverflow = ({ onPlay }: { onPlay: (video: Video) => void }) => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ ready = true }: { ready?: boolean }) => {
   const { t } = useLang();
-  const [playing, setPlaying] = useState<Video | null>(null);
   const openBudget = () => window.dispatchEvent(new CustomEvent("openBudgetModal"));
 
   const reveal = (delay: number) => ({
     initial: { opacity: 0, y: 24 },
-    animate: { opacity: 1, y: 0 },
+    animate: ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
     transition: { duration: 0.9, delay, ease: EASE },
   });
 
@@ -216,6 +215,7 @@ const Hero = () => {
         <h1 className="mt-6 max-w-5xl text-balance text-[clamp(2.6rem,5.6vw,4.75rem)] font-semibold leading-[1] tracking-[-0.05em]">
           <SplitReveal
             trigger="load"
+            play={ready}
             delay={0.15}
             segments={[{ text: t.hero.headline }, { text: t.hero.headlineAccent, className: "text-gradient block" }]}
           />
@@ -245,7 +245,7 @@ const Hero = () => {
             <div key={stat.label} className="flex flex-col items-center gap-1">
               <dt className="order-2 text-xs text-muted-foreground sm:text-sm">{stat.label}</dt>
               <dd className="order-1 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
-                <CountUp value={stat.value.replace(/\+$/, "")} />
+                <CountUp value={stat.value.replace(/\+$/, "")} play={ready} />
                 {stat.value.endsWith("+") && <span className="text-primary">+</span>}
               </dd>
             </div>

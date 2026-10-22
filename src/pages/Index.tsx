@@ -12,6 +12,7 @@ import BudgetModal from "@/components/BudgetModal";
 import Footer from "@/components/Footer";
 import GlobalBackground from "@/components/GlobalBackground";
 import KineticBand from "@/components/KineticBand";
+import Intro, { shouldPlayIntro } from "@/components/Intro";
 import ScrollProgress from "@/components/common/ScrollProgress";
 import { useLang } from "@/lib/lang";
 import { SITE_URL } from "@/lib/contact";
@@ -19,6 +20,10 @@ import { SITE_URL } from "@/lib/contact";
 const Index = () => {
   const { t } = useLang();
   const [isBudgetOpen, setIsBudgetOpen] = useState(false);
+  // Abertura animada: `revealed` libera as animações do hero quando a tela abre;
+  // `introDone` desmonta a abertura no fim.
+  const [introDone, setIntroDone] = useState(() => !shouldPlayIntro());
+  const [revealed, setRevealed] = useState(introDone);
 
   useEffect(() => {
     const handler = () => setIsBudgetOpen(true);
@@ -80,7 +85,7 @@ const Index = () => {
         <ScrollProgress />
         <Navbar onOpenBudget={() => setIsBudgetOpen(true)} />
         <main className="relative z-10">
-          <Hero />
+          <Hero ready={revealed} />
           <Clients />
           <Portfolio />
           <KineticBand />
@@ -93,6 +98,17 @@ const Index = () => {
           <Footer />
         </div>
       </div>
+
+      {!introDone && (
+        <Intro
+          onReveal={() => setRevealed(true)}
+          onDone={() => {
+            setIntroDone(true);
+            // A barra de progresso mediu a página travada durante a abertura; força nova medição
+            requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+          }}
+        />
+      )}
 
       {/* Budget modal — all screen sizes */}
       <BudgetModal isOpen={isBudgetOpen} onClose={() => setIsBudgetOpen(false)} />

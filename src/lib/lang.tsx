@@ -12,6 +12,7 @@ const HTML_LANG: Record<Lang, string> = {
 };
 
 type Item = { title: string; desc: string };
+type Service = { title: string; desc: string; formats: string };
 
 interface T {
   navbar: { projects: string; services: string; about: string; requestBudget: string; languages: string; backToTop: string; openMenu: string; };
@@ -26,8 +27,8 @@ interface T {
     allClients: string; yourBrand: string; empty: string;
     categories: Record<VideoCategory, string>;
   };
-  services: { label: string; title: string; titleAccent: string; cta: string; items: Item[]; };
-  about: { label: string; title: string; titleAccent: string; photoAlt: string; bio: string; clientsLabel: string; features: Item[]; };
+  services: { label: string; title: string; titleAccent: string; cta: string; items: Service[]; };
+  about: { label: string; title: string; titleAccent: string; photoAlt: string; bio: string; clientsLabel: string; processLabel: string; process: Item[]; };
   budget: {
     ready: string; letsCreate: string; description: string;
     name: string; namePlaceholder: string; email: string; emailPlaceholder: string;
@@ -37,6 +38,7 @@ interface T {
   contact: { label: string; title: string; titleAccent: string; description: string; whatsapp: string; };
   footer: { tagline: string; rights: string; };
   common: { close: string; };
+  intro: { skip: string; loading: string; };
   notFound: { message: string; back: string; };
   maintenance: { label: string; title: string; titleAccent: string; description: string; whatsapp: string; email: string; social: string; };
   seo: { title: string; description: string; keywords: string; };
@@ -59,9 +61,9 @@ const PT_BR: T = {
     highlights: "Destaques",
     prev: "Anterior",
     next: "Próximo",
-    headline: "Edição que prende. ",
-    headlineAccent: "Resultado que converte.",
-    pitch: "Atendo marcas de iGaming, VSL e redes sociais — vídeos com identidade, ritmo e foco em performance.",
+    headline: "Do material bruto ",
+    headlineAccent: "ao vídeo que vende.",
+    pitch: "Sou o Vitor, editor de vídeo há mais de 4 anos. Edito ads, reels e VSLs para marcas como 1pra1.bet, Group Phoenix e Cruzeiro Basquete.",
     ctaNote: "Resposta em até 24h",
     clients: "Clientes",
     stack: {
@@ -80,45 +82,46 @@ const PT_BR: T = {
     },
   },
   portfolio: {
-    label: "Showcase Recente",
-    title: "Trabalhos ",
-    titleAccent: "Selecionados",
-    description: "Uma seleção de produções recentes sob medida. Clique no card para assistir ao projeto.",
+    label: "Portfólio",
+    title: "O que já passou ",
+    titleAccent: "pela minha timeline.",
+    description: "Ads, reels, VSLs e motion feitos para clientes reais. Toque em qualquer vídeo para assistir.",
     allClients: "Todos",
     yourBrand: "Pode ser você",
     empty: "Nenhum projeto nesta categoria",
     categories: { igaming: "iGaming", vsl: "VSL", motion: "Motion & IA", ads: "Ads & Performance", social: "Social Media" },
   },
   services: {
-    label: "Serviços de Elite",
-    title: "Direção audiovisual que ",
-    titleAccent: "gera valor.",
-    cta: "Solicitar este serviço",
+    label: "Serviços",
+    title: "O que eu ",
+    titleAccent: "edito.",
+    cta: "Pedir orçamento",
     items: [
-      { title: "Direção Criativa & IA", desc: "Cada vídeo começa com uma ideia forte. Uso IA como ferramenta criativa — não como atalho — para construir estéticas que ninguém vai confundir com template." },
-      { title: "Motion Design Premium", desc: "Movimento, timing e tipografia que fazem o vídeo parecer caro antes de qualquer palavra aparecer na tela." },
-      { title: "VSLs de Alta Conversão", desc: "VSLs que prendem do primeiro segundo ao CTA. Estrutura, ritmo e áudio pensados para manter o espectador até o final — e convencer." },
-      { title: "Campanhas & Performance", desc: "Criativos que param o scroll e vendem. Feitos para rodar em tráfego pago e parecerem conteúdo, não anúncio." },
+      { title: "Ads para tráfego pago", desc: "Criativos com gancho nos primeiros segundos, feitos para rodar em anúncio e parecer conteúdo. Entrego em várias versões e formatos para você testar.", formats: "Meta · TikTok · YouTube" },
+      { title: "Reels e social media", desc: "Cortes verticais com ritmo, legenda dinâmica e o tom da marca — do clube de basquete à casa de apostas.", formats: "Reels · TikTok · Shorts" },
+      { title: "VSL", desc: "Vídeos de venda editados para segurar a atenção até a oferta: corte no ritmo do roteiro, b-roll, legenda e trilha.", formats: "Página de vendas · Lançamento" },
+      { title: "Motion e IA", desc: "Vinhetas, animações e cenas geradas com IA para dar acabamento de produtora ao vídeo.", formats: "After Effects · Higgsfield · ElevenLabs" },
     ],
   },
   about: {
-    label: "O Diretor Criativo",
-    title: "Especializado em iGaming, ",
-    titleAccent: "VSL e Social.",
+    label: "Sobre",
+    title: "Prazer, ",
+    titleAccent: "sou o Vitor.",
     photoAlt: "Vitor Carvalho, editor de vídeo",
-    bio: "Edição de vídeo, motion design, color grading, direção criativa e integração com IA. Do roteiro ao arquivo final, cuido de cada etapa com atenção técnica e visão criativa. Já atuei para 1pra1.bet, Cruzeiro Basquete, Group Phoenix e Projeto Draft — marcas que exigem padrão e recebem exatamente isso.",
-    clientsLabel: "Marcas que confiaram no meu corte",
-    features: [
-      { title: "Visão Estratégica", desc: "Cada peça tem uma função: prender, comunicar ou converter." },
-      { title: "IA na Fronteira", desc: "IA como parte do fluxo criativo — não como substituto de ideia." },
-      { title: "Qualidade Absoluta", desc: "Cor, corte, áudio e timing. Cada detalhe é intencional." },
-      { title: "Foco em Conversão", desc: "Estética e resultado andam juntos. O resto é só vídeo bonito." },
+    bio: "Há mais de 4 anos eu vivo de edição de vídeo. Nesse tempo foram mais de 50 projetos para mais de 20 marcas, de casa de apostas a clube de basquete. Penso cada corte pelo que o vídeo precisa fazer: parar o scroll, prender até o fim ou vender.",
+    clientsLabel: "Marcas com quem trabalho",
+    processLabel: "Como eu trabalho",
+    process: [
+      { title: "Briefing", desc: "Você me conta o objetivo e manda o material bruto e as referências." },
+      { title: "Primeiro corte", desc: "Eu monto a primeira versão completa: ritmo, legendas, trilha e cor." },
+      { title: "Ajustes", desc: "Você comenta e eu ajusto até o vídeo ficar do jeito certo." },
+      { title: "Entrega", desc: "Arquivo final no formato de cada plataforma, pronto para subir." },
     ],
   },
   budget: {
     ready: "Pronto para começar?",
-    letsCreate: "Vamos Criar Juntos",
-    description: "Transforme sua visão em alta conversão. Resposta em menos de 24h.",
+    letsCreate: "Me conta do seu vídeo",
+    description: "Respondo em até 24h com um orçamento.",
     name: "Nome",
     namePlaceholder: "Seu nome",
     email: "E-mail",
@@ -135,16 +138,17 @@ const PT_BR: T = {
   },
   contact: {
     label: "Contato",
-    title: "Vamos criar",
-    titleAccent: "juntos.",
-    description: "Conte a ideia do seu vídeo e receba um orçamento gratuito em até 24h.",
+    title: "Tem um vídeo ",
+    titleAccent: "pra editar?",
+    description: "Me manda o briefing ou o material bruto. Respondo em até 24h com um orçamento.",
     whatsapp: "Ou chame no WhatsApp",
   },
   footer: {
-    tagline: "Editor de Vídeo Sênior · iGaming · VSL · Social",
+    tagline: "Editor de vídeo · Ads · Reels · VSL · Motion",
     rights: "Todos os direitos reservados.",
   },
   common: { close: "Fechar" },
+  intro: { skip: "Pular", loading: "Carregando" },
   notFound: { message: "Página não encontrada", back: "Voltar para o início" },
   maintenance: {
     label: "Voltamos em breve",
@@ -179,9 +183,9 @@ const EN_US: T = {
     highlights: "Highlights",
     prev: "Previous",
     next: "Next",
-    headline: "Editing that hooks. ",
-    headlineAccent: "Results that convert.",
-    pitch: "I work with iGaming, VSL and social media brands — videos with identity, rhythm and a focus on performance.",
+    headline: "From raw footage ",
+    headlineAccent: "to videos that sell.",
+    pitch: "I'm Vitor, a video editor for over 4 years. I edit ads, reels and VSLs for brands like 1pra1.bet, Group Phoenix and Cruzeiro Basquete.",
     ctaNote: "Reply within 24h",
     clients: "Clients",
     stack: {
@@ -200,45 +204,46 @@ const EN_US: T = {
     },
   },
   portfolio: {
-    label: "Recent Showcase",
-    title: "Selected ",
-    titleAccent: "Work",
-    description: "A selection of recent tailor-made productions. Click a card to watch the project.",
+    label: "Portfolio",
+    title: "What's been through ",
+    titleAccent: "my timeline.",
+    description: "Ads, reels, VSLs and motion made for real clients. Tap any video to watch it.",
     allClients: "All",
     yourBrand: "This could be you",
     empty: "No projects in this category",
     categories: { igaming: "iGaming", vsl: "VSL", motion: "Motion & AI", ads: "Ads & Performance", social: "Social Media" },
   },
   services: {
-    label: "Elite Services",
-    title: "Audiovisual direction that ",
-    titleAccent: "creates value.",
-    cta: "Request this service",
+    label: "Services",
+    title: "What I ",
+    titleAccent: "edit.",
+    cta: "Get a quote",
     items: [
-      { title: "Creative Direction & AI", desc: "Every video starts with a strong idea. I use AI as a creative tool — not a shortcut — to build aesthetics nobody will mistake for a template." },
-      { title: "Premium Motion Design", desc: "Movement, timing and typography that make the video look expensive before a single word appears on screen." },
-      { title: "High-Converting VSLs", desc: "VSLs that hold attention from the first second to the CTA. Structure, pacing and audio designed to keep viewers until the end — and convince them." },
-      { title: "Campaigns & Performance", desc: "Creatives that stop the scroll and sell. Built to run on paid traffic and feel like content, not ads." },
+      { title: "Paid traffic ads", desc: "Creatives with a hook in the first seconds, built to run as ads and feel like content. Delivered in multiple versions and formats so you can test.", formats: "Meta · TikTok · YouTube" },
+      { title: "Reels and social media", desc: "Vertical cuts with rhythm, dynamic captions and the brand's voice — from a basketball club to a betting brand.", formats: "Reels · TikTok · Shorts" },
+      { title: "VSL", desc: "Sales videos edited to hold attention until the offer: cuts paced to the script, b-roll, captions and music.", formats: "Sales page · Launch" },
+      { title: "Motion and AI", desc: "Intros, animations and AI-generated scenes that give the video a studio finish.", formats: "After Effects · Higgsfield · ElevenLabs" },
     ],
   },
   about: {
-    label: "The Creative Director",
-    title: "Specialized in iGaming, ",
-    titleAccent: "VSL and Social.",
+    label: "About",
+    title: "Nice to meet you, ",
+    titleAccent: "I'm Vitor.",
     photoAlt: "Vitor Carvalho, video editor",
-    bio: "Video editing, motion design, color grading, creative direction and AI integration. From script to final file, I handle every step with technical care and creative vision. I've worked with 1pra1.bet, Cruzeiro Basquete, Group Phoenix and Projeto Draft — brands that demand high standards and get exactly that.",
-    clientsLabel: "Brands that trusted my cut",
-    features: [
-      { title: "Strategic Vision", desc: "Every piece has a job: hook, communicate or convert." },
-      { title: "Cutting-Edge AI", desc: "AI as part of the creative flow — not a substitute for ideas." },
-      { title: "Uncompromising Quality", desc: "Color, cut, audio and timing. Every detail is intentional." },
-      { title: "Conversion-Focused", desc: "Aesthetics and results go together. Everything else is just a pretty video." },
+    bio: "I've been making a living from video editing for over 4 years. In that time I've done 50+ projects for 20+ brands, from betting companies to a basketball club. I think about every cut in terms of what the video needs to do: stop the scroll, hold attention to the end, or sell.",
+    clientsLabel: "Brands I work with",
+    processLabel: "How I work",
+    process: [
+      { title: "Briefing", desc: "You tell me the goal and send the raw footage and references." },
+      { title: "First cut", desc: "I put together a complete first version: pacing, captions, music and color." },
+      { title: "Revisions", desc: "You leave comments and I adjust until the video is right." },
+      { title: "Delivery", desc: "Final file in the right format for each platform, ready to upload." },
     ],
   },
   budget: {
     ready: "Ready to start?",
-    letsCreate: "Let's Create Together",
-    description: "Turn your vision into high conversion. Response in less than 24h.",
+    letsCreate: "Tell me about your video",
+    description: "I'll reply within 24h with a quote.",
     name: "Name",
     namePlaceholder: "Your name",
     email: "E-mail",
@@ -255,16 +260,17 @@ const EN_US: T = {
   },
   contact: {
     label: "Contact",
-    title: "Let's create",
-    titleAccent: "together.",
-    description: "Tell me about your video idea and get a free quote within 24h.",
+    title: "Got a video ",
+    titleAccent: "to edit?",
+    description: "Send me the brief or the raw footage. I'll reply within 24h with a quote.",
     whatsapp: "Or message me on WhatsApp",
   },
   footer: {
-    tagline: "Senior Video Editor · iGaming · VSL · Social",
+    tagline: "Video editor · Ads · Reels · VSL · Motion",
     rights: "All rights reserved.",
   },
   common: { close: "Close" },
+  intro: { skip: "Skip", loading: "Loading" },
   notFound: { message: "Page not found", back: "Back to home" },
   maintenance: {
     label: "Back soon",
@@ -299,9 +305,9 @@ const ES: T = {
     highlights: "Destacados",
     prev: "Anterior",
     next: "Siguiente",
-    headline: "Edición que atrapa. ",
-    headlineAccent: "Resultados que convierten.",
-    pitch: "Trabajo con marcas de iGaming, VSL y redes sociales — videos con identidad, ritmo y foco en rendimiento.",
+    headline: "Del material en bruto ",
+    headlineAccent: "al video que vende.",
+    pitch: "Soy Vitor, editor de video desde hace más de 4 años. Edito ads, reels y VSLs para marcas como 1pra1.bet, Group Phoenix y Cruzeiro Basquete.",
     ctaNote: "Respuesta en menos de 24h",
     clients: "Clientes",
     stack: {
@@ -320,45 +326,46 @@ const ES: T = {
     },
   },
   portfolio: {
-    label: "Showcase Reciente",
-    title: "Trabajos ",
-    titleAccent: "Seleccionados",
-    description: "Una selección de producciones recientes a medida. Haz clic en una tarjeta para ver el proyecto.",
+    label: "Portafolio",
+    title: "Lo que ya pasó ",
+    titleAccent: "por mi timeline.",
+    description: "Ads, reels, VSLs y motion hechos para clientes reales. Toca cualquier video para verlo.",
     allClients: "Todos",
     yourBrand: "Puedes ser tú",
     empty: "No hay proyectos en esta categoría",
     categories: { igaming: "iGaming", vsl: "VSL", motion: "Motion & IA", ads: "Ads & Performance", social: "Social Media" },
   },
   services: {
-    label: "Servicios de Élite",
-    title: "Dirección audiovisual que ",
-    titleAccent: "genera valor.",
-    cta: "Solicitar este servicio",
+    label: "Servicios",
+    title: "Lo que ",
+    titleAccent: "edito.",
+    cta: "Pedir presupuesto",
     items: [
-      { title: "Dirección Creativa & IA", desc: "Cada video empieza con una idea fuerte. Uso la IA como herramienta creativa — no como atajo — para construir estéticas que nadie confundirá con una plantilla." },
-      { title: "Motion Design Premium", desc: "Movimiento, timing y tipografía que hacen que el video parezca caro antes de que aparezca cualquier palabra en pantalla." },
-      { title: "VSLs de Alta Conversión", desc: "VSLs que atrapan del primer segundo al CTA. Estructura, ritmo y audio pensados para mantener al espectador hasta el final — y convencerlo." },
-      { title: "Campañas & Performance", desc: "Creativos que detienen el scroll y venden. Hechos para correr en tráfico pago y parecer contenido, no anuncio." },
+      { title: "Ads para tráfico pago", desc: "Creativos con gancho en los primeros segundos, hechos para correr como anuncio y parecer contenido. Entrego varias versiones y formatos para que puedas testear.", formats: "Meta · TikTok · YouTube" },
+      { title: "Reels y redes sociales", desc: "Cortes verticales con ritmo, subtítulos dinámicos y el tono de la marca — del club de básquet a la casa de apuestas.", formats: "Reels · TikTok · Shorts" },
+      { title: "VSL", desc: "Videos de venta editados para mantener la atención hasta la oferta: cortes al ritmo del guion, b-roll, subtítulos y música.", formats: "Página de ventas · Lanzamiento" },
+      { title: "Motion e IA", desc: "Cortinillas, animaciones y escenas generadas con IA para darle al video un acabado de productora.", formats: "After Effects · Higgsfield · ElevenLabs" },
     ],
   },
   about: {
-    label: "El Director Creativo",
-    title: "Especializado en iGaming, ",
-    titleAccent: "VSL y Social.",
+    label: "Sobre mí",
+    title: "Un gusto, ",
+    titleAccent: "soy Vitor.",
     photoAlt: "Vitor Carvalho, editor de video",
-    bio: "Edición de video, motion design, color grading, dirección creativa e integración con IA. Del guion al archivo final, cuido cada etapa con atención técnica y visión creativa. He trabajado para 1pra1.bet, Cruzeiro Basquete, Group Phoenix y Projeto Draft — marcas que exigen estándar y reciben exactamente eso.",
-    clientsLabel: "Marcas que confiaron en mi corte",
-    features: [
-      { title: "Visión Estratégica", desc: "Cada pieza tiene una función: atrapar, comunicar o convertir." },
-      { title: "IA de Vanguardia", desc: "La IA como parte del flujo creativo — no como sustituto de ideas." },
-      { title: "Calidad Absoluta", desc: "Color, corte, audio y timing. Cada detalle es intencional." },
-      { title: "Foco en Conversión", desc: "Estética y resultado van juntos. Lo demás es solo un video bonito." },
+    bio: "Hace más de 4 años que vivo de la edición de video. En ese tiempo hice más de 50 proyectos para más de 20 marcas, de casas de apuestas a un club de básquet. Pienso cada corte según lo que el video necesita lograr: frenar el scroll, retener hasta el final o vender.",
+    clientsLabel: "Marcas con las que trabajo",
+    processLabel: "Cómo trabajo",
+    process: [
+      { title: "Briefing", desc: "Me cuentas el objetivo y me envías el material en bruto y las referencias." },
+      { title: "Primer corte", desc: "Armo la primera versión completa: ritmo, subtítulos, música y color." },
+      { title: "Ajustes", desc: "Comentas y ajusto hasta que el video quede como debe." },
+      { title: "Entrega", desc: "Archivo final en el formato de cada plataforma, listo para subir." },
     ],
   },
   budget: {
     ready: "¿Listo para comenzar?",
-    letsCreate: "Creemos Juntos",
-    description: "Convierte tu visión en alta conversión. Respuesta en menos de 24h.",
+    letsCreate: "Cuéntame de tu video",
+    description: "Respondo en menos de 24h con un presupuesto.",
     name: "Nombre",
     namePlaceholder: "Tu nombre",
     email: "E-mail",
@@ -375,16 +382,17 @@ const ES: T = {
   },
   contact: {
     label: "Contacto",
-    title: "Creemos",
-    titleAccent: "juntos.",
-    description: "Cuéntame la idea de tu video y recibe un presupuesto gratuito en menos de 24h.",
+    title: "¿Tienes un video ",
+    titleAccent: "para editar?",
+    description: "Envíame el briefing o el material en bruto. Respondo en menos de 24h con un presupuesto.",
     whatsapp: "O escríbeme por WhatsApp",
   },
   footer: {
-    tagline: "Editor de Video Senior · iGaming · VSL · Social",
+    tagline: "Editor de video · Ads · Reels · VSL · Motion",
     rights: "Todos los derechos reservados.",
   },
   common: { close: "Cerrar" },
+  intro: { skip: "Saltar", loading: "Cargando" },
   notFound: { message: "Página no encontrada", back: "Volver al inicio" },
   maintenance: {
     label: "Volvemos pronto",
