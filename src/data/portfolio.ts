@@ -25,6 +25,7 @@ export interface Video {
 export const clients: Client[] = [
   { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "/icons/groupphoenix.png" },
   { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "/icons/groupphoenix.png" },
+  { id: "1pra1_vsl", name: "1pra1.bet", niche: "vsl", logo: "/icons/1pra1.png" },
   { id: "1pra1_bet", name: "1pra1.bet", niche: "igaming", logo: "/icons/1pra1.png" },
   { id: "1pra1_motion", name: "1pra1.bet", niche: "motion", logo: "/icons/1pra1.png" },
   { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/icons/projeto-draft.webp" },
@@ -74,6 +75,13 @@ export const videos: Video[] = [
   { clientId: "fenix_ads", driveId: "1Mg3Bd7a29D6mkL6rkIBlc-i4r3XwzozT" },
   // fenix_vsl
   { clientId: "fenix_vsl", driveId: "1hEQOG_8z83qxfNGvYDKIoBUh56IiGSVX" },
+  // 1pra1_vsl
+  { clientId: "1pra1_vsl", driveId: "1gg-GRNMkCxSu_7qUPBuQlqSn6lgZhZES" },
+  { clientId: "1pra1_vsl", driveId: "1PT9uiNzHya0hSFDnudbEYkQkocyjq_gk" },
+  { clientId: "1pra1_vsl", driveId: "11noURsC5U0aEh5ayDTJip8ZoDbby2vHh", horizontal: true },
+  { clientId: "1pra1_vsl", driveId: "1ImRRGbxwR2jbeDMBsm9r9F-hY8X74kIR", horizontal: true },
+  { clientId: "1pra1_vsl", driveId: "17xlLvnC6nxgJPbOWgaQzG7MGxoO-V-Qo", horizontal: true },
+  { clientId: "1pra1_vsl", driveId: "1ajRCjQIdHr6go0QiNggCx9XpU2qdRqtI", horizontal: true },
 ];
 
 export const clientById = (id: string) => clients.find((c) => c.id === id);
