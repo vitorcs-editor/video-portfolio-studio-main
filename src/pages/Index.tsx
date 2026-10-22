@@ -26,16 +26,15 @@ const Index = () => {
     return () => window.removeEventListener("openBudgetModal", handler);
   }, []);
 
-  // O navegador tenta rolar até a âncora (ex.: /#portfolio) antes do React montar a página,
-  // então refazemos a rolagem depois da primeira renderização.
+  // Sempre abre no topo: ignora âncora na URL (ex.: /#portfolio) e remove a hash.
   useEffect(() => {
-    const id = decodeURIComponent(window.location.hash.slice(1));
-    if (!id) return;
-    const scroll = () => document.getElementById(id)?.scrollIntoView();
-    const frame = requestAnimationFrame(scroll);
-    // As fontes mudam a altura do hero ao carregar; rola de novo quando estiverem prontas
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    const top = () => window.scrollTo(0, 0);
+    const frame = requestAnimationFrame(top);
     let cancelled = false;
-    document.fonts?.ready.then(() => { if (!cancelled) scroll(); });
+    document.fonts?.ready.then(() => { if (!cancelled) top(); });
     return () => {
       cancelled = true;
       cancelAnimationFrame(frame);
