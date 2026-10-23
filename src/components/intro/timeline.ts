@@ -6,13 +6,13 @@ export const TIMELINE = {
   vStart: 0.45, vEnd: 1.25, // V sendo desenhado
   cStart: 0.95, cEnd: 1.95, // C sendo desenhado
   refocus: 2.35, // foco "procurando" antes de travar
-  name: 2.55, // nome entra embaixo do logo
+  name: 2.0, // nome entra embaixo do logo (logo depois do C terminar)
   lock: 3.3, // foco trava: flash e glitch
-  fly: 3.9, // câmera começa a atravessar o logo
-  flyEnd: 4.45, // tela começa a abrir
+  handoff: 4.6, // logo voa até o menu e o site aparece (nome fica ~2s legível)
 };
 
-export const OPEN_MS = 800;
+// Duração da passagem para o site (logo voando até o menu + fundo sumindo)
+export const HANDOFF_MS = 950;
 
 // Logo tem 3.2 unidades de largura na cena; câmera com FOV vertical de 35°
 export const LOGO_W = 3.2;

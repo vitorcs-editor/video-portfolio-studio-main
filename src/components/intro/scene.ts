@@ -41,7 +41,6 @@ const cCurve = (() => {
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const easeInOut = (p: number) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
 const easeOut = (p: number) => 1 - Math.pow(1 - p, 3);
-const easeIn = (p: number) => p * p * p;
 const phase = (t: number, a: number, b: number) => clamp01((t - a) / (b - a));
 
 // Um traço do logo: tubo que "cresce" ao longo do caminho, tampas arredondadas
@@ -232,15 +231,11 @@ export const createScene = (canvas: HTMLCanvasElement): IntroScene => {
     sweep.position.x = -4 + sw * 8;
     rim.intensity = 20 + Math.sin(t * 2) * 8;
 
-    // Câmera: orbita devagar e no fim atravessa o logo
+    // Câmera: orbita devagar e termina de frente para o logo
     const dist = camera.userData.dist as number;
     const orbit = (1 - easeOut(phase(t, 0, T.lock))) * 0.9;
-    const fly = easeIn(phase(t, T.fly, T.flyEnd));
-    const z = dist - fly * (dist + 0.5);
-    camera.position.set(Math.sin(orbit) * z * 0.5, 0.25 + orbit * 0.4 - fly * 0.25, z);
-    camera.fov = 35 + fly * 40;
-    camera.updateProjectionMatrix();
-    camera.lookAt(0, -fly * 0.1, 0);
+    camera.position.set(Math.sin(orbit) * dist * 0.5, orbit * 0.4, dist);
+    camera.lookAt(0, 0, 0);
 
     dust.rotation.y = t * 0.05;
     grid.position.z = (t * 0.6) % (40 / 60);

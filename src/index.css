@@ -145,3 +145,7 @@ body.modal-open .custom-cursor-layer {
 
 /* Abertura: medidor de áudio da câmera */
 @keyframes intro-meter { from { height: 25%; } to { height: 95%; } }
+
+/* Enquanto a abertura toca, o logo do menu fica escondido: o logo que voa
+   da abertura pousa no lugar dele */
+html.intro-playing header a svg { opacity: 0; }

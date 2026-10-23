@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useLang } from "@/lib/lang";
 import { useScrollLock } from "@/hooks/use-scroll-lock";
-import { TIMELINE as T, OPEN_MS, logoOnScreen, markIntroSeen } from "./intro/timeline";
+import { TIMELINE as T, HANDOFF_MS, logoOnScreen, markIntroSeen } from "./intro/timeline";
+import { Monogram } from "./Navbar";
 import type { IntroScene } from "./intro/scene";
 
 export { shouldPlayIntro } from "./intro/timeline";
@@ -12,8 +13,10 @@ export { shouldPlayIntro } from "./intro/timeline";
 //     desenhado por um traço de luz, gira com reflexos de estúdio e brilho;
 //   - por cima, a interface da câmera: cantos do visor, REC, timecode,
 //     dados de exposição, medidor de áudio e a mira de foco que trava no logo;
-//   - efeitos de vídeo: foco puxando (desfocado → nítido), glitch no
-//     travamento e a câmera atravessando o logo antes de a tela abrir.
+//   - efeitos de vídeo: foco puxando (desfocado → nítido) e glitch no
+//     travamento;
+//   - no fim o logo 3D vira o logo plano do site e voa até o menu, encaixando
+//     no lugar dele, enquanto o fundo se dissolve e o site aparece.
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 const EASE_IN_OUT = [0.76, 0, 0.24, 1] as const;
@@ -36,7 +39,9 @@ const Corner = ({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) => {
 const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void }) => {
   const { t } = useLang();
   const [ready, setReady] = useState(false);
-  const [phase, setPhase] = useState<"build" | "fly" | "open">("build");
+  const [phase, setPhase] = useState<"build" | "handoff">("build");
+  // Posição do logo do menu (destino do voo), medida no início da passagem
+  const [target, setTarget] = useState<DOMRect | null>(null);
   const [glitch, setGlitch] = useState(false);
   const [locked, setLocked] = useState(false);
   const [showName, setShowName] = useState(false);
@@ -45,7 +50,13 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
   const pctRef = useRef<HTMLSpanElement>(null);
   const [logo] = useState(() => logoOnScreen(window.innerWidth, window.innerHeight));
 
-  useScrollLock(phase !== "open");
+  useScrollLock(phase === "build");
+
+  // Esconde o logo do menu enquanto a abertura toca; o logo que voa ocupa o lugar dele
+  useEffect(() => {
+    document.documentElement.classList.add("intro-playing");
+    return () => document.documentElement.classList.remove("intro-playing");
+  }, []);
 
   // Carrega a cena 3D e roda a linha do tempo
   useEffect(() => {
@@ -55,7 +66,7 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
     let cancelled = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    const giveUp = setTimeout(() => { if (!scene) setPhase("open"); }, LOAD_TIMEOUT_MS);
+    const giveUp = setTimeout(() => { if (!scene) setPhase("handoff"); }, LOAD_TIMEOUT_MS);
 
     import("./intro/scene")
       .then(({ createScene }) => {
@@ -69,17 +80,16 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
           scene?.render(s);
           if (tcRef.current) tcRef.current.textContent = timecode(s);
           if (pctRef.current) pctRef.current.textContent = String(Math.round(Math.min(1, s / T.lock) * 100)).padStart(3, "0");
-          if (s < T.flyEnd + OPEN_MS / 1000) frame = requestAnimationFrame(loop);
+          if (s < T.handoff + HANDOFF_MS / 1000) frame = requestAnimationFrame(loop);
         };
         frame = requestAnimationFrame(loop);
         const at = (sec: number, fn: () => void) => timers.push(setTimeout(fn, sec * 1000));
         at(T.name, () => setShowName(true));
         at(T.lock, () => { setLocked(true); setGlitch(true); });
         at(T.lock + 0.16, () => setGlitch(false));
-        at(T.fly, () => setPhase("fly"));
-        at(T.flyEnd, () => setPhase("open"));
+        at(T.handoff, () => setPhase("handoff"));
       })
-      .catch(() => setPhase("open"));
+      .catch(() => setPhase("handoff"));
 
     const onResize = () => scene?.resize();
     window.addEventListener("resize", onResize);
@@ -94,14 +104,15 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
   }, []);
 
   useEffect(() => {
-    if (phase !== "open") return;
+    if (phase !== "handoff") return;
+    setTarget(document.querySelector("header a svg")?.getBoundingClientRect() ?? null);
     onReveal();
-    const done = setTimeout(onDone, OPEN_MS + 50);
+    const done = setTimeout(onDone, HANDOFF_MS + 50);
     return () => clearTimeout(done);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
-  const opening = phase === "open";
+  const handoff = phase === "handoff";
   const show = (delay: number, extra: object = {}) => ({
     initial: { opacity: 0, ...extra },
     animate: ready && phase === "build" ? { opacity: 1, x: 0, y: 0 } : { opacity: 0 },
@@ -110,15 +121,12 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
 
   return (
     <div className="fixed inset-0 z-[300] overflow-hidden" role="presentation">
-      {/* Persianas que se abrem no final */}
-      {(["top", "bottom"] as const).map((half) => (
-        <motion.div
-          key={half}
-          className={`absolute inset-x-0 h-1/2 bg-background ${half === "top" ? "top-0" : "bottom-0"}`}
-          animate={{ y: opening ? (half === "top" ? "-100%" : "100%") : 0 }}
-          transition={{ duration: OPEN_MS / 1000, ease: EASE_IN_OUT }}
-        />
-      ))}
+      {/* Fundo: se dissolve na passagem, revelando o site por trás */}
+      <motion.div
+        className="absolute inset-0 bg-background"
+        animate={{ opacity: handoff ? 0 : 1 }}
+        transition={{ delay: handoff ? 0.15 : 0, duration: 0.65, ease: EASE_IN_OUT }}
+      />
 
       {/* Cena 3D: começa desfocada e o foco "puxa"; reajusta antes de travar.
           O glitch (separação RGB) fica num wrapper para não brigar com o foco. */}
@@ -132,15 +140,15 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         className="absolute inset-0 h-full w-full"
         initial={{ filter: "blur(16px)", opacity: 0 }}
         animate={
-          opening
+          handoff
             ? { opacity: 0, filter: "blur(0px)" }
             : ready
               ? { opacity: 1, filter: ["blur(16px)", "blur(0px)", "blur(0px)", "blur(5px)", "blur(0px)"] }
               : { opacity: 0 }
         }
         transition={
-          opening
-            ? { duration: 0.3 }
+          handoff
+            ? { duration: 0.2 }
             : { opacity: { duration: 0.4 }, filter: { duration: T.lock, times: [0, 0.3, T.refocus / T.lock, (T.refocus + 0.3) / T.lock, 1], ease: "easeInOut" } }
         }
       />
@@ -250,24 +258,24 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         transition={{ duration: 0.3 }}
       >
         <motion.p
-          className="whitespace-nowrap text-sm font-medium uppercase text-foreground sm:text-base"
-          initial={{ letterSpacing: "1em", filter: "blur(6px)" }}
-          animate={showName ? { letterSpacing: "0.42em", filter: "blur(0px)" } : {}}
-          transition={{ duration: 1.1, ease: EASE_OUT }}
+          className="whitespace-nowrap text-base font-semibold uppercase text-white sm:text-xl"
+          initial={{ letterSpacing: "0.8em", filter: "blur(6px)" }}
+          animate={showName ? { letterSpacing: "0.38em", filter: "blur(0px)" } : {}}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
         >
           Vitor Carvalho
         </motion.p>
         <motion.span
           className="h-px bg-gradient-to-r from-transparent via-primary to-transparent"
           initial={{ width: 0 }}
-          animate={showName ? { width: 160 } : {}}
-          transition={{ delay: 0.3, duration: 0.9, ease: EASE_OUT }}
+          animate={showName ? { width: 200 } : {}}
+          transition={{ delay: 0.15, duration: 0.6, ease: EASE_OUT }}
         />
         <motion.span
-          className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground"
+          className="whitespace-nowrap font-mono text-xs uppercase tracking-[0.3em] text-primary sm:text-sm"
           initial={{ opacity: 0 }}
           animate={showName ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5, duration: 0.7 }}
+          transition={{ delay: 0.25, duration: 0.5 }}
         >
           {t.hero.role}
         </motion.span>
@@ -284,18 +292,42 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         />
       )}
 
-      {/* Linha ciano na emenda das persianas quando a tela abre */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 h-px -translate-x-1/2 bg-primary shadow-[0_0_20px_2px_hsl(var(--primary))]"
-        initial={{ width: 0, opacity: 0 }}
-        animate={phase !== "build" ? { width: "100%", opacity: opening ? 0 : 1 } : { width: 0, opacity: 0 }}
-        transition={{ duration: opening ? 0.5 : 0.5, ease: EASE_IN_OUT }}
-      />
+      {/* Logo que voa até o menu: começa exatamente sobre o logo 3D (mesmos
+          traços, mesmo tamanho) e termina no lugar do logo do menu */}
+      {handoff && (
+        <motion.div
+          aria-hidden
+          className="pointer-events-none fixed text-white"
+          initial={{
+            left: window.innerWidth / 2 - logo.width / 2,
+            top: window.innerHeight / 2 - logo.height / 2,
+            width: logo.width,
+            height: logo.height,
+            opacity: ready ? 1 : 0,
+            filter: "drop-shadow(0 0 18px hsl(191 100% 47% / 0.9))",
+          }}
+          animate={
+            target
+              ? {
+                  left: target.left,
+                  top: target.top,
+                  width: target.width,
+                  height: target.height,
+                  opacity: 1,
+                  filter: "drop-shadow(0 0 0px hsl(191 100% 47% / 0))",
+                }
+              : { opacity: 0 }
+          }
+          transition={{ duration: (HANDOFF_MS - 100) / 1000, ease: [0.65, 0, 0.35, 1] }}
+        >
+          <Monogram className="h-full w-full" />
+        </motion.div>
+      )}
 
       {/* Pular */}
       {phase === "build" && (
         <button
-          onClick={() => setPhase("open")}
+          onClick={() => setPhase("handoff")}
           className="absolute right-7 top-4 z-10 rounded-full px-3 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-foreground sm:right-10 sm:top-5"
         >
           {t.intro.skip} →
