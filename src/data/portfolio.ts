@@ -72,6 +72,7 @@ export const videos: Video[] = [
   { clientId: "cruzeiro_basquete", driveId: "1_f5PEY0zbC5KL1maHQRjcuaGke2L-Xat" },
   { clientId: "cruzeiro_basquete", driveId: "1D4z_d_od0DOlSOB_fOQPLy4qG6nbJKGv" },
   // 1pra1 — IA (Motion & IA)
+  { clientId: "1pra1_motion", driveId: "1uchzG5LjbWlwCxS2r7EKOKKiIgOG1luM", thumbnail: "/thumbs/1pra1-seja-no-cs.webp" }, // "Seja no CS" (IA) — em destaque
   { clientId: "1pra1_motion", driveId: "1vtuwD7adlTv9xoFP_Zh0C7tMn2Epx3k5" },
   { clientId: "1pra1_motion", driveId: "1O4gxYyRAxqIAXvbgfLdabFOjBqcVBOC0" },
   { clientId: "1pra1_motion", driveId: "1LVVxEmrP-N28X_w_Zgz7dNJc5QXRpfru" },
