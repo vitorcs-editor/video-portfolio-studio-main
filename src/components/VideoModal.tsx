@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ExternalLink } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import { useScrollLock, useEscapeKey } from "@/hooks/use-scroll-lock";
 import { EASE } from "./common/motion";
@@ -14,6 +14,8 @@ interface VideoModalProps {
 
 const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: VideoModalProps) => {
   const { t } = useLang();
+  // Link do mesmo vídeo no Drive, onde ele toca na qualidade máxima (até 1080p)
+  const hdUrl = videoUrl.includes("drive.google.com") ? videoUrl.replace(/\/preview$/, "/view") : "";
   useScrollLock(isOpen, { hideNavbar: true });
   useEscapeKey(isOpen, onClose);
 
@@ -30,26 +32,54 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
             onClick={onClose}
           />
 
-          <div className="pointer-events-none relative flex h-full w-full flex-col items-center justify-center gap-4 p-5 sm:p-10">
+          <div className="pointer-events-none relative flex h-full w-full flex-col items-center justify-center p-3 sm:p-6">
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 24 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 24 }}
               transition={{ duration: 0.45, ease: EASE }}
-              className={`pointer-events-auto flex flex-col items-center gap-4 ${isVertical ? "h-[78svh] sm:h-[80vh]" : "w-full max-w-[1000px]"}`}
+              className="pointer-events-auto flex flex-col gap-2.5"
+              // O maior tamanho que cabe na tela mantendo a proporção do vídeo
+              // (sobram ~64px para a barra de cima e as margens). O player do
+              // Drive escolhe a qualidade pelo tamanho exibido: maior = mais nítido.
+              style={{
+                width: isVertical
+                  ? "min(calc(100vw - 24px), calc((100svh - 64px) * 9 / 16))"
+                  : "min(calc(100vw - 24px), calc((100svh - 64px) * 16 / 9), 1600px)",
+              }}
             >
-              {/* Barra de título, como um monitor de programa */}
-              <div className="flex w-full items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  {title}
+              {/* Barra de cima: título, abrir em HD no Drive e fechar */}
+              <div className="flex items-center justify-between gap-3">
+                <span className="flex min-w-0 items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span className="truncate">{title}</span>
                 </span>
-                <span>{isVertical ? "9:16" : "16:9"}</span>
+                <span className="flex shrink-0 items-center gap-2">
+                  {hdUrl && (
+                    <a
+                      href={hdUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={t.common.openHd}
+                      className="btn-glass h-9 gap-1.5 px-3.5 py-0 font-mono text-[11px] uppercase tracking-wider"
+                    >
+                      HD <ExternalLink size={13} />
+                    </a>
+                  )}
+                  <button
+                    onClick={onClose}
+                    className="btn-glass h-9 w-9 touch-manipulation p-0"
+                    aria-label={t.common.close}
+                    title={`${t.common.close} (Esc)`}
+                  >
+                    <X size={16} strokeWidth={2.5} />
+                  </button>
+                </span>
               </div>
 
               <div
-                className={`overflow-hidden rounded-[22px] border border-white/10 bg-black shadow-[0_30px_120px_-20px_hsl(var(--primary)/0.35)] ${
-                  isVertical ? "aspect-[9/16] min-h-0 w-full flex-1" : "aspect-video w-full"
+                className={`w-full overflow-hidden rounded-[18px] border border-white/10 bg-black shadow-[0_30px_120px_-20px_hsl(var(--primary)/0.35)] ${
+                  isVertical ? "aspect-[9/16]" : "aspect-video"
                 }`}
               >
                 <iframe
@@ -60,16 +90,6 @@ const VideoModal = ({ isOpen, onClose, videoUrl, title, isVertical = false }: Vi
                   allowFullScreen
                 />
               </div>
-
-              <button
-                onClick={onClose}
-                className="btn-glass min-h-[44px] touch-manipulation px-5 py-2.5 text-sm"
-                aria-label={t.common.close}
-              >
-                <X size={15} strokeWidth={2.5} />
-                {t.common.close}
-                <kbd className="ml-1 hidden font-mono text-[10px] text-muted-foreground sm:inline">ESC</kbd>
-              </button>
             </motion.div>
           </div>
         </div>

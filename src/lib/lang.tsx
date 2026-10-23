@@ -37,7 +37,7 @@ interface T {
   };
   contact: { label: string; title: string; titleAccent: string; description: string; whatsapp: string; };
   footer: { tagline: string; rights: string; };
-  common: { close: string; };
+  common: { close: string; openHd: string; };
   intro: { skip: string; loading: string; };
   notFound: { message: string; back: string; };
   maintenance: { label: string; title: string; titleAccent: string; description: string; whatsapp: string; email: string; social: string; };
@@ -147,7 +147,7 @@ const PT_BR: T = {
     tagline: "Editor de vídeo · Ads · Reels · VSL · Motion",
     rights: "Todos os direitos reservados.",
   },
-  common: { close: "Fechar" },
+  common: { close: "Fechar", openHd: "Abrir no Google Drive em alta qualidade" },
   intro: { skip: "Pular", loading: "Carregando" },
   notFound: { message: "Página não encontrada", back: "Voltar para o início" },
   maintenance: {
@@ -269,7 +269,7 @@ const EN_US: T = {
     tagline: "Video editor · Ads · Reels · VSL · Motion",
     rights: "All rights reserved.",
   },
-  common: { close: "Close" },
+  common: { close: "Close", openHd: "Open in Google Drive in high quality" },
   intro: { skip: "Skip", loading: "Loading" },
   notFound: { message: "Page not found", back: "Back to home" },
   maintenance: {
@@ -391,7 +391,7 @@ const ES: T = {
     tagline: "Editor de video · Ads · Reels · VSL · Motion",
     rights: "Todos los derechos reservados.",
   },
-  common: { close: "Cerrar" },
+  common: { close: "Cerrar", openHd: "Abrir en Google Drive en alta calidad" },
   intro: { skip: "Saltar", loading: "Cargando" },
   notFound: { message: "Página no encontrada", back: "Volver al inicio" },
   maintenance: {

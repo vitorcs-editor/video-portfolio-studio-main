@@ -143,6 +143,5 @@ body.modal-open .custom-cursor-layer {
 @keyframes scene-pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes scene-vsl { 0% { width: 0; } 85%, 100% { width: 100%; } }
 
-/* Abertura */
-@keyframes intro-spin { to { transform: rotate(360deg); } }
-@keyframes intro-orbit { from { transform: rotateY(0deg) rotateX(8deg); } to { transform: rotateY(360deg) rotateX(8deg); } }
+/* Abertura: medidor de áudio da câmera */
+@keyframes intro-meter { from { height: 25%; } to { height: 95%; } }
