@@ -13,8 +13,7 @@ export { shouldPlayIntro } from "./intro/timeline";
 //     desenhado por um traço de luz, gira com reflexos de estúdio e brilho;
 //   - por cima, a interface da câmera: cantos do visor, REC, timecode,
 //     dados de exposição, medidor de áudio e a mira de foco que trava no logo;
-//   - efeitos de vídeo: foco puxando (desfocado → nítido) e glitch no
-//     travamento;
+//   - efeito de vídeo: foco puxando (desfocado → nítido);
 //   - no fim o logo 3D vira o logo plano do site e voa até o menu, encaixando
 //     no lugar dele, enquanto o fundo se dissolve e o site aparece.
 
@@ -42,7 +41,6 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
   const [phase, setPhase] = useState<"build" | "handoff">("build");
   // Posição do logo do menu (destino do voo), medida no início da passagem
   const [target, setTarget] = useState<DOMRect | null>(null);
-  const [glitch, setGlitch] = useState(false);
   const [locked, setLocked] = useState(false);
   const [showName, setShowName] = useState(false);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -85,8 +83,7 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         frame = requestAnimationFrame(loop);
         const at = (sec: number, fn: () => void) => timers.push(setTimeout(fn, sec * 1000));
         at(T.name, () => setShowName(true));
-        at(T.lock, () => { setLocked(true); setGlitch(true); });
-        at(T.lock + 0.16, () => setGlitch(false));
+        at(T.lock, () => setLocked(true));
         at(T.handoff, () => setPhase("handoff"));
       })
       .catch(() => setPhase("handoff"));
@@ -128,12 +125,7 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         transition={{ delay: handoff ? 0.15 : 0, duration: 0.65, ease: EASE_IN_OUT }}
       />
 
-      {/* Cena 3D: começa desfocada e o foco "puxa"; reajusta antes de travar.
-          O glitch (separação RGB) fica num wrapper para não brigar com o foco. */}
-      <div
-        className="absolute inset-0"
-        style={glitch ? { transform: "translateX(6px)", filter: "drop-shadow(5px 0 0 rgba(255,0,90,.75)) drop-shadow(-5px 0 0 rgba(0,240,255,.75))" } : undefined}
-      >
+      {/* Cena 3D: começa desfocada e o foco "puxa"; reajusta antes de travar */}
       <motion.canvas
         ref={canvas}
         aria-hidden
@@ -148,11 +140,10 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         }
         transition={
           handoff
-            ? { duration: 0.2 }
+            ? { duration: 0.4, ease: "easeOut" }
             : { opacity: { duration: 0.4 }, filter: { duration: T.lock, times: [0, 0.3, T.refocus / T.lock, (T.refocus + 0.3) / T.lock, 1], ease: "easeInOut" } }
         }
       />
-      </div>
 
       {/* Linhas de varredura (textura de monitor) */}
       <div
@@ -281,17 +272,6 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
         </motion.span>
       </motion.div>
 
-      {/* Flash branco no travamento */}
-      {locked && phase === "build" && (
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-white mix-blend-overlay"
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-        />
-      )}
-
       {/* Logo que voa até o menu: começa exatamente sobre o logo 3D (mesmos
           traços, mesmo tamanho) e termina no lugar do logo do menu */}
       {handoff && (
@@ -303,8 +283,7 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
             top: window.innerHeight / 2 - logo.height / 2,
             width: logo.width,
             height: logo.height,
-            opacity: ready ? 1 : 0,
-            filter: "drop-shadow(0 0 18px hsl(191 100% 47% / 0.9))",
+            opacity: 0,
           }}
           animate={
             target
@@ -313,12 +292,12 @@ const Intro = ({ onReveal, onDone }: { onReveal: () => void; onDone: () => void 
                   top: target.top,
                   width: target.width,
                   height: target.height,
-                  opacity: 1,
-                  filter: "drop-shadow(0 0 0px hsl(191 100% 47% / 0))",
+                  opacity: ready ? 1 : 0,
                 }
               : { opacity: 0 }
           }
-          transition={{ duration: (HANDOFF_MS - 100) / 1000, ease: [0.65, 0, 0.35, 1] }}
+          // o logo plano surge enquanto o 3D some (cruzamento), sem "pulo"
+          transition={{ default: { duration: (HANDOFF_MS - 100) / 1000, ease: [0.65, 0, 0.35, 1] }, opacity: { duration: 0.35, ease: "easeOut" } }}
         >
           <Monogram className="h-full w-full" />
         </motion.div>

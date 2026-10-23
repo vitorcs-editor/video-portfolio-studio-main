@@ -219,11 +219,10 @@ export const createScene = (canvas: HTMLCanvasElement): IntroScene => {
 
     // Pulso no travamento
     const lockPulse = Math.exp(-Math.pow((t - T.lock) / 0.12, 2));
-    cyanMetal.emissiveIntensity = 0.25 + lockPulse * 0.7;
-    chrome.emissive.setHex(0xbfefff);
-    chrome.emissiveIntensity = lockPulse * 0.12;
-    haloV.uniforms.strength.value = 0.35 + lockPulse * 0.9;
-    haloC.uniforms.strength.value = 0.6 + lockPulse * 1.2;
+    // pulso discreto, só no próprio logo (sem clarear a tela)
+    cyanMetal.emissiveIntensity = 0.25 + lockPulse * 0.25;
+    haloV.uniforms.strength.value = 0.35 + lockPulse * 0.25;
+    haloC.uniforms.strength.value = 0.6 + lockPulse * 0.35;
 
     // Luz branca varrendo a frente entre 2.0s e 3.0s
     const sw = phase(t, 2.0, 3.0);
