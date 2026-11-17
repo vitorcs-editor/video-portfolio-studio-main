@@ -29,6 +29,7 @@ export const clients: Client[] = [
   { id: "projeto_draft", name: "Projeto Draft", niche: "social", logo: "/icons/projeto-draft.webp" },
   { id: "cruzeiro_basquete", name: "Cruzeiro Basquete", niche: "social", logo: "/icons/cruzeiro-basquete.webp" },
   { id: "fenix_vsl", name: "Group Phoenix", niche: "vsl", logo: "/icons/groupphoenix.png" },
+  { id: "fenix_ads", name: "Group Phoenix", niche: "ads", logo: "/icons/groupphoenix.png" },
 ];
 
 export const videos: Video[] = [
@@ -76,6 +77,12 @@ export const videos: Video[] = [
   { clientId: "1pra1_motion", driveId: "1vtuwD7adlTv9xoFP_Zh0C7tMn2Epx3k5" },
   { clientId: "1pra1_motion", driveId: "1O4gxYyRAxqIAXvbgfLdabFOjBqcVBOC0" },
   { clientId: "1pra1_motion", driveId: "1LVVxEmrP-N28X_w_Zgz7dNJc5QXRpfru" },
+  // Group Phoenix — Ads
+  { clientId: "fenix_ads", driveId: "1TgrFFP5ZlXtpNSYqABnTe9ndQxET7UkK" },
+  { clientId: "fenix_ads", driveId: "1m9uZo4uOpZo1T-bZqYM3IcLSJx_LrdUY" },
+  { clientId: "fenix_ads", driveId: "1smgrFA_9xXI080-lvdlGVheH4Z1ia_Rc" },
+  { clientId: "fenix_ads", driveId: "1XvK-xYaoNu5SKAmEnfDRTWnEPEwScr2H" },
+  { clientId: "fenix_ads", driveId: "1jzenXppKRixkmfZ2ArKsEg-Kn2-Yhxbr" },
   // Group Phoenix — VSL
   { clientId: "fenix_vsl", driveId: "1gg-GRNMkCxSu_7qUPBuQlqSn6lgZhZES" },
   { clientId: "fenix_vsl", driveId: "1PT9uiNzHya0hSFDnudbEYkQkocyjq_gk" },
